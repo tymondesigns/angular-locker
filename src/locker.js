@@ -179,8 +179,7 @@
 					},
 
 					/**
-					 * empty - empties the current storage driver completely, careful now
-					 * not sure if this should be included ?
+					 * empty - empties the current storage driver completely. careful now
 					 * 
 					 * @return {Object}
 					 */
