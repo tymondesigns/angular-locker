@@ -16,13 +16,20 @@
 
 	.provider('locker', ['$window', '$log', function locker($window, $log) {
 
-		// set some defaults
+		/**
+		 * set some defaults
+		 */
 		var storage = $window.sessionStorage,
 			separator = '.',
 			namespace: 'locker',
 			prefix = namespace === '' ? '' : namespace + separator,
 		
-		// set the item in storage - try to stringify if not a string (object/array)
+		/**
+		 * _setItem - set the item in storage - try to stringify if not a string (object/array)
+		 * 
+		 * @param {String} key
+		 * @param {Mixed} value
+		 */
 		_setItem = function (key, value) {
 			if (typeof value !== 'string') {
 				try {
@@ -36,8 +43,7 @@
 				storage[prefix + key] = value;
 			} catch (e) {
 				if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED' || e.name === 'QuotaExceededError') {
-					// should probs remove some stuff here and try again
-					$log.warn('locker - Your storage quota has been exceeded');
+					$log.warn('locker - Your browser storage quota has been exceeded');
 				} else {
 					$log.warn('locker - Could not add item with key "' + key + '"', e);
 				}
@@ -45,7 +51,12 @@
 			
 		},
 
-		// try to parse value as json, if it fails then it probably isn't json
+		/**
+		 * _getItem - try to parse value as json, if it fails then it probably isn't json so just return it
+		 * 
+		 * @param  {String} value
+		 * @return {Object|String}
+		 */
 		_getItem = function (value) {
 			try {
 				return JSON.parse(value);
@@ -54,13 +65,23 @@
 			}
 		},
 		
-		// remove the specified entry from storage
+		/**
+		 * _removeItem - remove the specified entry from storage
+		 * 
+		 * @param  {String} key
+		 * @return {void}
+		 */
 		_removeItem = function (key) {
 			if (!storage[prefix + key]) return;
 			delete storage[prefix + key];
 		},
 
-		// set the storage driver (session or local)
+		/**
+		 * _setStorageDriver - set the storage driver (session or local)
+		 * 
+		 * @param  {String} value
+		 * @return {Object}
+		 */
 		_setStorageDriver = function (value) {
 			storage = value === 'local' ? $window.localStorage : $window.sessionStorage;
 			return this;
@@ -68,17 +89,32 @@
 
 		return {
 
-			// allow setting of default storage driver and namespace via `lockerProvider`
-			// e.g. lockerProvider.setStorageDriver('local');
+			/**
+			 * setStorageDriver - allow setting of default storage driver and namespace via `lockerProvider`
+			 * e.g. lockerProvider.setStorageDriver('local');
+			 */
 			setStorageDriver: _setStorageDriver,
+
+			/**
+			 * setNamespace - set the namespace
+			 * 
+			 * @param {String} value
+			 */
 			setNamespace: function (value) {
 				namespace = value;
 			},
 
-			// exposed methods
 			$get: function() {
 				return {
-					// add a new item to storage
+
+					/**
+					 * put - add a new item to storage
+					 * an object can be passed as the first param to set multiple items in one go
+					 * 
+					 * @param  {Mixed} key
+					 * @param  {Mixed} value
+					 * @return {Object}
+					 */
 					put: function (key, value) {
 						if (!angular.isObject(key)) {
 							if (!key || !value) return;
@@ -90,17 +126,35 @@
 						}
 						return this;
 					},
-					// retrieve the specified item from storage
+
+					/**
+					 * get - retrieve the specified item from storage
+					 * 
+					 * @param  {String} key
+					 * @return {Object|String}
+					 */
 					get: function (key) {
 						var value = storage[prefix + key];
 						if (!value) return;
 						return _getItem(value);
 					},
-					// find out if a particular key exists in storage
+					
+					/**
+					 * has - determine whether a particular item exists in storage
+					 * 
+					 * @param  {String}  key
+					 * @return {Boolean}
+					 */
 					has: function (key) {
 						return storage.hasOwnProperty(prefix + key);
 					},
-					// remove a specified item from storage
+
+					/**
+					 * remove - remove a specified item from storage
+					 * 
+					 * @param  {String|Array} key
+					 * @return {Object}
+					 */
 					remove: function (key) {
 						if (!angular.isArray(key)) {
 							_removeItem(key);
@@ -111,19 +165,36 @@
 						}
 						return this;
 					},
-					// removes all items set within the current namespace - defaults to `locker`
+
+					/**
+					 * clean - removes all items set within the current namespace - defaults to `locker`
+					 * 
+					 * @return {Object}
+					 */
 					clean: function () {
 						for (var key in storage) {
 							_removeItem(key);
 						}
 						return this;
 					},
-					// empties the current storage driver completely, careful now
-					// not sure if this should be included ?
+
+					/**
+					 * empty - empties the current storage driver completely, careful now
+					 * not sure if this should be included ?
+					 * 
+					 * @return {Object}
+					 */
 					empty: function () {
 						storage.clear();
 						return this;
 					}
+
+					/**
+					 * setStorageDriver - same as above. Added here so that it can be chained on the fly
+					 * e.g. locker.setStorageDriver('session').put('sessionVar', 'I am volatile');
+					 * 
+					 * @return {Object}
+					 */
 					setStorageDriver: _setStorageDriver
 				};
 			}
