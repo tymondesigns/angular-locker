@@ -85,24 +85,30 @@
 		_setStorageDriver = function (value) {
 			storage = value === 'local' ? $window.localStorage : $window.sessionStorage;
 			return this;
+		},
+
+		/**
+		 * setNamespace - set the namespace
+		 * 
+		 * @param {String} value
+		 */
+		_setNamespace = function (value) {
+			namespace = value;
 		};
 
 		return {
 
 			/**
-			 * setStorageDriver - allow setting of default storage driver and namespace via `lockerProvider`
+			 * setStorageDriver - allow setting of default storage driver via `lockerProvider`
 			 * e.g. lockerProvider.setStorageDriver('local');
 			 */
 			setStorageDriver: _setStorageDriver,
 
 			/**
-			 * setNamespace - set the namespace
-			 * 
-			 * @param {String} value
+			 * setNamespace - allow setting of default namespace via `lockerProvider`
+			 * e.g. lockerProvider.setNamespace('myAppName');
 			 */
-			setNamespace: function (value) {
-				namespace = value;
-			},
+			setNamespace: _setNamespace,
 
 			$get: function() {
 				return {
