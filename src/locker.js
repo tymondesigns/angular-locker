@@ -11,11 +11,12 @@
 (function() {
 
 'use strict';
-
+	
 	angular.module('tymon.ng-locker', [])
 
 	.provider('locker', ['$window', '$log', function locker($window, $log) {
 
+		// set some defaults
 		var storage = $window.sessionStorage,
 			separator = '.',
 			namespace: 'locker',
@@ -77,6 +78,7 @@
 			// exposed methods
 			$get: function() {
 				return {
+					// add a new item to storage
 					put: function (key, value) {
 						if (!angular.isObject(key)) {
 							if (!key || !value) return;
@@ -88,14 +90,17 @@
 						}
 						return this;
 					},
+					// retrieve the specified item from storage
 					get: function (key) {
 						var value = storage[prefix + key];
 						if (!value) return;
 						return _getItem(value);
 					},
+					// find out if a particular key exists in storage
 					has: function (key) {
 						return storage.hasOwnProperty(prefix + key);
 					},
+					// remove a specified item from storage
 					remove: function (key) {
 						if (!angular.isArray(key)) {
 							_removeItem(key);
@@ -106,12 +111,19 @@
 						}
 						return this;
 					},
-					empty: function () {
+					// removes all items set within the current namespace - defaults to `locker`
+					clean: function () {
 						for (var key in storage) {
 							_removeItem(key);
 						}
 						return this;
 					},
+					// empties the current storage driver completely, careful now
+					// not sure if this should be included ?
+					empty: function () {
+						storage.clear();
+						return this;
+					}
 					setStorageDriver: _setStorageDriver
 				};
 			}
