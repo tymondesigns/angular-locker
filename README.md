@@ -14,13 +14,13 @@ $ bower install angular-locker
 
 #### adding to your project
 
-Add angular-locker as a dependency to your app
+Add `angular-locker` as a dependency
 
 ```js
 angular.module('myApp', ['angular-locker'])
 ```
 
-Configure locker (*optional*)
+Configure via `lockerProvider` (*optional*)
 
 ```js
 .config(function config(lockerProvider) {
@@ -29,7 +29,7 @@ Configure locker (*optional*)
 }]);
 ```
 
-inject locker into your controller/service/directive etc
+inject `locker` into your controller/service/directive etc
 
 ```js
 .factory('MyFactory', function MyFactory(locker) {
@@ -39,14 +39,23 @@ inject locker into your controller/service/directive etc
 
 ## Available methods
 
-##### `locker.put('key', 'value');`
+##### `locker.put(key, value);`
 
-##### `locker.get('key');`
+Add a new item to storage
 
-##### `locker.has('key');`
 
-##### `locker.remove('key');`
+##### `locker.get(key);`
+
+Retrieve the specified item from storage
+
+##### `locker.has(key);`
+
+##### `locker.remove(key);`
 
 ##### `locker.clean();`
 
 ##### `locker.empty();`
+
+##### `locker.setStorageDriver(store);`
+
+##### `locker.setNamespace(namespace);`
