@@ -1,7 +1,7 @@
 angular-locker (in development)
 ==============
 
-> A simple abstraction for local/session storage in angular projects
+> A simple & configurable abstraction for local/session storage in angular projects
 
 ## Installation
 
