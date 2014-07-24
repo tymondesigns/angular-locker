@@ -3,6 +3,7 @@ angular-locker (in development)
 
 > A simple & configurable abstraction for local/session storage in angular projects
 
+[![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker.svg?style=flat)](https://travis-ci.org/tymondesigns/angular-locker)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
 
 ## Installation
