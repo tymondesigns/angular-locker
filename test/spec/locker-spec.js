@@ -1,9 +1,12 @@
-describe('locker.js', function () {
+describe('angular-locker', function () {
 
-	var provider;
+	beforeEach(function () {
+		module('angular-locker');
+	});
 
-	beforeEach(module('mockApp', function( lockerProvider ) {
-		provider = lockerProvider;
+	beforeEach(inject(function ($window, $log) {
+		this.$log = $log;
+		this.$window = $window;
 	}));
 
 	describe('locker provider', function () {
