@@ -12,7 +12,7 @@ angular-locker (in development)
 $ bower install angular-locker
 ```
 
-## Usage
+#### adding to your project
 
 Add angular-locker as a dependency to your app
 
@@ -36,3 +36,17 @@ inject locker into your controller/service/directive etc
 	locker.put('someKey', 'someVal');
 });
 ```
+
+## Available methods
+
+##### `locker.put('key', 'value');`
+
+##### `locker.get('key');`
+
+##### `locker.has('key');`
+
+##### `locker.remove('key');`
+
+##### `locker.clean();`
+
+##### `locker.empty();`
