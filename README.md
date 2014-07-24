@@ -1,9 +1,9 @@
 angular-locker (in development)
 ==============
 
-[![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)](http://www.opensource.org/licenses/MIT)
-
 > A simple & configurable abstraction for local/session storage in angular projects
+
+[![License](http://img.shields.io/badge/license-MIT-green.svg?style=flat)](http://www.opensource.org/licenses/MIT)
 
 ## Installation
 
