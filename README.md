@@ -15,7 +15,7 @@ $ bower install angular-locker
 Add angular-locker as a dependency to your app
 
 ```js
-angular.module('angular-locker', [])
+angular.module('myApp', ['angular-locker'])
 ```
 
 Configure locker (*optional*)
