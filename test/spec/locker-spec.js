@@ -11,9 +11,9 @@ describe('angular-locker', function () {
 
 	describe('locker provider', function () {
 
-		it('should be defined', function () {
-			expect(true).toBeTruthy();
-		});
+		// it('should be defined', function () {
+		// 	expect(true).toBeTruthy();
+		// });
 
 	});
 
