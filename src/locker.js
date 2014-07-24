@@ -12,7 +12,7 @@
 
 'use strict';
 	
-	angular.module('tymon.ng-locker', [])
+	angular.module('angular-locker', [])
 
 	.provider('locker', ['$window', '$log', function locker($window, $log) {
 
