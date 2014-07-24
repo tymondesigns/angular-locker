@@ -12,7 +12,6 @@
     "locker",
     "localStorage",
     "sessionStorage",
-    "tymondesigns"
   ],
   "license": "MIT",
   "ignore": [

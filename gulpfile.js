@@ -31,6 +31,16 @@ var banner = [
   '\n'
 ].join('');
 
+/**
+ * angular-locker
+ * 
+ * A simple abstraction for local/session storage in angular projects.
+ *
+ * @link https://github.com/tymondesigns/angular-locker
+ * @author Sean Tymon <tymon148@gmail.com>
+ * @license MIT License, http://www.opensource.org/licenses/MIT 
+ */
+
 gulp.task('scripts', ['clean'], function() {
   return gulp.src(paths.scripts)
     .pipe(plumber())
