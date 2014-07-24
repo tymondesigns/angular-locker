@@ -12,8 +12,25 @@ $ bower install angular-locker
 
 ## Usage
 
-1. Add angular-locker as a dependency to your app
+Add angular-locker as a dependency to your app
 
 ```js
-angular.module('tymon.ng-locker', [])
+angular.module('angular-locker', [])
+```
+
+Configure locker (*optional*)
+
+```js
+.config(function config(lockerProvider) {
+	lockerProvider.setStorageDriver('session');
+	lockerProvider.setNamespace('myAppName');
+}]);
+```
+
+inject locker into your controller/service/directive etc
+
+```js
+.factory('MyFactory', function MyFactory(locker) {
+	locker.put('someKey', 'someVal');
+});
 ```
