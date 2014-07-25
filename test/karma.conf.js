@@ -10,11 +10,6 @@ module.exports = function (config) {
 			'karma-phantomjs-launcher',
 			'karma-jasmine'
 		],
-		files: [
-			'https://code.angularjs.org/1.2.9/angular.min.js',
-    		'https://code.angularjs.org/1.2.9/angular-mocks.js',
-    		'test/spec/**/*.js'
-		],
 		reporters : ['spec']
 	});
 };

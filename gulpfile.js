@@ -15,8 +15,8 @@ var paths = {
     'src/locker.js'
   ],
   test: [
-    'https://code.angularjs.org/1.2.9/angular.min.js',
-    'https://code.angularjs.org/1.2.9/angular-mocks.js',
+    'test/vendor/angular/angular.js',
+    'test/vendor/angular/angular-mocks.js',
     'test/spec/**/*.js'
   ]
 };
@@ -33,12 +33,12 @@ var banner = [
 
 /**
  * angular-locker
- * 
+ *
  * A simple abstraction for local/session storage in angular projects.
  *
  * @link https://github.com/tymondesigns/angular-locker
  * @author Sean Tymon <tymon148@gmail.com>
- * @license MIT License, http://www.opensource.org/licenses/MIT 
+ * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
 gulp.task('scripts', ['clean'], function() {
@@ -66,9 +66,12 @@ gulp.task('clean', function () {
 });
 
 gulp.task('test', function() {
-  return gulp.src(paths.scripts.concat(paths.test))
+  return gulp.src(paths.test)
     .pipe(plumber())
-    .pipe(karma({ configFile: 'test/karma.conf.js' }))
+    .pipe(karma({
+      configFile: 'test/karma.conf.js',
+      action: 'run'
+    }))
     .on('error', function(err) { throw err; });
 });
 
