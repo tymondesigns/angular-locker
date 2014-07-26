@@ -83,7 +83,7 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
-			storage = value === 'session' ? sessionStorage : localStorage 
+			storage = value === 'session' ? sessionStorage : localStorage;
 			return this;
 		},
 
