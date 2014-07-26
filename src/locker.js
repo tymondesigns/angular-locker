@@ -19,7 +19,7 @@
 		/**
 		 * set some defaults
 		 */
-		var storage = sessionStorage,
+		var storage = localStorage,
 		separator = '.',
 		namespace = 'locker',
 		prefix = namespace === '' ? '' : namespace + separator,
@@ -83,8 +83,12 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
-			storage = value === 'local' ? localStorage : sessionStorage;
+			storage = value === 'session' ? sessionStorage : localStorage 
 			return this;
+		},
+
+		_getStorageDriver = function () {
+			return storage === localStorage ? 'local' : 'session';
 		},
 
 		/**
@@ -94,6 +98,10 @@
 		 */
 		_setNamespace = function (value) {
 			namespace = value;
+		},
+
+		_getNamespace = function () {
+			return namespace;
 		};
 
 		return {
@@ -104,11 +112,15 @@
 			 */
 			setStorageDriver: _setStorageDriver,
 
+			getStorageDriver: _getStorageDriver,
+
 			/**
 			 * setNamespace - allow setting of default namespace via `lockerProvider`
 			 * e.g. lockerProvider.setNamespace('myAppName');
 			 */
 			setNamespace: _setNamespace,
+
+			getNamespace: _getNamespace,
 
 			$get: function() {
 				return {
