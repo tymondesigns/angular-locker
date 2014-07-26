@@ -1,9 +1,13 @@
-describe('angular-locker', function () {
+describe('locker', function () {
+
+	var locker = true;
+
+	beforeEach(module('angular-locker'));
 
 	describe('lockerProvider', function () {
 
 		it('should be defined', function () {
-			expect(true).toBe(true);
+			expect(locker).toBeDefined();
 		});
 
 	});

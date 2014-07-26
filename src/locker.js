@@ -14,12 +14,12 @@
 	
 	angular.module('angular-locker', [])
 
-	.provider('locker', ['$window', '$log', function locker($window, $log) {
+	.provider('locker', function locker() {
 
 		/**
 		 * set some defaults
 		 */
-		var storage = $window.sessionStorage,
+		var storage = sessionStorage,
 		separator = '.',
 		namespace = 'locker',
 		prefix = namespace === '' ? '' : namespace + separator,
@@ -43,9 +43,9 @@
 				storage[prefix + key] = value;
 			} catch (e) {
 				if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED' || e.name === 'QuotaExceededError') {
-					$log.warn('locker - Your browser storage quota has been exceeded');
+					// $log.warn('locker - Your browser storage quota has been exceeded');
 				} else {
-					$log.warn('locker - Could not add item with key "' + key + '"', e);
+					// $log.warn('locker - Could not add item with key "' + key + '"', e);
 				}
 			}
 			
@@ -83,7 +83,7 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
-			storage = value === 'local' ? $window.localStorage : $window.sessionStorage;
+			storage = value === 'local' ? localStorage : sessionStorage;
 			return this;
 		},
 
@@ -205,6 +205,6 @@
 			}
 		};
 
-	}]);
+	});
 
 })();
