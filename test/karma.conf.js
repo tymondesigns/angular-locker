@@ -3,11 +3,13 @@ module.exports = function (config) {
 		basePath : '',
 		autoWatch : true,
 		frameworks: ['jasmine'],
-		browsers : ['PhantomJS'],
+		browsers : ['PhantomJS', 'Chrome', 'Firefox', 'Safari'],
 		plugins : [
 			'karma-spec-reporter',
-			// 'karma-chrome-launcher',
 			'karma-phantomjs-launcher',
+			'karma-chrome-launcher',
+			'karma-firefox-launcher',
+			'karma-safari-launcher',
 			'karma-jasmine'
 		],
 		reporters : ['spec']
