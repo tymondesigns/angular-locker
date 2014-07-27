@@ -87,6 +87,11 @@
 			return this;
 		},
 
+		/**
+		 * _getStorageDriver - returns the storage driver that is currently set
+		 * 
+		 * @return {String}
+		 */
 		_getStorageDriver = function () {
 			return storage === localStorage ? 'local' : 'session';
 		},
@@ -98,8 +103,14 @@
 		 */
 		_setNamespace = function (value) {
 			namespace = value;
+			return this;
 		},
 
+		/**
+		 * _getNamespace - returns the namespace that is currently set
+		 * 
+		 * @return {String}
+		 */
 		_getNamespace = function () {
 			return namespace;
 		};
@@ -112,6 +123,9 @@
 			 */
 			setStorageDriver: _setStorageDriver,
 
+			/**
+			 * getStorageDriver
+			 */
 			getStorageDriver: _getStorageDriver,
 
 			/**
@@ -120,6 +134,9 @@
 			 */
 			setNamespace: _setNamespace,
 
+			/**
+			 * getNamespace
+			 */
 			getNamespace: _getNamespace,
 
 			$get: function() {
@@ -186,10 +203,12 @@
 
 					/**
 					 * clean - removes all items set within the current namespace - defaults to `locker`
-					 * 
+					 *
+					 * @param  {String} namespace
 					 * @return {Object}
 					 */
-					clean: function () {
+					clean: function (namespace) {
+						if (namespace) this.setNamespace(namespace);
 						for (var key in storage) {
 							_removeItem(key);
 						}
@@ -212,7 +231,9 @@
 					 * 
 					 * @return {Object}
 					 */
-					setStorageDriver: _setStorageDriver
+					setStorageDriver: _setStorageDriver,
+
+					setNamespace: _setNamespace
 				};
 			}
 		};

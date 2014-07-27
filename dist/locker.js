@@ -19,7 +19,7 @@
 		/**
 		 * set some defaults
 		 */
-		var storage = sessionStorage,
+		var storage = localStorage,
 		separator = '.',
 		namespace = 'locker',
 		prefix = namespace === '' ? '' : namespace + separator,
@@ -83,8 +83,17 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
-			storage = value === 'local' ? localStorage : sessionStorage;
+			storage = value === 'session' ? sessionStorage : localStorage;
 			return this;
+		},
+
+		/**
+		 * _getStorageDriver - returns the storage driver that is currently set
+		 * 
+		 * @return {String}
+		 */
+		_getStorageDriver = function () {
+			return storage === localStorage ? 'local' : 'session';
 		},
 
 		/**
@@ -94,6 +103,16 @@
 		 */
 		_setNamespace = function (value) {
 			namespace = value;
+			return this;
+		},
+
+		/**
+		 * _getNamespace - returns the namespace that is currently set
+		 * 
+		 * @return {String}
+		 */
+		_getNamespace = function () {
+			return namespace;
 		};
 
 		return {
@@ -105,10 +124,20 @@
 			setStorageDriver: _setStorageDriver,
 
 			/**
+			 * getStorageDriver
+			 */
+			getStorageDriver: _getStorageDriver,
+
+			/**
 			 * setNamespace - allow setting of default namespace via `lockerProvider`
 			 * e.g. lockerProvider.setNamespace('myAppName');
 			 */
 			setNamespace: _setNamespace,
+
+			/**
+			 * getNamespace
+			 */
+			getNamespace: _getNamespace,
 
 			$get: function() {
 				return {
@@ -174,10 +203,12 @@
 
 					/**
 					 * clean - removes all items set within the current namespace - defaults to `locker`
-					 * 
+					 *
+					 * @param  {String} namespace
 					 * @return {Object}
 					 */
-					clean: function () {
+					clean: function (namespace) {
+						if (namespace) this.setNamespace(namespace);
 						for (var key in storage) {
 							_removeItem(key);
 						}
@@ -200,7 +231,9 @@
 					 * 
 					 * @return {Object}
 					 */
-					setStorageDriver: _setStorageDriver
+					setStorageDriver: _setStorageDriver,
+
+					setNamespace: _setNamespace
 				};
 			}
 		};
