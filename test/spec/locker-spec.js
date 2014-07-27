@@ -136,6 +136,16 @@ describe('angular-locker', function () {
 				expect( result2 ).toEqual(obj);
 			}));
 
+			it('should return a value and then delete the item', inject(function () {
+				var str = 'someVal456';
+				locker.put('someKey123', str);
+
+				var value = locker.pull('someKey123');
+
+				expect( value ).toEqual(str);
+				expect( locker.get('someKey123') ).toBeUndefined();
+			}));
+
 		});
 
 		describe('removing items from locker', function () {

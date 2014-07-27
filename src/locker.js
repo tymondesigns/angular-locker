@@ -203,6 +203,19 @@
 					},
 
 					/**
+					 * pull - retrieve the specified item from storage and then remove it
+					 * 
+					 * @param  {String} key
+					 * @param  {Mixed}  def
+					 * @return {Mixed}
+					 */
+					pull: function (key, def) {
+						var value = this.get(key, def);
+						this.remove(key);
+						return value;
+					},
+
+					/**
 					 * remove - remove a specified item from storage
 					 * 
 					 * @param  {String|Array} key
