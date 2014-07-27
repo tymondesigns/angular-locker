@@ -69,11 +69,12 @@
 		 * _removeItem - remove the specified entry from storage
 		 * 
 		 * @param  {String} key
-		 * @return {void}
+		 * @return {void|Boolean}
 		 */
 		_removeItem = function (key) {
 			if (!storage[prefix + key]) return;
 			delete storage[prefix + key];
+			return true;
 		},
 
 		/**
@@ -143,7 +144,7 @@
 				return {
 
 					/**
-					 * put - add a new item to storage
+					 * put - add a new item to storage (even if it already exists)
 					 * an object can be passed as the first param to set multiple items in one go
 					 * 
 					 * @param  {Mixed} key
@@ -152,7 +153,7 @@
 					 */
 					put: function (key, value) {
 						if (!angular.isObject(key)) {
-							if (!key || !value) return;
+							if (!key || !value) return false;
 							_setItem(key, value);
 						} else {
 							for (var k in key) {
@@ -163,14 +164,30 @@
 					},
 
 					/**
+					 * add - adds an item to storage if it exists
+					 * 
+					 * @param  {Mixed} key
+					 * @param  {Mixed} value
+					 * @return {Boolean}
+					 */
+					add: function (key, value) {
+						if (!this.has(key)) {
+							this.put(key, value);
+							return true;
+						}
+						return false;
+					},
+
+					/**
 					 * get - retrieve the specified item from storage
 					 * 
 					 * @param  {String} key
-					 * @return {Object|String}
+					 * @param  {Mixed}  def
+					 * @return {Mixed}
 					 */
-					get: function (key) {
+					get: function (key, def) {
 						var value = storage[prefix + key];
-						if (!value) return;
+						if (!value) return def || void 0;
 						return _getItem(value);
 					},
 					
@@ -233,6 +250,12 @@
 					 */
 					setStorageDriver: _setStorageDriver,
 
+					/**
+					 * setNamespace - same as above. Added here so that it can be chained on the fly
+					 * e.g. locker.setNamespace('myAppName').put('appVar', 'someVar);
+					 * 
+					 * @return {Object}
+					 */
 					setNamespace: _setNamespace
 				};
 			}

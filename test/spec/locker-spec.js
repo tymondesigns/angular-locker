@@ -96,6 +96,37 @@ describe('angular-locker', function () {
 				expect( locker.get('bob').lorem ).toBeTruthy();
 			}));
 
+			it('should add an item into the locker if it doesn\'t already exist', inject(function () {
+
+				locker.put('foo', 'loremipsumdolorsitamet');
+				var added = locker.add('foo', ['foo', 'bar', 'baz']);
+
+				locker.put('bar', 'foobarbazbob');
+				var added2 = locker.add('bar1', 'foobazbob');
+
+				expect( added ).toBeFalsy();
+				expect( added2 ).toBeTruthy();
+
+				expect( locker.get('foo') ).toEqual('loremipsumdolorsitamet');
+				expect( locker.get('bar1') ).toEqual('foobazbob');
+			}));
+
+		});
+
+		describe('retrieving items from locker', function () {
+
+			it('should return specified default value if item not in locker', inject(function () {
+				var obj = { foo: 'bar', bar: 123, baz: true }, str = 'defaultValue';
+
+				locker.put('somethingThatDoesExist', 'exists');
+
+				var result = locker.get('somethingThatDoesExist', str);
+				var result2 = locker.get('somethingElseThatDoesntExist', { foo: 'bar', bar: 123, baz: true });
+
+				expect( result ).not.toEqual(str);
+				expect( result2 ).toEqual(obj);
+			}));
+
 		});
 
 		describe('removing items from locker', function () {
