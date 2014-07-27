@@ -96,6 +96,15 @@ describe('angular-locker', function () {
 				expect( locker.get('bob').lorem ).toBeTruthy();
 			}));
 
+			it('should put an item into the locker when passing a function', inject(function () {
+
+				locker.put('fnKey', function () {
+					return 12 * 12;
+				});
+
+				expect( locker.get('fnKey') ).toEqual(144);
+			}));
+
 			it('should add an item into the locker if it doesn\'t already exist', inject(function () {
 
 				locker.put('foo', 'loremipsumdolorsitamet');

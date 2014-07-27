@@ -152,6 +152,7 @@
 					 * @return {Object}
 					 */
 					put: function (key, value) {
+						if (typeof value === 'function') value = value();
 						if (!angular.isObject(key)) {
 							if (!key || !value) return false;
 							_setItem(key, value);
