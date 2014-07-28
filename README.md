@@ -15,7 +15,7 @@ $ bower install angular-locker
 
 #### manually
 
-Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include dist/angular-locker.min.js in your project
+Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
 
 #### adding to your project
 
