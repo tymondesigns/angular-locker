@@ -12,12 +12,12 @@ var gulp    = require('gulp'),
 var paths = {
   output : 'dist/',
   scripts : [
-    'src/locker.js'
+    'src/angular-locker.js'
   ],
   test: [
     'test/vendor/angular/angular.js',
     'test/vendor/angular/angular-mocks.js',
-    'src/locker.js',
+    'src/angular-locker.js',
     'test/spec/**/*.js'
   ]
 };
