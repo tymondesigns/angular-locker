@@ -1,4 +1,4 @@
-angular-locker (in development)
+angular-locker
 ==============
 
 > A simple & configurable abstraction for local/session storage in angular projects
@@ -13,7 +13,7 @@ angular-locker (in development)
 $ bower install angular-locker
 ```
 
-#### manually
+#### manual
 
 Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
 
