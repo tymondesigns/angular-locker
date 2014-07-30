@@ -4,4 +4,5 @@ node_js:
   - "0.11"
 before_script:
   - npm install -g gulp
+  - bower install
 script: gulp

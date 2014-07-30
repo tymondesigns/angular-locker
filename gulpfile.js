@@ -15,8 +15,8 @@ var paths = {
     'src/angular-locker.js'
   ],
   test: [
-    'test/vendor/angular/angular.js',
-    'test/vendor/angular/angular-mocks.js',
+    'vendor/angular/angular.js',
+    'vendor/angular-mocks/angular-mocks.js',
     'src/angular-locker.js',
     'test/spec/**/*.js'
   ]

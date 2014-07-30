@@ -10,9 +10,15 @@
   "keywords": [
     "angular",
     "locker",
+    "storage",
     "localStorage",
     "sessionStorage",
+    "session"
   ],
+  "devDependencies": {
+    "angular-latest": "~1.2.21",
+    "angular-mocks": "~1.2.21"
+  },
   "license": "MIT",
   "ignore": [
     "**/.*",
