@@ -105,7 +105,7 @@ describe('angular-locker', function () {
 				expect( locker.get('fnKey') ).toEqual(144);
 			}));
 
-			it('should add an item into the locker if it doesn\'t already exist', inject(function () {
+			it('should put an item into the locker if it doesn\'t already exist', inject(function () {
 
 				locker.put('foo', 'loremipsumdolorsitamet');
 				var added = locker.add('foo', ['foo', 'bar', 'baz']);
@@ -119,6 +119,14 @@ describe('angular-locker', function () {
 				expect( locker.get('foo') ).toEqual('loremipsumdolorsitamet');
 				expect( locker.get('bar1') ).toEqual('foobazbob');
 			}));
+
+			it('should put an item into the locker in a different namespace', inject(function () {
+				locker.put('foo', 'defaultNamespace');
+				locker.setNamespace('someOtherNamespace').put('foo', 'newNamespace');
+
+				expect( locker.get('foo') ).toEqual('newNamespace');
+				expect( locker.setNamespace('locker').get('foo') ).toEqual('defaultNamespace');
+			})); 
 
 		});
 
@@ -146,6 +154,24 @@ describe('angular-locker', function () {
 				expect( locker.get('someKey123') ).toBeUndefined();
 			}));
 
+			it('should return all items within current namespace', inject(function () {
+
+				for(var i=0; i<20; i++) {
+					locker.put('aKey' + i, 'aVal' + i);
+				}
+
+				var all = locker.all();
+				var none = locker.setNamespace('something').all();
+
+				expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
+				expect( Object.keys(none).length ).toEqual(0);
+				expect( Object.keys(all) ).toContain('aKey12');
+
+				// need to isolate tests more by seeding storage before each one,
+				// and cleaning afterwards
+				expect( Object.keys(all).length ).toEqual(31);
+			}));
+
 		});
 
 		describe('removing items from locker', function () {
@@ -170,14 +196,16 @@ describe('angular-locker', function () {
 				expect( locker.get('foo') ).toBeUndefined();
 			}));
 
-			// it('should remove all items within a namespace', inject(function () {
-				// provider.setNamespace('someOtherNamespace');
-				// locker.put('keyInOtherNamespace', 'someVal');
+			it('should remove all items within a namespace', inject(function () {
+				provider.setNamespace('someOtherNamespace');
+				locker.put('keyInOtherNamespace', 'someVal');
+				locker.setNamespace('wontBeCleaned').put('keyInOtherNamespace', 'someVal');
 
-				// locker.clean('someOtherNamespace');
+				locker.clean('someOtherNamespace');
 
-				// expect( locker.setNamespace('locker').get('keyInOtherNamespace') ).toBeUndefined();
-			// }));
+				expect( locker.setNamespace('locker').get('keyInOtherNamespace') ).toBeUndefined();
+				expect( locker.setNamespace('wontBeCleaned').get('keyInOtherNamespace') ).toBeDefined();
+			}));
 
 			it('should empty the locker', inject(function () {
 
@@ -191,13 +219,20 @@ describe('angular-locker', function () {
 
 		});
 
-		describe('other', function () {
+		describe('checking existence in locker', function () {
 
 			it('should determine whether an item exists in locker', inject(function () {
 				locker.put('randKey', Math.random());
 
 				expect( locker.has('randKey') ).toBeTruthy();
 				expect( locker.has('loremipsumdolorsitamet') ).toBeFalsy();
+			}));
+
+			it('should determine whether an item exists in locker within another namespace', inject(function () {
+				locker.setNamespace('differentNs').put('randKeyNs', Math.random());
+
+				expect( locker.setNamespace('differentNs').has('randKeyNs') ).toBeTruthy();
+				expect( locker.setNamespace('loremipsumdolorsitamet').has('randKeyNs') ).toBeFalsy();
 			}));
 
 		});

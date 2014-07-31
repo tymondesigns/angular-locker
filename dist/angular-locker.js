@@ -104,6 +104,7 @@
 		 */
 		_setNamespace = function (value) {
 			namespace = value;
+			prefix = namespace === '' ? '' : namespace + separator;
 			return this;
 		},
 
@@ -140,6 +141,9 @@
 			 */
 			getNamespace: _getNamespace,
 
+			/**
+			 * the locker service
+			 */
 			$get: function() {
 				return {
 
@@ -213,6 +217,24 @@
 						var value = this.get(key, def);
 						this.remove(key);
 						return value;
+					},
+
+					/**
+					 * all - return all items in storage within the current namespace
+					 * 
+					 * @return {Object}
+					 */
+					all: function () {
+						var items = {};
+						for (var key in storage) {
+							var split = key.split('.');
+							if (split.length > 1 && split[0] === namespace) {
+								split.splice(0, 1);
+								key = split.join('');
+							}
+							if (this.get(key)) items[key] = this.get(key);
+						}
+						return items;
 					},
 
 					/**
