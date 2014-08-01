@@ -50,12 +50,17 @@ inject `locker` into your controller/service/directive etc
 
 Add a new item to storage
 
+##### `locker.add(key, value);`
 
 ##### `locker.get(key);`
 
 Retrieve the specified item from storage
 
+##### `locker.pull(key);`
+
 ##### `locker.has(key);`
+
+##### `locker.all();`
 
 ##### `locker.remove(key);`
 
