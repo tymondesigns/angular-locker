@@ -135,7 +135,6 @@ This will return an object containing all the key/value pairs in storage
 
 ```js
 locker.all();
-
 ```
 
 ----------------------------
@@ -186,3 +185,13 @@ coming soon...
 ##### `locker.setStorageDriver(store);`
 
 ##### `locker.setNamespace(namespace);`
+
+## Development
+
+Pull requests welcome
+
+```bash
+$ npm install
+$ bower install
+$ gulp
+```
