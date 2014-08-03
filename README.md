@@ -46,8 +46,6 @@ inject `locker` into your controller/service/directive etc
 });
 ```
 
-## Methods
-
 ### Adding items to locker
 
 there are several ways to add something to locker:
