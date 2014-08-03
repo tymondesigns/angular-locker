@@ -45,6 +45,7 @@ inject `locker` into your controller/service/directive etc
 	locker.put('someKey', 'someVal');
 });
 ```
+----------------------------
 
 ### Adding items to locker
 
