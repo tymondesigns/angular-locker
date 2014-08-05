@@ -9,7 +9,8 @@ A simple & configurable abstraction for local/session storage in angular project
 ## Installation
 
 #### via bower
-```
+
+```bash
 $ bower install angular-locker
 ```
 
@@ -178,7 +179,7 @@ you can remove all the items witin the currently set namespace via the `clean()`
 ```js
 locker.clean();
 ```
-#### removing all items with the currently set storage driver
+#### removing all items within the currently set storage driver
 
 ```js
 locker.empty();
