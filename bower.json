@@ -8,7 +8,7 @@
   "description": "A simple abstraction for local/session storage in angular projects.",
   "main": "src/locker.js",
   "keywords": [
-    "angular-locker"
+    "angular-locker",
     "angular",
     "locker",
     "storage",
