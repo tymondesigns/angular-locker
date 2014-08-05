@@ -8,9 +8,9 @@
  * @license MIT License, http://www.opensource.org/licenses/MIT	
  */
 
-(function() {
+(function(angular, undefined) {
 
-'use strict';
+	'use strict';
 	
 	angular.module('angular-locker', [])
 
@@ -156,9 +156,10 @@
 					 * @return {Object}
 					 */
 					put: function (key, value) {
-						if (typeof value === 'function') value = value();
+						if (!key) return false;
 						if (!angular.isObject(key)) {
-							if (!key || !value) return false;
+							if (!value) return false;
+							if (typeof value === 'function') value = value();
 							_setItem(key, value);
 						} else {
 							for (var k in key) {
@@ -191,9 +192,8 @@
 					 * @return {Mixed}
 					 */
 					get: function (key, def) {
-						var value = storage[prefix + key];
-						if (!value) return def || void 0;
-						return _getItem(value);
+						if (!this.has(key)) return def || void 0;
+						return _getItem(storage[prefix + key]);
 					},
 					
 					/**
@@ -299,4 +299,4 @@
 
 	});
 
-})();
+})(window.angular);

@@ -1,6 +1,6 @@
 {
   "name": "angular-locker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/tymondesigns/angular-locker",
   "authors": [
     "Sean Tymon <tymon148@gmail.com>"
@@ -8,12 +8,14 @@
   "description": "A simple abstraction for local/session storage in angular projects.",
   "main": "src/locker.js",
   "keywords": [
+    "angular-locker"
     "angular",
     "locker",
     "storage",
     "localStorage",
     "sessionStorage",
-    "session"
+    "session",
+    "local"
   ],
   "devDependencies": {
     "angular-latest": "~1.2.21",
@@ -24,7 +26,6 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "test"
   ]
 }
