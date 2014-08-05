@@ -147,7 +147,7 @@ locker.has('someKey') // true or false
 
 // e.g.
 if (locker.has('user.authToken') ) {
-	// we should be logged in right?
+	// we're logged in
 } else {
 	// go to login page or something
 }
@@ -157,7 +157,31 @@ if (locker.has('user.authToken') ) {
 
 ### Removing items from locker
 
-coming soon...
+```js
+locker.remove('keyToRemove');
+```
+
+#### removing multiple items at once
+
+You can also pass an array to the remove method
+
+```js
+locker.remove(['keyToRemove', 'anotherKeyToRemove', 'something', 'else']);
+```
+
+#### removing all within namespace
+
+you can remove all the items witin the currently set namespace via the `clean()` method
+
+```js
+locker.clean();
+```
+#### removing all items with the currently set storage driver
+
+```js
+locker.empty();
+```
+
 
 ----------------------------
 
@@ -184,6 +208,14 @@ coming soon...
 ##### `locker.setStorageDriver(store);`
 
 ##### `locker.setNamespace(namespace);`
+
+----------------------------
+
+## Browser Compatibilty
+
+locker will work in any browser that supports local/session Storage.
+
+For the latest browser compatibility chart see [HERE](http://caniuse.com/namevalue-storage)
 
 ## Development
 
