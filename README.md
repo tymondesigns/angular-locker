@@ -184,33 +184,6 @@ locker.clean();
 locker.empty();
 ```
 
-
-----------------------------
-
-## API
-
-##### `locker.put(key, value);`
-
-##### `locker.add(key, value);`
-
-##### `locker.get(key, default);`
-
-##### `locker.pull(key, default);`
-
-##### `locker.has(key);`
-
-##### `locker.all();`
-
-##### `locker.remove(key);`
-
-##### `locker.clean();`
-
-##### `locker.empty();`
-
-##### `locker.setStorageDriver(store);`
-
-##### `locker.setNamespace(namespace);`
-
 ----------------------------
 
 ## Browser Compatibilty
