@@ -1,12 +1,10 @@
 angular-locker
 ==============
 
-> A simple & configurable abstraction for local/session storage in angular projects
+A simple & configurable abstraction for local/session storage in angular projects
 
 [![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker.svg?style=flat)](https://travis-ci.org/tymondesigns/angular-locker)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
-
-locker will automatically serialize your objects/arrays in local/session storage
 
 ## Installation
 
@@ -52,6 +50,8 @@ inject `locker` into your controller/service/directive etc
 there are several ways to add something to locker:
 
 You can add Objects, Arrays, whatever :)
+
+locker will automatically serialize your objects/arrays in local/session storage
 
 ```js
 locker.put('someString', 'anyDataType');
@@ -186,8 +186,6 @@ coming soon...
 ##### `locker.setNamespace(namespace);`
 
 ## Development
-
-Pull requests welcome
 
 ```bash
 $ npm install
