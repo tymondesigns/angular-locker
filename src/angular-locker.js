@@ -52,12 +52,12 @@
 		},
 
 		/**
-		 * _getItem - try to parse value as json, if it fails then it probably isn't json so just return it
+		 * _unserializeValue - try to parse value as json, if it fails then it probably isn't json so just return it
 		 * 
 		 * @param  {String} value
 		 * @return {Object|String}
 		 */
-		_getItem = function (value) {
+		_unserializeValue = function (value) {
 			try {
 				return JSON.parse(value);
 			} catch (e) {
@@ -170,7 +170,7 @@
 					},
 
 					/**
-					 * add - adds an item to storage if it exists
+					 * add - adds an item to storage if it doesn't already exists
 					 * 
 					 * @param  {Mixed} key
 					 * @param  {Mixed} value
@@ -193,7 +193,7 @@
 					 */
 					get: function (key, def) {
 						if (!this.has(key)) return def || void 0;
-						return _getItem(storage[prefix + key]);
+						return _unserializeValue(storage[prefix + key]);
 					},
 					
 					/**
@@ -238,7 +238,7 @@
 					},
 
 					/**
-					 * remove - remove a specified item from storage
+					 * remove - remove a specified item(s) from storage
 					 * 
 					 * @param  {String|Array} key
 					 * @return {Object}
@@ -260,8 +260,7 @@
 					 * @param  {String} namespace
 					 * @return {Object}
 					 */
-					clean: function (namespace) {
-						if (namespace) this.setNamespace(namespace);
+					clean: function () {
 						for (var key in storage) {
 							_removeItem(key);
 						}

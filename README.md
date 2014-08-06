@@ -1,17 +1,16 @@
 angular-locker
 ==============
 
-> A simple & configurable abstraction for local/session storage in angular projects
+A simple & configurable abstraction for local/session storage in angular projects
 
 [![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker.svg?style=flat)](https://travis-ci.org/tymondesigns/angular-locker)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
 
-locker will automatically serialize your objects/arrays in local/session storage
-
 ## Installation
 
 #### via bower
-```
+
+```bash
 $ bower install angular-locker
 ```
 
@@ -45,14 +44,15 @@ inject `locker` into your controller/service/directive etc
 	locker.put('someKey', 'someVal');
 });
 ```
-
-## Methods
+----------------------------
 
 ### Adding items to locker
 
 there are several ways to add something to locker:
 
 You can add Objects, Arrays, whatever :)
+
+locker will automatically serialize your objects/arrays in local/session storage
 
 ```js
 locker.put('someString', 'anyDataType');
@@ -148,7 +148,7 @@ locker.has('someKey') // true or false
 
 // e.g.
 if (locker.has('user.authToken') ) {
-	// we should be logged in right?
+	// we're logged in
 } else {
 	// go to login page or something
 }
@@ -158,37 +158,43 @@ if (locker.has('user.authToken') ) {
 
 ### Removing items from locker
 
-coming soon...
+The simplest way to remove an item is to simply pass the key to the `remove()` method
 
+```js
+locker.remove('keyToRemove');
+```
+
+#### removing multiple items at once
+
+You can also pass an array to the remove method
+
+```js
+locker.remove(['keyToRemove', 'anotherKeyToRemove', 'something', 'else']);
+```
+
+#### removing all within namespace
+
+you can remove all the items within the currently set namespace via the `clean()` method
+
+```js
+locker.clean();
+// or
+locker.setNamespace('someOtherNamespace').clean();
+```
+#### removing all items within the currently set storage driver
+
+```js
+locker.empty();
+```
 ----------------------------
 
-## API
+## Browser Compatibilty
 
-##### `locker.put(key, value);`
+locker works in any browser that supports local/session Storage.
 
-##### `locker.add(key, value);`
-
-##### `locker.get(key, default);`
-
-##### `locker.pull(key, default);`
-
-##### `locker.has(key);`
-
-##### `locker.all();`
-
-##### `locker.remove(key);`
-
-##### `locker.clean();`
-
-##### `locker.empty();`
-
-##### `locker.setStorageDriver(store);`
-
-##### `locker.setNamespace(namespace);`
+For the latest browser compatibility chart see [HERE](http://caniuse.com/namevalue-storage)
 
 ## Development
-
-Pull requests welcome
 
 ```bash
 $ npm install
