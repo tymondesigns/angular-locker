@@ -32,11 +32,7 @@
 		 */
 		_setItem = function (key, value) {
 			if (typeof value !== 'string') {
-				try {
-					value = JSON.stringify(value);
-				} catch (e) {
-					return;
-				}
+				value = _serializeValue(value);
 			}
 
 			try {
@@ -49,6 +45,14 @@
 				}
 			}
 			
+		},
+		
+		_serializeValue = function (value) {
+			try {
+				return JSON.stringify(value);
+			} catch (e) {
+				return value;
+			}
 		},
 
 		/**
