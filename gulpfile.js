@@ -8,6 +8,10 @@ var gulp    = require('gulp'),
 	clean   = require('gulp-clean'),
 	rename  = require('gulp-rename'),
 	bump    = require('gulp-bump'),
+	git     = require('gulp-git'),
+	filter  = require('gulp-filter'),
+	prompt  = require('gulp-prompt'),
+    tag     = require('gulp-tag-version');
 	package = require('./package.json');
 
 var paths = {
@@ -21,6 +25,10 @@ var paths = {
 	],
 	test: [
 		'test/spec/**/*.js'
+	],
+	versions: [
+		'./bower.json',
+		'./package.json'
 	]
 };
 
@@ -33,16 +41,6 @@ var banner = [
 	' */',
 	'\n'
 ].join('');
-
-/**
- * angular-locker
- *
- * A simple abstraction for local/session storage in angular projects.
- *
- * @link https://github.com/tymondesigns/angular-locker
- * @author Sean Tymon <tymon148@gmail.com>
- * @license MIT License, http://www.opensource.org/licenses/MIT
- */
 
 gulp.task('scripts', ['clean'], function() {
 	return gulp.src(paths.scripts)
@@ -78,13 +76,6 @@ gulp.task('test', function() {
 		.on('error', function(err) { throw err; });
 });
 
-gulp.task('bump', function(){
-	return gulp.src(['./bower.json', './package.json'])
-	.pipe(plumber())
-	.pipe(bump())
-	.pipe(gulp.dest('./'));
-});
-
 gulp.task('default', [
 	'lint',
 	'clean',
@@ -92,7 +83,37 @@ gulp.task('default', [
 	'test'
 ]);
 
-gulp.task('version', [
-	'bump',
-	'default'
-]);
+gulp.task('bump', function() {
+	var process = gulp.src(paths.versions[0])
+	.pipe(plumber())
+	.pipe(prompt.prompt({
+        type: 'checkbox',
+        name: 'bump',
+        message: 'What type of bump would you like to do?',
+        choices: ['patch', 'minor', 'major']
+    }, function (res) {
+        var importance = res.bump;
+    }));
+	process.pipe(bump({ type: importance }))
+	.pipe(gulp.dest('./'));
+});
+
+function inc(importance) {
+    var process = gulp.src(paths.versions[0]) // get all the files to bump version in
+        .pipe(prompt.confirm('Have you commited all the changes to be included by this version?'));
+    process.pipe(bump({type: importance})) // bump the version number in those files
+        .pipe(gulp.dest('./'))  // save it back to filesystem
+        .pipe(git.commit('bump version')) // commit the changed version number
+        .pipe(filter(paths.versions[0])) // read only one file to get the version number
+        .pipe(tag({ prefix: '' })) // tag it in the repository 
+        // .pipe(git.push('origin', 'master', { args: '--tags' })) // push the tags to master
+}
+
+gulp.task('patch', function() { return inc('patch'); })
+gulp.task('feature', function() { return inc('minor'); })
+gulp.task('release', function() { return inc('major'); })
+
+// gulp.task('release', [
+// 	'default',
+// 	'bump'
+// ]);

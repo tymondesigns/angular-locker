@@ -5,6 +5,10 @@
   "author": "@tymondesigns",
   "license": "MIT",
   "homepage": "https://github.com/tymondesigns/angular-locker",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/tymondesigns/angular-locker.git"
+  },
   "devDependencies": {
     "gulp": "~3.8.6",
     "gulp-bump": "^0.1.11",
@@ -15,6 +19,10 @@
     "gulp-plumber": "~0.6.2",
     "gulp-rename": "~1.1.0",
     "gulp-uglify": "~0.3.0",
+    "gulp-git": "~0.3.6",
+    "gulp-prompt": "~0.1.1",
+    "gulp-filter": "~0.4.0",
+    "gulp-tag-version": "^1.0.2",
     "jshint-stylish": "^0.2.0",
     "karma": "^0.12.16",
     "karma-jasmine": "~0.2.0",
