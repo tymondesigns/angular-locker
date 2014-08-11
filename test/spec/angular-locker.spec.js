@@ -23,10 +23,28 @@ describe('angular-locker', function () {
 			expect( provider.getStorageDriver() ).toEqual('session');
 		}));
 
+		it('should set a default storage driver via function', inject(function () {
+			expect( provider.getStorageDriver() ).toEqual('local');
+			provider.setStorageDriver(function () {
+				var shouldUseSession = true;
+				if (shouldUseSession) return 'session';
+			});
+			expect( provider.getStorageDriver() ).toEqual('session');
+		}));
+
 		it('should set a default namespace', inject(function () {
 			expect( provider.getNamespace() ).toEqual('locker');
 			provider.setNamespace('myApp');
 			expect( provider.getNamespace() ).toEqual('myApp');
+		}));
+
+		it('should set a default namespace via function', inject(function () {
+			expect( provider.getNamespace() ).toEqual('locker');
+			provider.setNamespace(function () {
+				var arr = ['myApp', 'coolApp', 'somethingElse'];
+				return arr[1];
+			});
+			expect( provider.getNamespace() ).toEqual('coolApp');
 		}));
 
 	});
