@@ -167,8 +167,8 @@ describe('angular-locker', function () {
 				expect( Object.keys(none).length ).toEqual(0);
 				expect( Object.keys(all) ).toContain('aKey12');
 
-				// need to isolate tests more by seeding storage before each one,
-				// and cleaning afterwards
+				// @todo need to isolate tests more by seeding storage before each one
+				// and cleaning up afterwards
 				expect( Object.keys(all).length ).toEqual(31);
 			}));
 
