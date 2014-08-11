@@ -6,6 +6,8 @@ A simple & configurable abstraction for local/session storage in angular project
 [![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker.svg?style=flat)](https://travis-ci.org/tymondesigns/angular-locker)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://www.opensource.org/licenses/MIT)
 
+Only `0.8kb` minified & gzipped!
+
 ## Installation
 
 #### via bower
