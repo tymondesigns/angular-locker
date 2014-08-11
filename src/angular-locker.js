@@ -47,6 +47,12 @@
 			
 		},
 		
+		/**
+		 * _serializeValue - try to encode value as json, or just return the value upon failure
+		 * 
+		 * @param  {Mixed} value
+		 * @return {Mixed}
+		 */
 		_serializeValue = function (value) {
 			try {
 				return JSON.stringify(value);
@@ -70,13 +76,33 @@
 		},
 		
 		/**
+		 * _itemExists - check whether the item exists in storage
+		 * 
+		 * @param  {String} key
+		 * @return {Boolean}
+		 */
+		_itemExists = function (key) {
+			return storage.hasOwnProperty(prefix + key);
+		},
+
+		/**
+		 * _parseFn - if value is a function then execute, otherwise just return
+		 * 
+		 * @param  {Mixed} value
+		 * @return {Mixed}
+		 */
+		_parseFn = function (value) {
+			return typeof value === 'function' ? value() : value;
+		},
+
+		/**
 		 * _removeItem - remove the specified entry from storage
 		 * 
 		 * @param  {String} key
 		 * @return {void|Boolean}
 		 */
 		_removeItem = function (key) {
-			if (!storage[prefix + key]) return;
+			if (!_itemExists(key)) return false;
 			delete storage[prefix + key];
 			return true;
 		},
@@ -88,6 +114,7 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
+			value = _parseFn(value);
 			storage = value === 'session' ? sessionStorage : localStorage;
 			return this;
 		},
@@ -107,7 +134,7 @@
 		 * @param {String} value
 		 */
 		_setNamespace = function (value) {
-			namespace = value;
+			namespace = _parseFn(value);
 			prefix = namespace === '' ? '' : namespace + separator;
 			return this;
 		},
@@ -125,7 +152,7 @@
 
 			/**
 			 * setStorageDriver - allow setting of default storage driver via `lockerProvider`
-			 * e.g. lockerProvider.setStorageDriver('local');
+			 * e.g. lockerProvider.setStorageDriver('session');
 			 */
 			setStorageDriver: _setStorageDriver,
 
@@ -163,7 +190,7 @@
 						if (!key) return false;
 						if (!angular.isObject(key)) {
 							if (!value) return false;
-							if (typeof value === 'function') value = value();
+							value = _parseFn(value);
 							_setItem(key, value);
 						} else {
 							for (var k in key) {
@@ -175,6 +202,7 @@
 
 					/**
 					 * add - adds an item to storage if it doesn't already exists
+					 * @todo doesn't handle passing object as key yet
 					 * 
 					 * @param  {Mixed} key
 					 * @param  {Mixed} value
@@ -206,9 +234,7 @@
 					 * @param  {String}  key
 					 * @return {Boolean}
 					 */
-					has: function (key) {
-						return storage.hasOwnProperty(prefix + key);
-					},
+					has: _itemExists,
 
 					/**
 					 * pull - retrieve the specified item from storage and then remove it
