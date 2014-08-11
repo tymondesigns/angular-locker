@@ -7,6 +7,7 @@ var gulp    = require('gulp'),
 	plumber = require('gulp-plumber'),
 	clean   = require('gulp-clean'),
 	rename  = require('gulp-rename'),
+	bump    = require('gulp-bump'),
 	package = require('./package.json');
 
 var paths = {
@@ -77,9 +78,21 @@ gulp.task('test', function() {
 		.on('error', function(err) { throw err; });
 });
 
+gulp.task('bump', function(){
+	return gulp.src(['./bower.json', './package.json'])
+	.pipe(plumber())
+	.pipe(bump())
+	.pipe(gulp.dest('./'));
+});
+
 gulp.task('default', [
 	'lint',
 	'clean',
 	'scripts',
 	'test'
+]);
+
+gulp.task('version', [
+	'bump',
+	'default'
 ]);

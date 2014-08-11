@@ -4,11 +4,11 @@
  * A simple abstraction for local/session storage in angular projects.
  *
  * @link https://github.com/tymondesigns/angular-locker
- * @author Sean Tymon <tymon148@gmail.com>
+ * @author Sean Tymon @tymondesigns
  * @license MIT License, http://www.opensource.org/licenses/MIT	
  */
 
-(function(angular, undefined) {
+(function(window, angular, undefined) {
 
 	'use strict';
 	
@@ -19,7 +19,7 @@
 		/**
 		 * set some defaults
 		 */
-		var storage = localStorage,
+		var storage = window.localStorage,
 		separator = '.',
 		namespace = 'locker',
 		prefix = namespace === '' ? '' : namespace + separator,
@@ -38,13 +38,12 @@
 			try {
 				storage[prefix + key] = value;
 			} catch (e) {
-				if (e.name === 'QUOTA_EXCEEDED_ERR' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED' || e.name === 'QuotaExceededError') {
-					// $log.warn('locker - Your browser storage quota has been exceeded');
+				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
+					console.warn('locker - Your browser storage quota has been exceeded');
 				} else {
-					// $log.warn('locker - Could not add item with key "' + key + '"', e);
+					console.warn('locker - Could not add item with key "' + key + '"', e);
 				}
 			}
-			
 		},
 		
 		/**
@@ -115,7 +114,7 @@
 		 */
 		_setStorageDriver = function (value) {
 			value = _parseFn(value);
-			storage = value === 'session' ? sessionStorage : localStorage;
+			storage = value === 'session' ? window.sessionStorage : window.localStorage;
 			return this;
 		},
 
@@ -328,4 +327,4 @@
 
 	});
 
-})(window.angular);
+})(window, window.angular);
