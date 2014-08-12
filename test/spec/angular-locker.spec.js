@@ -174,9 +174,11 @@ describe('angular-locker', function () {
 
 			it('should return all items within current namespace', inject(function () {
 
-				for(var i=0; i<20; i++) {
+				for (var i=0; i<20; i++) {
 					locker.put('aKey' + i, 'aVal' + i);
 				}
+
+				locker.put('something.foo.bar', ['someValue']);
 
 				var all = locker.all();
 				var none = locker.setNamespace('something').all();
@@ -185,9 +187,11 @@ describe('angular-locker', function () {
 				expect( Object.keys(none).length ).toEqual(0);
 				expect( Object.keys(all) ).toContain('aKey12');
 
+				expect( Object.keys(all) ).toContain('something.foo.bar');
+
 				// @todo need to isolate tests more by seeding storage before each one
 				// and cleaning up afterwards
-				expect( Object.keys(all).length ).toEqual(31);
+				expect( Object.keys(all).length ).toEqual(32);
 			}));
 
 		});

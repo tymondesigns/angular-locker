@@ -31,17 +31,15 @@
 		 * @param {Mixed} value
 		 */
 		_setItem = function (key, value) {
-			if (typeof value !== 'string') {
-				value = _serializeValue(value);
-			}
+			value = _serializeValue(value);
 
 			try {
 				storage[prefix + key] = value;
 			} catch (e) {
 				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-					console.warn('locker - Your browser storage quota has been exceeded');
+					console.warn('angular-locker - Your browser storage quota has been exceeded');
 				} else {
-					console.warn('locker - Could not add item with key "' + key + '"', e);
+					console.warn('angular-locker - Could not add item with key "' + key + '"', e);
 				}
 			}
 		},
@@ -54,7 +52,7 @@
 		 */
 		_serializeValue = function (value) {
 			try {
-				return JSON.stringify(value);
+				return angular.toJson(value);
 			} catch (e) {
 				return value;
 			}
@@ -68,7 +66,7 @@
 		 */
 		_unserializeValue = function (value) {
 			try {
-				return JSON.parse(value);
+				return angular.fromJson(value);
 			} catch (e) {
 				return value;
 			}
@@ -124,7 +122,7 @@
 		 * @return {String}
 		 */
 		_getStorageDriver = function () {
-			return storage === localStorage ? 'local' : 'session';
+			return storage === window.localStorage ? 'local' : 'session';
 		},
 
 		/**
@@ -192,9 +190,9 @@
 							value = _parseFn(value);
 							_setItem(key, value);
 						} else {
-							for (var k in key) {
-								_setItem(k, key[k]);
-							}
+							angular.forEach(key, function (value, key) {
+								_setItem(key, value);
+							});
 						}
 						return this;
 					},
@@ -255,14 +253,14 @@
 					 */
 					all: function () {
 						var items = {};
-						for (var key in storage) {
-							var split = key.split('.');
+						angular.forEach(storage, function (value, key) {
+							var split = key.split(separator);
 							if (split.length > 1 && split[0] === namespace) {
 								split.splice(0, 1);
-								key = split.join('');
+								key = split.join(separator);
 							}
 							if (this.get(key)) items[key] = this.get(key);
-						}
+						}, this);
 						return items;
 					},
 
@@ -276,8 +274,8 @@
 						if (!angular.isArray(key)) {
 							_removeItem(key);
 						} else {
-							key.forEach(function(k) {
-								_removeItem(k);
+							angular.forEach(key, function (key) {
+								_removeItem(key);
 							});
 						}
 						return this;
@@ -290,9 +288,9 @@
 					 * @return {Object}
 					 */
 					clean: function () {
-						for (var key in storage) {
+						angular.forEach(storage, function (value, key) {
 							_removeItem(key);
-						}
+						});
 						return this;
 					},
 
