@@ -256,7 +256,7 @@
 					all: function () {
 						var items = {};
 						for (var key in storage) {
-							var split = key.split('.');
+							var split = key.split(separator);
 							if (split.length > 1 && split[0] === namespace) {
 								split.splice(0, 1);
 								key = split.join('');
