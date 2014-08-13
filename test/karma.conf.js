@@ -7,8 +7,16 @@ module.exports = function (config) {
 		plugins : [
 			'karma-spec-reporter',
 			'karma-phantomjs-launcher',
-			'karma-jasmine'
+			'karma-jasmine',
+			'karma-coverage'
 		],
-		reporters : ['spec']
+		preprocessors: {
+			'../src/*.js': ['coverage']
+    	},
+		reporters : ['spec', 'coverage'],
+		coverageReporter: {
+			type : 'html',
+			dir : 'coverage/'
+		}
 	});
 };
