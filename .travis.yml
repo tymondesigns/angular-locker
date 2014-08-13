@@ -8,6 +8,7 @@ addons:
 before_script:
   - npm install -g gulp
   - npm install -g bower
+  - npm install -g codeclimate-test-reporter
   - bower install
 after_script:
   - cat test/coverage/phantomjs/lcov.info | codeclimate

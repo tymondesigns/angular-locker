@@ -22,7 +22,6 @@
     "gulp-plumber": "~0.6.2",
     "gulp-prompt": "~0.1.1",
     "gulp-rename": "~1.1.0",
-    "gulp-tag-version": "^1.0.2",
     "gulp-uglify": "~0.3.0",
     "jshint-stylish": "^0.2.0",
     "karma": "^0.12.16",
