@@ -126,7 +126,7 @@ gulp.task('release', ['default'], function () {
 				.pipe(jeditor({
 					'version': newVer
 				}))
-				.pipe(gulp.dest("./"))
+				.pipe(gulp.dest('./'))
 			);
 
 			stream.queue(
@@ -134,7 +134,7 @@ gulp.task('release', ['default'], function () {
 				.pipe(jeditor({
 					'version': newVer
 				}))
-				.pipe(gulp.dest("./"))
+				.pipe(gulp.dest('./'))
 			);
 
 			// stream.queue(build(newVer));
