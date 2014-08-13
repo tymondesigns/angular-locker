@@ -7,11 +7,10 @@ var gulp    = require('gulp'),
 	plumber = require('gulp-plumber'),
 	clean   = require('gulp-clean'),
 	rename  = require('gulp-rename'),
-	bump    = require('gulp-bump'),
-	git     = require('gulp-git'),
-	filter  = require('gulp-filter'),
 	prompt  = require('gulp-prompt'),
-    tag     = require('gulp-tag-version');
+    semver  = require('semver'),
+    streamqueue = require('streamqueue'),
+    jeditor = require("gulp-json-editor"),
 	package = require('./package.json');
 
 var paths = {
@@ -83,37 +82,63 @@ gulp.task('default', [
 	'test'
 ]);
 
-gulp.task('bump', function() {
-	var process = gulp.src(paths.versions[0])
-	.pipe(plumber())
-	.pipe(prompt.prompt({
-        type: 'checkbox',
-        name: 'bump',
-        message: 'What type of bump would you like to do?',
-        choices: ['patch', 'minor', 'major']
-    }, function (res) {
-        var importance = res.bump;
-    }));
-	process.pipe(bump({ type: importance }))
-	.pipe(gulp.dest('./'));
-});
+var promptBump = function(callback) {
 
-function inc(importance) {
-    var process = gulp.src(paths.versions[0]) // get all the files to bump version in
-        .pipe(prompt.confirm('Have you commited all the changes to be included by this version?'));
-    process.pipe(bump({type: importance})) // bump the version number in those files
-        .pipe(gulp.dest('./'))  // save it back to filesystem
-        .pipe(git.commit('bump version')) // commit the changed version number
-        .pipe(filter(paths.versions[0])) // read only one file to get the version number
-        .pipe(tag({ prefix: '' })) // tag it in the repository 
-        // .pipe(git.push('origin', 'master', { args: '--tags' })) // push the tags to master
+	return gulp.src('')
+		.pipe(prompt.prompt({
+			type: 'list',
+			name: 'bump',
+			message: 'What type of version bump would you like to do ? (current version is ' + package.version + ')',
+			choices: [
+				'patch (' + package.version + ' --> ' + semver.inc(package.version, 'patch') + ')',
+				'minor (' + package.version + ' --> ' + semver.inc(package.version, 'minor') + ')',
+				'major (' + package.version + ' --> ' + semver.inc(package.version, 'major') + ')',
+				'none (exit)'
+			]
+		}, function(res) {
+			var newVer;
+			if(res.bump.match(/^patch/)) {
+				newVer = semver.inc(package.version, 'patch');
+			} else if(res.bump.match(/^minor/)) {
+				newVer = semver.inc(package.version, 'minor');
+			} else if(res.bump.match(/^major/)) {
+				newVer = semver.inc(package.version, 'major');
+			}
+			if(newVer && typeof callback === 'function') {
+				return callback(newVer);
+			} else {
+				return;
+			}
+		}));
 }
 
-gulp.task('patch', function() { return inc('patch'); })
-gulp.task('feature', function() { return inc('minor'); })
-gulp.task('release', function() { return inc('major'); })
+gulp.task('release', ['default'], function () {
+	return promptBump(function(newVer) {
+			
+			var stream = streamqueue({ objectMode: true });
 
-// gulp.task('release', [
-// 	'default',
-// 	'bump'
-// ]);
+			// make the changelog
+			// stream.queue(makeChangelog(newVer));
+
+			// update the main project version number
+			stream.queue(
+				gulp.src('./package.json')
+					.pipe(jeditor({
+						'version': newVer
+					}))
+					.pipe(gulp.dest("./"))
+			);
+
+			stream.queue(
+				gulp.src('./bower.json')
+					.pipe(jeditor({
+						'version': newVer
+					}))
+					.pipe(gulp.dest("./"))
+			);
+
+			// stream.queue(build(newVer));
+
+			return stream.done();
+		});
+});
