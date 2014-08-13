@@ -2,8 +2,13 @@ language: node_js
 node_js:
   - "0.10"
   - "0.11"
+addons:
+  code_climate:
+    repo_token: 1127d7870ffcfe9bfd904d031f78b9e5b9b919e1901b8a0e12a7e66edfe039c9
 before_script:
   - npm install -g gulp
   - npm install -g bower
   - bower install
+after_script:
+  - cat test/coverage/phantomjs/lcov.info | codeclimate
 script: gulp
