@@ -15,8 +15,11 @@ module.exports = function (config) {
     	},
 		reporters : ['spec', 'coverage'],
 		coverageReporter: {
-			type : 'html',
-			dir : 'coverage/'
+			type : 'lcovonly',
+			dir : 'coverage/',
+			subdir: function(browser) {
+				return browser.toLowerCase().split(/[ /-]/)[0];
+			}
 		}
 	});
 };

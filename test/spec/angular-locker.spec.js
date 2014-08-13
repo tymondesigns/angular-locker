@@ -146,6 +146,14 @@ describe('angular-locker', function () {
 				expect( locker.setNamespace('locker').get('foo') ).toEqual('defaultNamespace');
 			})); 
 
+			it('should return false if key/value params are missing', inject(function () {
+
+				var result1 = locker.put('aKey');
+				var result2 = locker.put(null, 'aVal');
+
+				expect( result1 && result2 ).toBeFalsy();
+			}));
+
 		});
 
 		describe('retrieving items from locker', function () {
