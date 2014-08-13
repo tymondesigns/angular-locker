@@ -10,7 +10,7 @@ var gulp    = require('gulp'),
 	prompt  = require('gulp-prompt'),
     semver  = require('semver'),
     streamqueue = require('streamqueue'),
-    jeditor = require("gulp-json-editor"),
+    jeditor = require('gulp-json-editor'),
 	package = require('./package.json');
 
 var paths = {
@@ -110,7 +110,7 @@ var promptBump = function(callback) {
 				return;
 			}
 		}));
-}
+};
 
 gulp.task('release', ['default'], function () {
 	return promptBump(function(newVer) {
@@ -123,18 +123,18 @@ gulp.task('release', ['default'], function () {
 			// update the main project version number
 			stream.queue(
 				gulp.src('./package.json')
-					.pipe(jeditor({
-						'version': newVer
-					}))
-					.pipe(gulp.dest("./"))
+				.pipe(jeditor({
+					'version': newVer
+				}))
+				.pipe(gulp.dest("./"))
 			);
 
 			stream.queue(
 				gulp.src('./bower.json')
-					.pipe(jeditor({
-						'version': newVer
-					}))
-					.pipe(gulp.dest("./"))
+				.pipe(jeditor({
+					'version': newVer
+				}))
+				.pipe(gulp.dest("./"))
 			);
 
 			// stream.queue(build(newVer));
