@@ -45,7 +45,7 @@ gulp.task('scripts', ['clean'], function() {
 	return gulp.src(paths.scripts)
 		.pipe(plumber())
 		// .pipe(header(banner, { package : package }))
-		// .pipe(gulp.dest('dist/'))
+		.pipe(gulp.dest('dist/'))
 		.pipe(rename({ suffix: '.min' }))
 		.pipe(uglify())
 		.pipe(header(banner, { package : package }))
