@@ -7,21 +7,21 @@ describe('angular-locker', function () {
 		locker = lockerProvider.$get();
 		
 		// localStorage mocks
-		spyOn(localStorage, 'setItem').and.callFake(function(key, value) {
-			store[key] = value;
-		});
-		spyOn(localStorage, 'getItem').and.callFake(function(key) {
-			return store[key];
-		});
-		spyOn(localStorage, 'removeItem').and.callFake(function(key) {
-			delete store[key];
-		});
-		spyOn(localStorage, 'hasOwnProperty').and.callFake(function(key) {
-			return store.hasOwnProperty(key);
-		});
-		spyOn(localStorage, 'clear').and.callFake(function() {
-			store = {};
-		});
+		// spyOn(localStorage, 'setItem').and.callFake(function(key, value) {
+		// 	store[key] = value;
+		// });
+		// spyOn(localStorage, 'getItem').and.callFake(function(key) {
+		// 	return store[key];
+		// });
+		// spyOn(localStorage, 'removeItem').and.callFake(function(key) {
+		// 	delete store[key];
+		// });
+		// spyOn(localStorage, 'hasOwnProperty').and.callFake(function(key) {
+		// 	return store.hasOwnProperty(key);
+		// });
+		// spyOn(localStorage, 'clear').and.callFake(function() {
+		// 	store = {};
+		// });
 
 	}));
 
@@ -212,19 +212,22 @@ describe('angular-locker', function () {
 
 			it('should return all items within current namespace', inject(function () {
 
+				locker.empty();
+
 				for (var i=0; i<20; i++) {
 					locker.put('aKey' + i, 'aVal' + i);
 				}
 
 				locker.put('something.foo.bar', ['someValue']);
 
-				var all = store;
-				// var none = locker.setNamespace('something').all();
+				// var all = store;
+				var all = locker.all();
+				var none = locker.setNamespace('something').all();
 
-				// expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
-				// expect( Object.keys(none).length ).toEqual(0);
-				expect( Object.keys(all) ).toContain(prefix + 'aKey12');
-				expect( Object.keys(all) ).toContain(prefix + 'something.foo.bar');
+				expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
+				expect( Object.keys(none).length ).toEqual(0);
+				expect( Object.keys(all) ).toContain('aKey12');
+				expect( Object.keys(all) ).toContain('something.foo.bar');
 				expect( Object.keys(all).length ).toEqual(21);
 			}));
 
