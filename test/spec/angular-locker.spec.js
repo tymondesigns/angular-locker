@@ -39,6 +39,9 @@ describe('angular-locker', function () {
 			expect( provider.getStorageDriver() ).toEqual('local');
 			provider.setStorageDriver('session');
 			expect( provider.getStorageDriver() ).toEqual('session');
+
+			provider.setStorageDriver('somethingNotExpected');
+			expect( provider.getStorageDriver() ).toEqual('local');
 		}));
 
 		it('should set a default storage driver via function', inject(function () {
@@ -54,6 +57,8 @@ describe('angular-locker', function () {
 			expect( provider.getNamespace() ).toEqual('locker');
 			provider.setNamespace('myApp');
 			expect( provider.getNamespace() ).toEqual('myApp');
+			provider.setNamespace('');
+			expect( provider.getNamespace() ).toEqual('');
 		}));
 
 		it('should set a default namespace via function', inject(function () {
@@ -175,14 +180,41 @@ describe('angular-locker', function () {
 
 			// it('should fail silently if my value cannot be serialized', inject(function () {
 
-			// 	var malformedArray = [{a:[{}]}];
+				// expect( function () {
+				// 	locker.put('someKey', ['foo']).toThrowError("quux");
+				// } )
 
-			// 	var result = locker.put('aKey', malformedArray).get('aKey');
+				// 	var malformedArray = [{a:[{}]}];
 
-			// 	expect( result ).toBeDefined();
-			// 	console.log(result);
-			// 	expect( angular.isArray(result) ).toBeFalsy();
+				// 	var result = locker.put('aKey', malformedArray).get('aKey');
+
+				// 	expect( result ).toBeDefined();
+				// 	console.log(result);
+				// 	expect( angular.isArray(result) ).toBeFalsy();
 			// }));
+
+			it('should catch the error when the browser reports storage is full', inject(function () {
+
+				var error = new Error();
+				error.name = 'QUOTA_EXCEEDED_ERR';
+
+				spyOn(localStorage, 'setItem').and.throwError(error);
+				spyOn(console, 'warn');
+
+				locker.put('someKey', ['foo']);
+
+				expect(console.warn).toHaveBeenCalled();
+			}));
+
+			it('should catch the error when an item couldn\'t be added for some other reason', inject(function () {
+
+				spyOn(localStorage, 'setItem').and.throwError();
+				spyOn(console, 'warn');
+
+				locker.put('someKey', ['foo']);
+
+				expect(console.warn).toHaveBeenCalled();
+			}));
 
 		});
 
@@ -226,6 +258,9 @@ describe('angular-locker', function () {
 
 				expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
 				expect( Object.keys(none).length ).toEqual(0);
+
+				expect( all ).toEqual(jasmine.objectContaining({ 'aKey12': 'aVal12' }));
+
 				expect( Object.keys(all) ).toContain('aKey12');
 				expect( Object.keys(all) ).toContain('something.foo.bar');
 				expect( Object.keys(all).length ).toEqual(21);
