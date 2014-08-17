@@ -1,7 +1,7 @@
 /**
  * angular-locker
  * 
- * A simple abstraction for local/session storage in angular projects.
+ * A lightweight & configurable abstraction for local/session storage in angular projects.
  *
  * @link https://github.com/tymondesigns/angular-locker
  * @author Sean Tymon @tymondesigns
@@ -34,7 +34,7 @@
 			value = _serializeValue(value);
 
 			try {
-				storage[prefix + key] = value;
+				storage.setItem(prefix + key, value);
 			} catch (e) {
 				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
 					console.warn('angular-locker - Your browser storage quota has been exceeded');
@@ -100,7 +100,7 @@
 		 */
 		_removeItem = function (key) {
 			if (!_itemExists(key)) return false;
-			delete storage[prefix + key];
+			storage.removeItem(prefix + key);
 			return true;
 		},
 
@@ -222,7 +222,7 @@
 					 */
 					get: function (key, def) {
 						if (!this.has(key)) return def || void 0;
-						return _unserializeValue(storage[prefix + key]);
+						return _unserializeValue(storage.getItem(prefix + key));
 					},
 					
 					/**

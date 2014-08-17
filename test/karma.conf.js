@@ -18,7 +18,8 @@ module.exports = function (config) {
 			type : 'lcovonly',
 			dir : 'coverage/',
 			subdir: function(browser) {
-				return browser.toLowerCase().split(/[ /-]/)[0];
+				// return browser.toLowerCase().split(/[ /-]/)[0];
+				return 'lcov';
 			}
 		}
 	});

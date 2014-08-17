@@ -1,14 +1,32 @@
 describe('angular-locker', function () {
 
-	var provider, locker;
+	var provider, locker, store = {}, prefix = 'locker.';
 
 	beforeEach(module('angular-locker', function (lockerProvider) {
 		provider = lockerProvider;
 		locker = lockerProvider.$get();
+		
+		// localStorage mocks
+		spyOn(localStorage, 'setItem').and.callFake(function(key, value) {
+			store[key] = value;
+		});
+		spyOn(localStorage, 'getItem').and.callFake(function(key) {
+			return store[key];
+		});
+		spyOn(localStorage, 'removeItem').and.callFake(function(key) {
+			delete store[key];
+		});
+		spyOn(localStorage, 'hasOwnProperty').and.callFake(function(key) {
+			return store.hasOwnProperty(key);
+		});
+		spyOn(localStorage, 'clear').and.callFake(function() {
+			store = {};
+		});
+
 	}));
 
 	afterEach(function() {
-		// locker.empty();
+		store = {};
 	});
 
 	describe('lockerProvider', function () {
@@ -56,6 +74,7 @@ describe('angular-locker', function () {
 			it('should put a string into the locker', inject(function () {
 				var str = 'someVal';
 				locker.put('someKey', str);
+
 				expect( locker.get('someKey') ).toEqual(str);
 			}));
 
@@ -154,6 +173,17 @@ describe('angular-locker', function () {
 				expect( result1 && result2 ).toBeFalsy();
 			}));
 
+			// it('should fail silently if my value cannot be serialized', inject(function () {
+
+			// 	var malformedArray = [{a:[{}]}];
+
+			// 	var result = locker.put('aKey', malformedArray).get('aKey');
+
+			// 	expect( result ).toBeDefined();
+			// 	console.log(result);
+			// 	expect( angular.isArray(result) ).toBeFalsy();
+			// }));
+
 		});
 
 		describe('retrieving items from locker', function () {
@@ -188,18 +218,14 @@ describe('angular-locker', function () {
 
 				locker.put('something.foo.bar', ['someValue']);
 
-				var all = locker.all();
-				var none = locker.setNamespace('something').all();
+				var all = store;
+				// var none = locker.setNamespace('something').all();
 
-				expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
-				expect( Object.keys(none).length ).toEqual(0);
-				expect( Object.keys(all) ).toContain('aKey12');
-
-				expect( Object.keys(all) ).toContain('something.foo.bar');
-
-				// @todo need to isolate tests more by seeding storage before each one
-				// and cleaning up afterwards
-				expect( Object.keys(all).length ).toEqual(32);
+				// expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
+				// expect( Object.keys(none).length ).toEqual(0);
+				expect( Object.keys(all) ).toContain(prefix + 'aKey12');
+				expect( Object.keys(all) ).toContain(prefix + 'something.foo.bar');
+				expect( Object.keys(all).length ).toEqual(21);
 			}));
 
 		});
@@ -207,6 +233,7 @@ describe('angular-locker', function () {
 		describe('removing items from locker', function () {
 
 			it('should remove an item from locker', inject(function () {
+				locker.put('someKey', 'someVal');
 				expect( locker.get('someKey') ).toEqual('someVal');
 
 				locker.remove('someKey');
@@ -215,8 +242,13 @@ describe('angular-locker', function () {
 			}));
 
 			it('should remove multiple items from locker by passing an array', inject(function () {
+				
+				locker.put('objectKey', {foo: 'bar'});
+				locker.put('arrayKey', ['foo', 'bar']);
+				locker.put('foo', 'bar');
+
 				expect( locker.get('objectKey') ).toBeDefined();
-				expect( locker.get('arrayKey1') ).toBeDefined();
+				expect( locker.get('arrayKey') ).toBeDefined();
 				expect( locker.get('foo') ).toBeDefined();
 
 				locker.remove(['objectKey', 'arrayKey1', 'foo']);
