@@ -185,7 +185,6 @@ describe('angular-locker', function () {
 				var result = locker.put('foo', ['bar', 'baz']).get('foo');
 
 				expect( result ).toBeDefined();
-				console.log(result);
 				expect( angular.isArray(result) ).toBeFalsy();
 			}));
 
