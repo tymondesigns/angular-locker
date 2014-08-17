@@ -178,20 +178,16 @@ describe('angular-locker', function () {
 				expect( result1 && result2 ).toBeFalsy();
 			}));
 
-			// it('should fail silently if my value cannot be serialized', inject(function () {
+			it('should fail silently if value cannot be serialized and unserialized', inject(function () {
 
-				// expect( function () {
-				// 	locker.put('someKey', ['foo']).toThrowError("quux");
-				// } )
+				spyOn(JSON, 'stringify').and.throwError();
 
-				// 	var malformedArray = [{a:[{}]}];
+				var result = locker.put('foo', ['bar', 'baz']).get('foo');
 
-				// 	var result = locker.put('aKey', malformedArray).get('aKey');
-
-				// 	expect( result ).toBeDefined();
-				// 	console.log(result);
-				// 	expect( angular.isArray(result) ).toBeFalsy();
-			// }));
+				expect( result ).toBeDefined();
+				console.log(result);
+				expect( angular.isArray(result) ).toBeFalsy();
+			}));
 
 			it('should catch the error when the browser reports storage is full', inject(function () {
 
