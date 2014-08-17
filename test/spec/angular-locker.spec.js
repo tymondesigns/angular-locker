@@ -1,14 +1,32 @@
 describe('angular-locker', function () {
 
-	var provider, locker;
+	var provider, locker, store = {}, prefix = 'locker.';
 
 	beforeEach(module('angular-locker', function (lockerProvider) {
 		provider = lockerProvider;
 		locker = lockerProvider.$get();
+		
+		// localStorage mocks
+		// spyOn(localStorage, 'setItem').and.callFake(function(key, value) {
+		// 	store[key] = value;
+		// });
+		// spyOn(localStorage, 'getItem').and.callFake(function(key) {
+		// 	return store[key];
+		// });
+		// spyOn(localStorage, 'removeItem').and.callFake(function(key) {
+		// 	delete store[key];
+		// });
+		// spyOn(localStorage, 'hasOwnProperty').and.callFake(function(key) {
+		// 	return store.hasOwnProperty(key);
+		// });
+		// spyOn(localStorage, 'clear').and.callFake(function() {
+		// 	store = {};
+		// });
+
 	}));
 
 	afterEach(function() {
-		// locker.empty();
+		store = {};
 	});
 
 	describe('lockerProvider', function () {
@@ -21,6 +39,9 @@ describe('angular-locker', function () {
 			expect( provider.getStorageDriver() ).toEqual('local');
 			provider.setStorageDriver('session');
 			expect( provider.getStorageDriver() ).toEqual('session');
+
+			provider.setStorageDriver('somethingNotExpected');
+			expect( provider.getStorageDriver() ).toEqual('local');
 		}));
 
 		it('should set a default storage driver via function', inject(function () {
@@ -36,6 +57,8 @@ describe('angular-locker', function () {
 			expect( provider.getNamespace() ).toEqual('locker');
 			provider.setNamespace('myApp');
 			expect( provider.getNamespace() ).toEqual('myApp');
+			provider.setNamespace('');
+			expect( provider.getNamespace() ).toEqual('');
 		}));
 
 		it('should set a default namespace via function', inject(function () {
@@ -56,6 +79,7 @@ describe('angular-locker', function () {
 			it('should put a string into the locker', inject(function () {
 				var str = 'someVal';
 				locker.put('someKey', str);
+
 				expect( locker.get('someKey') ).toEqual(str);
 			}));
 
@@ -154,6 +178,44 @@ describe('angular-locker', function () {
 				expect( result1 && result2 ).toBeFalsy();
 			}));
 
+			// it('should fail silently if my value cannot be serialized', inject(function () {
+
+				// expect( function () {
+				// 	locker.put('someKey', ['foo']).toThrowError("quux");
+				// } )
+
+				// 	var malformedArray = [{a:[{}]}];
+
+				// 	var result = locker.put('aKey', malformedArray).get('aKey');
+
+				// 	expect( result ).toBeDefined();
+				// 	console.log(result);
+				// 	expect( angular.isArray(result) ).toBeFalsy();
+			// }));
+
+			it('should catch the error when the browser reports storage is full', inject(function () {
+
+				var error = new Error();
+				error.name = 'QUOTA_EXCEEDED_ERR';
+
+				spyOn(localStorage, 'setItem').and.throwError(error);
+				spyOn(console, 'warn');
+
+				locker.put('someKey', ['foo']);
+
+				expect(console.warn).toHaveBeenCalled();
+			}));
+
+			it('should catch the error when an item couldn\'t be added for some other reason', inject(function () {
+
+				spyOn(localStorage, 'setItem').and.throwError();
+				spyOn(console, 'warn');
+
+				locker.put('someKey', ['foo']);
+
+				expect(console.warn).toHaveBeenCalled();
+			}));
+
 		});
 
 		describe('retrieving items from locker', function () {
@@ -182,24 +244,26 @@ describe('angular-locker', function () {
 
 			it('should return all items within current namespace', inject(function () {
 
+				locker.empty();
+
 				for (var i=0; i<20; i++) {
 					locker.put('aKey' + i, 'aVal' + i);
 				}
 
 				locker.put('something.foo.bar', ['someValue']);
 
+				// var all = store;
 				var all = locker.all();
 				var none = locker.setNamespace('something').all();
 
 				expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
 				expect( Object.keys(none).length ).toEqual(0);
+
+				expect( all ).toEqual(jasmine.objectContaining({ 'aKey12': 'aVal12' }));
+
 				expect( Object.keys(all) ).toContain('aKey12');
-
 				expect( Object.keys(all) ).toContain('something.foo.bar');
-
-				// @todo need to isolate tests more by seeding storage before each one
-				// and cleaning up afterwards
-				expect( Object.keys(all).length ).toEqual(32);
+				expect( Object.keys(all).length ).toEqual(21);
 			}));
 
 		});
@@ -207,6 +271,7 @@ describe('angular-locker', function () {
 		describe('removing items from locker', function () {
 
 			it('should remove an item from locker', inject(function () {
+				locker.put('someKey', 'someVal');
 				expect( locker.get('someKey') ).toEqual('someVal');
 
 				locker.remove('someKey');
@@ -215,8 +280,13 @@ describe('angular-locker', function () {
 			}));
 
 			it('should remove multiple items from locker by passing an array', inject(function () {
+				
+				locker.put('objectKey', {foo: 'bar'});
+				locker.put('arrayKey', ['foo', 'bar']);
+				locker.put('foo', 'bar');
+
 				expect( locker.get('objectKey') ).toBeDefined();
-				expect( locker.get('arrayKey1') ).toBeDefined();
+				expect( locker.get('arrayKey') ).toBeDefined();
 				expect( locker.get('foo') ).toBeDefined();
 
 				locker.remove(['objectKey', 'arrayKey1', 'foo']);
