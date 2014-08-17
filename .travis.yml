@@ -11,5 +11,5 @@ before_script:
   - npm install -g codeclimate-test-reporter
   - bower install
 after_script:
-  - cat test/coverage/phantomjs/lcov.info | codeclimate
+  - cat test/coverage/lcov/lcov.info | codeclimate
 script: gulp
