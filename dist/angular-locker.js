@@ -185,6 +185,7 @@
 					 */
 					put: function (key, value) {
 						if (!key) return false;
+						key = _parseFn(key);
 						if (!angular.isObject(key)) {
 							if (!value) return false;
 							value = _parseFn(value);
@@ -199,7 +200,6 @@
 
 					/**
 					 * add - adds an item to storage if it doesn't already exists
-					 * @todo doesn't handle passing object as key yet
 					 * 
 					 * @param  {Mixed} key
 					 * @param  {Mixed} value

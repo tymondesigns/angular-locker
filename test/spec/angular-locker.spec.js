@@ -5,28 +5,10 @@ describe('angular-locker', function () {
 	beforeEach(module('angular-locker', function (lockerProvider) {
 		provider = lockerProvider;
 		locker = lockerProvider.$get();
-		
-		// localStorage mocks
-		// spyOn(localStorage, 'setItem').and.callFake(function(key, value) {
-		// 	store[key] = value;
-		// });
-		// spyOn(localStorage, 'getItem').and.callFake(function(key) {
-		// 	return store[key];
-		// });
-		// spyOn(localStorage, 'removeItem').and.callFake(function(key) {
-		// 	delete store[key];
-		// });
-		// spyOn(localStorage, 'hasOwnProperty').and.callFake(function(key) {
-		// 	return store.hasOwnProperty(key);
-		// });
-		// spyOn(localStorage, 'clear').and.callFake(function() {
-		// 	store = {};
-		// });
-
 	}));
 
 	afterEach(function() {
-		store = {};
+		locker.empty();
 	});
 
 	describe('lockerProvider', function () {
@@ -138,13 +120,29 @@ describe('angular-locker', function () {
 				expect( locker.get('bob').lorem ).toBeTruthy();
 			}));
 
-			it('should put an item into the locker when passing a function', inject(function () {
+			it('should put an item into the locker when passing a function as second param', inject(function () {
 
 				locker.put('fnKey', function () {
 					return 12 * 12;
 				});
 
 				expect( locker.get('fnKey') ).toEqual(144);
+			}));
+
+			it('should put an item into the locker when passing a function as first param', inject(function () {
+
+				locker.put(function () {
+					return {
+						'someKey': ['some', 'array'],
+						'anotherKey': { foo: 'bar', baz: true }
+					};
+				});
+
+				expect( locker.get('someKey') ).toBeDefined();
+				expect( locker.get('anotherKey') ).toBeDefined();
+
+				expect( angular.isArray(locker.get('someKey')) ).toBeTruthy();
+				expect( angular.isObject(locker.get('anotherKey')) ).toBeTruthy();
 			}));
 
 			it('should put an item into the locker if it doesn\'t already exist', inject(function () {
@@ -180,7 +178,7 @@ describe('angular-locker', function () {
 
 			it('should fail silently if value cannot be serialized and unserialized', inject(function () {
 
-				spyOn(JSON, 'stringify').and.throwError();
+				spyOn(angular, 'toJson').and.throwError();
 
 				var result = locker.put('foo', ['bar', 'baz']).get('foo');
 
