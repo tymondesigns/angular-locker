@@ -6,9 +6,11 @@
   "description": "A simple abstraction for local/session storage in angular projects.",
   "main": "src/locker.js",
   "keywords": ["angular-locker", "angular", "locker", "storage", "localStorage", "sessionStorage", "session", "local"],
+  "dependencies": {
+    "angular-latest": "~1.2.*"
+  },
   "devDependencies": {
-    "angular-latest": "~1.2.21",
-    "angular-mocks": "~1.2.21"
+    "angular-mocks": "~1.2.*"
   },
   "license": "MIT",
   "ignore": ["**/.*", "node_modules", "bower_components", "test"]
