@@ -8,12 +8,13 @@ module.exports = function (config) {
 			'karma-spec-reporter',
 			'karma-phantomjs-launcher',
 			'karma-jasmine',
-			'karma-coverage'
+			'karma-coverage',
+			'karma-notify-reporter'
 		],
 		preprocessors: {
 			'../src/*.js': ['coverage']
     	},
-		reporters : ['spec', 'coverage'],
+		reporters : ['spec', 'coverage', 'notify'],
 		coverageReporter: {
 			type : 'lcov',
 			dir : 'coverage/',
@@ -21,6 +22,7 @@ module.exports = function (config) {
 				// return browser.toLowerCase().split(/[ /-]/)[0];
 				return 'lcov';
 			}
-		}
+		},
+
 	});
 };
