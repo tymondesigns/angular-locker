@@ -9,6 +9,9 @@
     "type": "git",
     "url": "http://github.com/tymondesigns/angular-locker.git"
   },
+  "dependencies": {
+    "angular": "1.2.*"
+  },
   "devDependencies": {
     "gulp": "~3.8.6",
     "gulp-bump": "^0.1.11",
