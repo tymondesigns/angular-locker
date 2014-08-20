@@ -65,7 +65,7 @@ locker.put('someArray', ['foo', 'bar', 'baz']);
 // etc
 ```
 
-#### adding via function param
+#### adding via value function param
 
 Inserts specified key and return value of function
 
@@ -83,9 +83,28 @@ This will add each key/value pair as a **separate** item in storage
 
 ```js
 locker.put({
-	'someKey': 'johndoe',
-	'anotherKey': ['some', 'random', 'array'],
-	'boolKey': true
+	someKey: 'johndoe',
+	anotherKey: ['some', 'random', 'array'],
+	boolKey: true
+});
+```
+
+#### adding via key function param
+
+Inserts each item from the returned Object, similar to above
+
+```js
+locker.put(function() {
+	// some logic
+	return {
+		foo: ['lorem', 'ipsum', 'dolor'],
+		user: {
+			username: 'johndoe',
+			displayName: 'Johnny Doe',
+			active: true,
+			role: 'user'
+		}
+	};
 });
 ```
 

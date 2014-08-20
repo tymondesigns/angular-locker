@@ -133,8 +133,8 @@ describe('angular-locker', function () {
 
 				locker.put(function () {
 					return {
-						'someKey': ['some', 'array'],
-						'anotherKey': { foo: 'bar', baz: true }
+						someKey: ['some', 'array'],
+						anotherKey: { foo: 'bar', baz: true }
 					};
 				});
 
