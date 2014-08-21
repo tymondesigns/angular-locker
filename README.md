@@ -136,6 +136,21 @@ if the key does not exist then, if specified the default will be returned
 locker.get('keyDoesNotExist', 'a default value'); // 'a default value'
 ```
 
+#### retrieving multiple items at once
+
+You may pass an array to the `get()` method to return an Object containing the specified keys (if they exist)
+
+```js
+locker.get(['someKey', 'anotherKey', 'foo']);
+
+// will return something like...
+{
+	someKey: 'someValue',
+	anotherKey: true,
+	foo: 'bar'
+}
+```
+
 #### deleting afterwards
 
 You can also retrieve an item and then delete it via the `pull()` method

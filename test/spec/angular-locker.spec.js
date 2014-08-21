@@ -166,7 +166,7 @@ describe('angular-locker', function () {
 
 				expect( locker.get('foo') ).toEqual('newNamespace');
 				expect( locker.setNamespace('locker').get('foo') ).toEqual('defaultNamespace');
-			})); 
+			}));
 
 			it('should return false if key/value params are missing', inject(function () {
 
@@ -225,6 +225,24 @@ describe('angular-locker', function () {
 				expect( result2 ).toEqual(obj);
 			}));
 
+			it('should return an object containing the key/value pairs passed in via array', inject(function () {
+
+				locker.put(function () {
+					return {
+						'something': 'some value',
+						'anotherThing': ['foo', 'bar'],
+						'lorem': true
+					};
+				});
+
+				var result = locker.get(['something', 'anotherThing']);
+
+				expect( angular.isObject(result) ).toBeTruthy();
+				expect( result.something ).toEqual('some value');
+				expect( result ).not.toEqual( jasmine.objectContaining({ lorem: true }) );
+
+			}));
+
 			it('should return a value and then delete the item', inject(function () {
 				var str = 'someVal456';
 				locker.put('someKey123', str);
@@ -273,7 +291,7 @@ describe('angular-locker', function () {
 			}));
 
 			it('should remove multiple items from locker by passing an array', inject(function () {
-				
+
 				locker.put('objectKey', {foo: 'bar'});
 				locker.put('arrayKey', ['foo', 'bar']);
 				locker.put('foo', 'bar');
@@ -329,9 +347,9 @@ describe('angular-locker', function () {
 			}));
 
 		});
-		
+
 	});
 
-	
+
 
 });

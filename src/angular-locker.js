@@ -1,17 +1,17 @@
 /**
  * angular-locker
- * 
+ *
  * A lightweight & configurable abstraction for local/session storage in angular projects.
  *
  * @link https://github.com/tymondesigns/angular-locker
  * @author Sean Tymon @tymondesigns
- * @license MIT License, http://www.opensource.org/licenses/MIT	
+ * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
 (function(window, angular, undefined) {
 
 	'use strict';
-	
+
 	angular.module('angular-locker', [])
 
 	.provider('locker', function locker() {
@@ -23,10 +23,10 @@
 		separator = '.',
 		namespace = 'locker',
 		prefix = namespace === '' ? '' : namespace + separator,
-		
+
 		/**
 		 * _setItem - set the item in storage - try to stringify if not a string (object/array)
-		 * 
+		 *
 		 * @param {String} key
 		 * @param {Mixed} value
 		 */
@@ -43,10 +43,10 @@
 				}
 			}
 		},
-		
+
 		/**
 		 * _serializeValue - try to encode value as json, or just return the value upon failure
-		 * 
+		 *
 		 * @param  {Mixed} value
 		 * @return {Mixed}
 		 */
@@ -60,7 +60,7 @@
 
 		/**
 		 * _unserializeValue - try to parse value as json, if it fails then it probably isn't json so just return it
-		 * 
+		 *
 		 * @param  {String} value
 		 * @return {Object|String}
 		 */
@@ -71,10 +71,10 @@
 				return value;
 			}
 		},
-		
+
 		/**
 		 * _itemExists - check whether the item exists in storage
-		 * 
+		 *
 		 * @param  {String} key
 		 * @return {Boolean}
 		 */
@@ -84,7 +84,7 @@
 
 		/**
 		 * _parseFn - if value is a function then execute, otherwise just return
-		 * 
+		 *
 		 * @param  {Mixed} value
 		 * @return {Mixed}
 		 */
@@ -94,7 +94,7 @@
 
 		/**
 		 * _removeItem - remove the specified entry from storage
-		 * 
+		 *
 		 * @param  {String} key
 		 * @return {void|Boolean}
 		 */
@@ -106,7 +106,7 @@
 
 		/**
 		 * _setStorageDriver - set the storage driver (session or local)
-		 * 
+		 *
 		 * @param  {String} value
 		 * @return {Object}
 		 */
@@ -118,7 +118,7 @@
 
 		/**
 		 * _getStorageDriver - returns the storage driver that is currently set
-		 * 
+		 *
 		 * @return {String}
 		 */
 		_getStorageDriver = function () {
@@ -127,7 +127,7 @@
 
 		/**
 		 * setNamespace - set the namespace
-		 * 
+		 *
 		 * @param {String} value
 		 */
 		_setNamespace = function (value) {
@@ -138,7 +138,7 @@
 
 		/**
 		 * _getNamespace - returns the namespace that is currently set
-		 * 
+		 *
 		 * @return {String}
 		 */
 		_getNamespace = function () {
@@ -178,7 +178,7 @@
 					/**
 					 * put - add a new item to storage (even if it already exists)
 					 * an object can be passed as the first param to set multiple items in one go
-					 * 
+					 *
 					 * @param  {Mixed} key
 					 * @param  {Mixed} value
 					 * @return {Object}
@@ -200,7 +200,7 @@
 
 					/**
 					 * add - adds an item to storage if it doesn't already exists
-					 * 
+					 *
 					 * @param  {Mixed} key
 					 * @param  {Mixed} value
 					 * @return {Boolean}
@@ -215,19 +215,27 @@
 
 					/**
 					 * get - retrieve the specified item from storage
-					 * 
+					 *
 					 * @param  {String} key
 					 * @param  {Mixed}  def
 					 * @return {Mixed}
 					 */
 					get: function (key, def) {
-						if (!this.has(key)) return def || void 0;
-						return _unserializeValue(storage.getItem(prefix + key));
+						if (!angular.isArray(key)) {
+							if (!this.has(key)) return def || void 0;
+							return _unserializeValue(storage.getItem(prefix + key));
+						} else {
+							var items = {};
+							angular.forEach(key, function (k) {
+								if (this.has(k)) items[k] = this.get(k);
+							}, this);
+							return items;
+						}
 					},
-					
+
 					/**
 					 * has - determine whether a particular item exists in storage
-					 * 
+					 *
 					 * @param  {String}  key
 					 * @return {Boolean}
 					 */
@@ -235,7 +243,7 @@
 
 					/**
 					 * pull - retrieve the specified item from storage and then remove it
-					 * 
+					 *
 					 * @param  {String} key
 					 * @param  {Mixed}  def
 					 * @return {Mixed}
@@ -248,7 +256,7 @@
 
 					/**
 					 * all - return all items in storage within the current namespace
-					 * 
+					 *
 					 * @return {Object}
 					 */
 					all: function () {
@@ -259,14 +267,14 @@
 								split.splice(0, 1);
 								key = split.join(separator);
 							}
-							if (this.get(key)) items[key] = this.get(key);
+							if (this.has(key)) items[key] = this.get(key);
 						}, this);
 						return items;
 					},
 
 					/**
 					 * remove - remove a specified item(s) from storage
-					 * 
+					 *
 					 * @param  {String|Array} key
 					 * @return {Object}
 					 */
@@ -296,7 +304,7 @@
 
 					/**
 					 * empty - empties the current storage driver completely. careful now
-					 * 
+					 *
 					 * @return {Object}
 					 */
 					empty: function () {
@@ -307,7 +315,7 @@
 					/**
 					 * setStorageDriver - same as above. Added here so that it can be chained on the fly
 					 * e.g. locker.setStorageDriver('session').put('sessionVar', 'I am volatile');
-					 * 
+					 *
 					 * @return {Object}
 					 */
 					setStorageDriver: _setStorageDriver,
@@ -315,7 +323,7 @@
 					/**
 					 * setNamespace - same as above. Added here so that it can be chained on the fly
 					 * e.g. locker.setNamespace('myAppName').put('appVar', 'someVar);
-					 * 
+					 *
 					 * @return {Object}
 					 */
 					setNamespace: _setNamespace
