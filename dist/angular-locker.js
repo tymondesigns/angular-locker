@@ -20,8 +20,8 @@
 		 * set some defaults
 		 */
 		var storage = window.localStorage,
-		separator = '.',
 		namespace = 'locker',
+		separator = '.',
 		prefix = namespace === '' ? '' : namespace + separator,
 
 		/**
