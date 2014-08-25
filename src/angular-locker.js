@@ -24,6 +24,16 @@
 		separator = '.',
 		prefix = namespace === '' ? '' : namespace + separator,
 
+
+		/**
+		 * _supported - check whether the browser supports local/session storage
+		 *
+		 * @return {Boolean}
+		 */
+		_supported = function () {
+			return typeof Storage !== void 0;
+		},
+
 		/**
 		 * _setItem - set the item in storage - try to stringify if not a string (object/array)
 		 *
@@ -224,13 +234,13 @@
 						if (!angular.isArray(key)) {
 							if (!this.has(key)) return def || void 0;
 							return _unserializeValue(storage.getItem(prefix + key));
-						} else {
-							var items = {};
-							angular.forEach(key, function (k) {
-								if (this.has(k)) items[k] = this.get(k);
-							}, this);
-							return items;
 						}
+						
+						var items = {};
+						angular.forEach(key, function (k) {
+							if (this.has(k)) items[k] = this.get(k);
+						}, this);
+						return items;
 					},
 
 					/**
@@ -326,7 +336,14 @@
 					 *
 					 * @return {Object}
 					 */
-					setNamespace: _setNamespace
+					setNamespace: _setNamespace,
+
+					/**
+					 * supported - check whether the browser supports local/session storage
+					 * 
+					 * @return {Boolean}
+					 */
+					supported: _supported
 				};
 			}
 		};
