@@ -31,7 +31,7 @@
 		 * @return {Boolean}
 		 */
 		_supported = function () {
-			return typeof Storage !== void 0;
+			return typeof window.Storage !== 'undefined';
 		},
 
 		/**

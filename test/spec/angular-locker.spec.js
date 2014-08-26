@@ -348,6 +348,26 @@ describe('angular-locker', function () {
 
 		});
 
+		describe('checking browser support', function () {
+
+			it('should return true if storage is supported', inject(function () {
+				
+				spyOn(window, 'Storage').and.returnValue(function(){});
+
+				expect( locker.supported() ).toBeTruthy();
+
+			}));
+
+			it('should return false if storage is not supported', inject(function () {
+				
+				window.Storage = undefined;
+
+				expect( locker.supported() ).toBeFalsy();
+
+			}));
+
+		});
+
 	});
 
 
