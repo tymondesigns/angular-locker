@@ -222,7 +222,7 @@
 					 */
 					get: function (key, def) {
 						if (!angular.isArray(key)) {
-							if (!this.has(key)) return def || void 0;
+							if (!this.has(key)) return arguments.length === 2 ? def : void 0;
 							return _unserializeValue(storage.getItem(prefix + key));
 						} else {
 							var items = {};
