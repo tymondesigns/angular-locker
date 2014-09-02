@@ -372,7 +372,7 @@ describe('angular-locker', function () {
 
 			it('should return false if storage is not supported', inject(function () {
 				
-				window.Storage = undefined;
+				spyOn(window.localStorage, 'setItem').and.throwError();
 
 				expect( locker.supported() ).toBeFalsy();
 

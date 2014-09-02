@@ -31,7 +31,14 @@
 		 * @return {Boolean}
 		 */
 		_supported = function () {
-			return typeof window.Storage !== 'undefined';
+			var t = 't';
+			try {
+				localStorage.setItem(t, t);
+				localStorage.removeItem(t);
+				return true;
+			} catch (e) {
+				return false;
+			}
 		},
 
 		/**
@@ -232,8 +239,7 @@
 					 */
 					get: function (key, def) {
 						if (!angular.isArray(key)) {
-							if (!this.has(key)) return def || void 0;
-							// if (!this.has(key)) return arguments.length === 2 ? def : void 0;
+							if (!this.has(key)) return arguments.length === 2 ? def : void 0;
 							return _unserializeValue(storage.getItem(prefix + key));
 						}
 						

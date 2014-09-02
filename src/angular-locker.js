@@ -31,7 +31,14 @@
 		 * @return {Boolean}
 		 */
 		_supported = function () {
-			return typeof window.Storage !== 'undefined';
+			var t = 't';
+			try {
+				localStorage.setItem(t, t);
+				localStorage.removeItem(t);
+				return true;
+			} catch (e) {
+				return false;
+			}
 		},
 
 		/**
