@@ -226,8 +226,8 @@
 					/**
 					 * get - retrieve the specified item from storage
 					 *
-					 * @param  {String} key
-					 * @param  {Mixed}  def
+					 * @param  {String|Array} key
+					 * @param  {Mixed}        def
 					 * @return {Mixed}
 					 */
 					get: function (key, def) {
@@ -254,8 +254,8 @@
 					/**
 					 * pull - retrieve the specified item from storage and then remove it
 					 *
-					 * @param  {String} key
-					 * @param  {Mixed}  def
+					 * @param  {String|Array} key
+					 * @param  {Mixed}        def
 					 * @return {Mixed}
 					 */
 					pull: function (key, def) {

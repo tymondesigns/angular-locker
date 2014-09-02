@@ -221,6 +221,18 @@ describe('angular-locker', function () {
 				var result = locker.get('somethingThatDoesExist', str);
 				var result2 = locker.get('somethingElseThatDoesntExist', { foo: 'bar', bar: 123, baz: true });
 
+				var result3 = locker.get('somethingElseThatDoesntExist', false);
+				var result4 = locker.get('somethingElseThatDoesntExist', '');
+				var result5 = locker.get('somethingElseThatDoesntExist', 'NaN');
+				var result6 = locker.get('somethingElseThatDoesntExist', null);
+				var result7 = locker.get('somethingElseThatDoesntExist', 0);
+
+				expect( result3 ).toEqual(false);
+				expect( result4 ).toEqual('');
+				expect( result5 ).toEqual('NaN');
+				expect( result6 ).toEqual(null);
+				expect( result7 ).toEqual(0);
+
 				expect( result ).not.toEqual(str);
 				expect( result2 ).toEqual(obj);
 			}));

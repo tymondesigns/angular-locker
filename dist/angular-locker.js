@@ -226,13 +226,14 @@
 					/**
 					 * get - retrieve the specified item from storage
 					 *
-					 * @param  {String} key
-					 * @param  {Mixed}  def
+					 * @param  {String|Array} key
+					 * @param  {Mixed}        def
 					 * @return {Mixed}
 					 */
 					get: function (key, def) {
 						if (!angular.isArray(key)) {
 							if (!this.has(key)) return def || void 0;
+							// if (!this.has(key)) return arguments.length === 2 ? def : void 0;
 							return _unserializeValue(storage.getItem(prefix + key));
 						}
 						
@@ -254,8 +255,8 @@
 					/**
 					 * pull - retrieve the specified item from storage and then remove it
 					 *
-					 * @param  {String} key
-					 * @param  {Mixed}  def
+					 * @param  {String|Array} key
+					 * @param  {Mixed}        def
 					 * @return {Mixed}
 					 */
 					pull: function (key, def) {
