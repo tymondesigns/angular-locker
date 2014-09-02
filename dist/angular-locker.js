@@ -24,6 +24,23 @@
 		separator = '.',
 		prefix = namespace === '' ? '' : namespace + separator,
 
+
+		/**
+		 * _supported - check whether the browser supports local/session storage
+		 *
+		 * @return {Boolean}
+		 */
+		_supported = function () {
+			var t = 't';
+			try {
+				localStorage.setItem(t, t);
+				localStorage.removeItem(t);
+				return true;
+			} catch (e) {
+				return false;
+			}
+		},
+
 		/**
 		 * _setItem - set the item in storage - try to stringify if not a string (object/array)
 		 *
@@ -216,21 +233,21 @@
 					/**
 					 * get - retrieve the specified item from storage
 					 *
-					 * @param  {String} key
-					 * @param  {Mixed}  def
+					 * @param  {String|Array} key
+					 * @param  {Mixed}        def
 					 * @return {Mixed}
 					 */
 					get: function (key, def) {
 						if (!angular.isArray(key)) {
-							if (!this.has(key)) return def || void 0;
+							if (!this.has(key)) return arguments.length === 2 ? def : void 0;
 							return _unserializeValue(storage.getItem(prefix + key));
-						} else {
-							var items = {};
-							angular.forEach(key, function (k) {
-								if (this.has(k)) items[k] = this.get(k);
-							}, this);
-							return items;
 						}
+						
+						var items = {};
+						angular.forEach(key, function (k) {
+							if (this.has(k)) items[k] = this.get(k);
+						}, this);
+						return items;
 					},
 
 					/**
@@ -244,8 +261,8 @@
 					/**
 					 * pull - retrieve the specified item from storage and then remove it
 					 *
-					 * @param  {String} key
-					 * @param  {Mixed}  def
+					 * @param  {String|Array} key
+					 * @param  {Mixed}        def
 					 * @return {Mixed}
 					 */
 					pull: function (key, def) {
@@ -326,7 +343,14 @@
 					 *
 					 * @return {Object}
 					 */
-					setNamespace: _setNamespace
+					setNamespace: _setNamespace,
+
+					/**
+					 * supported - check whether the browser supports local/session storage
+					 * 
+					 * @return {Boolean}
+					 */
+					supported: _supported
 				};
 			}
 		};

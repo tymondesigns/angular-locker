@@ -221,6 +221,18 @@ describe('angular-locker', function () {
 				var result = locker.get('somethingThatDoesExist', str);
 				var result2 = locker.get('somethingElseThatDoesntExist', { foo: 'bar', bar: 123, baz: true });
 
+				var result3 = locker.get('somethingElseThatDoesntExist', false);
+				var result4 = locker.get('somethingElseThatDoesntExist', '');
+				var result5 = locker.get('somethingElseThatDoesntExist', 'NaN');
+				var result6 = locker.get('somethingElseThatDoesntExist', null);
+				var result7 = locker.get('somethingElseThatDoesntExist', 0);
+
+				expect( result3 ).toEqual(false);
+				expect( result4 ).toEqual('');
+				expect( result5 ).toEqual('NaN');
+				expect( result6 ).toEqual(null);
+				expect( result7 ).toEqual(0);
+
 				expect( result ).not.toEqual(str);
 				expect( result2 ).toEqual(obj);
 			}));
@@ -344,6 +356,26 @@ describe('angular-locker', function () {
 
 				expect( locker.setNamespace('differentNs').has('randKeyNs') ).toBeTruthy();
 				expect( locker.setNamespace('loremipsumdolorsitamet').has('randKeyNs') ).toBeFalsy();
+			}));
+
+		});
+
+		describe('checking browser support', function () {
+
+			it('should return true if storage is supported', inject(function () {
+				
+				spyOn(window, 'Storage').and.returnValue(function(){});
+
+				expect( locker.supported() ).toBeTruthy();
+
+			}));
+
+			it('should return false if storage is not supported', inject(function () {
+				
+				spyOn(window.localStorage, 'setItem').and.throwError();
+
+				expect( locker.supported() ).toBeFalsy();
+
 			}));
 
 		});
