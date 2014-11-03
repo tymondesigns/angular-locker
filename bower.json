@@ -3,8 +3,8 @@
   "version": "0.6.1",
   "homepage": "https://github.com/tymondesigns/angular-locker",
   "authors": ["Sean Tymon <tymon148@gmail.com>"],
-  "description": "A simple abstraction for local/session storage in angular projects.",
-  "main": "src/locker.js",
+  "description": "A simple & configurable abstraction for local/session storage in angular projects.",
+  "main": "dist/angular-locker.js",
   "keywords": ["angular-locker", "angular", "locker", "storage", "localStorage", "sessionStorage", "session", "local"],
   "dependencies": {
     "angular-latest": "~1.2.*"

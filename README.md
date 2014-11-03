@@ -203,7 +203,7 @@ if (locker.has('user.authToken') ) {
 
 ### Removing items from locker
 
-The simplest way to remove an item is to simply pass the key to the `remove()` method
+The simplest way to remove an item is to pass the key to the `remove()` method
 
 ```js
 locker.remove('keyToRemove');
