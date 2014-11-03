@@ -90,16 +90,6 @@
 		},
 
 		/**
-		 * _itemExists - check whether the item exists in storage
-		 *
-		 * @param  {String} key
-		 * @return {Boolean}
-		 */
-		_itemExists = function (key) {
-			return storage.hasOwnProperty(prefix + key);
-		},
-
-		/**
 		 * _parseFn - if value is a function then execute, otherwise just return
 		 *
 		 * @param  {Mixed} value
@@ -107,6 +97,17 @@
 		 */
 		_parseFn = function (value) {
 			return typeof value === 'function' ? value() : value;
+		},
+
+		/**
+		 * _itemExists - check whether the item exists in storage
+		 *
+		 * @param  {String} key
+		 * @return {Boolean}
+		 */
+		_itemExists = function (key) {
+			key = _parseFn(key);
+			return storage.hasOwnProperty(prefix + key);
 		},
 
 		/**
@@ -242,7 +243,7 @@
 							if (!this.has(key)) return arguments.length === 2 ? def : void 0;
 							return _unserializeValue(storage.getItem(prefix + key));
 						}
-						
+
 						var items = {};
 						angular.forEach(key, function (k) {
 							if (this.has(k)) items[k] = this.get(k);
@@ -296,6 +297,7 @@
 					 * @return {Object}
 					 */
 					remove: function (key) {
+						key = _parseFn(key);
 						if (!angular.isArray(key)) {
 							_removeItem(key);
 						} else {
@@ -347,7 +349,7 @@
 
 					/**
 					 * supported - check whether the browser supports local/session storage
-					 * 
+					 *
 					 * @return {Boolean}
 					 */
 					supported: _supported

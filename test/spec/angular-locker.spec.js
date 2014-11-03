@@ -295,11 +295,38 @@ describe('angular-locker', function () {
 
 			it('should remove an item from locker', inject(function () {
 				locker.put('someKey', 'someVal');
-				expect( locker.get('someKey') ).toEqual('someVal');
 
 				locker.remove('someKey');
 
 				expect( locker.get('someKey') ).toBeUndefined();
+			}));
+
+			it('should remove an item from locker when passing a function', inject(function () {
+				locker.put('someKey', 'someVal');
+
+				locker.remove(function () {
+					return 'someKey';
+				});
+
+				expect( locker.get('someKey') ).toBeUndefined();
+			}));
+
+			it('should remove multiple items from locker when passing a function', inject(function () {
+				locker.put(function () {
+					return {
+						'something': 'some value',
+						'anotherThing': ['foo', 'bar'],
+						'lorem': true
+					};
+				});
+
+				locker.remove(function () {
+					return ['something', 'anotherThing'];
+				});
+
+				expect( locker.get('something') ).toBeUndefined();
+				expect( locker.get('anotherThing') ).toBeUndefined();
+				expect( locker.get('lorem') ).toBeTruthy();
 			}));
 
 			it('should remove multiple items from locker by passing an array', inject(function () {
@@ -307,10 +334,6 @@ describe('angular-locker', function () {
 				locker.put('objectKey', {foo: 'bar'});
 				locker.put('arrayKey', ['foo', 'bar']);
 				locker.put('foo', 'bar');
-
-				expect( locker.get('objectKey') ).toBeDefined();
-				expect( locker.get('arrayKey') ).toBeDefined();
-				expect( locker.get('foo') ).toBeDefined();
 
 				locker.remove(['objectKey', 'arrayKey1', 'foo']);
 
@@ -351,6 +374,17 @@ describe('angular-locker', function () {
 				expect( locker.has('loremipsumdolorsitamet') ).toBeFalsy();
 			}));
 
+			it('should determine whether an item exists in locker when passing a function', inject(function () {
+				locker.put('randKey', Math.random());
+
+				var result = locker.has(function () {
+					return 'randKey';
+				});
+
+				expect(result).toBeTruthy();
+				expect( locker.has('loremipsumdolorsitamet') ).toBeFalsy();
+			}));
+
 			it('should determine whether an item exists in locker within another namespace', inject(function () {
 				locker.setNamespace('differentNs').put('randKeyNs', Math.random());
 
@@ -363,7 +397,7 @@ describe('angular-locker', function () {
 		describe('checking browser support', function () {
 
 			it('should return true if storage is supported', inject(function () {
-				
+
 				spyOn(window, 'Storage').and.returnValue(function(){});
 
 				expect( locker.supported() ).toBeTruthy();
@@ -371,7 +405,7 @@ describe('angular-locker', function () {
 			}));
 
 			it('should return false if storage is not supported', inject(function () {
-				
+
 				spyOn(window.localStorage, 'setItem').and.throwError();
 
 				expect( locker.supported() ).toBeFalsy();
