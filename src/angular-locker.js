@@ -1,7 +1,7 @@
 /**
  * angular-locker
  *
- * A lightweight & configurable abstraction for local/session storage in angular projects.
+ * A simple & configurable abstraction for local/session storage in angular projects.
  *
  * @link https://github.com/tymondesigns/angular-locker
  * @author Sean Tymon @tymondesigns
