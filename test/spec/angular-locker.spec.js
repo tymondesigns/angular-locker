@@ -267,8 +267,6 @@ describe('angular-locker', function () {
 
 			it('should return all items within current namespace', inject(function () {
 
-				locker.empty();
-
 				for (var i=0; i<20; i++) {
 					locker.put('aKey' + i, 'aVal' + i);
 				}
@@ -287,6 +285,17 @@ describe('angular-locker', function () {
 				expect( Object.keys(all) ).toContain('aKey12');
 				expect( Object.keys(all) ).toContain('something.foo.bar');
 				expect( Object.keys(all).length ).toEqual(21);
+			}));
+
+			it('should count the items within current namespace', inject(function () {
+				for (var i=0; i<20; i++) {
+					locker.put('aKey' + i, 'aVal' + i);
+				}
+
+				locker.put('something.foo.bar', ['someValue']);
+
+				expect( locker.count() ).toEqual(21);
+				expect(locker.setNamespace('something').count()).toEqual(0);
 			}));
 
 		});

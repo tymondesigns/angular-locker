@@ -14,7 +14,7 @@
 
 	angular.module('angular-locker', [])
 
-	.provider('locker', function locker() {
+	.provider('locker', function locker () {
 
 		/**
 		 * set some defaults
@@ -190,7 +190,7 @@
 			/**
 			 * the locker service
 			 */
-			$get: function() {
+			$get: function () {
 				return {
 
 					/**
@@ -329,6 +329,21 @@
 					empty: function () {
 						storage.clear();
 						return this;
+					},
+
+					/**
+					 * count helper to get the total number of items within the current namespace
+					 *
+					 * @return {Integer}
+					 */
+					count: function () {
+						var all = this.all(), count = 0, k;
+						for (k in all) {
+							if (all.hasOwnProperty(k)) {
+								count++;
+							}
+						}
+						return count;
 					},
 
 					/**
