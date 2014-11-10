@@ -114,7 +114,7 @@ var promptBump = function(callback) {
 
 gulp.task('release', ['default'], function () {
 	return promptBump(function(newVer) {
-			
+
 			var stream = streamqueue({ objectMode: true });
 
 			// make the changelog
