@@ -180,6 +180,18 @@ This will return an object containing all the key/value pairs in storage
 
 ```js
 locker.all();
+// or
+locker.setNamespace('somethingElse').all();
+```
+
+#### counting items
+
+To count the number of items within a given namespace:
+
+```js
+locker.count();
+// or
+locker.setNamespace('somethingElse').count();
 ```
 
 ----------------------------
