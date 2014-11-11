@@ -13,3 +13,7 @@ before_script:
 after_script:
   - cat test/coverage/lcov/lcov.info | codeclimate
 script: gulp
+env:
+  global:
+    - secure: cigU5ReZLTT2l75BFfEvSBGy+GZ68ivSfs561Kc22vSDidEBb/1x1Ydv7cjNLbyGoT43MJBYFHL5xeyyY9haBn03sUpXHu/PjNULJFfQUWpizqhfSmC7OZJNVuonESruq4k7yHWGgUEE9aHuJGi8cDw1cB0k6TMAtY7LExQNLaE=
+    - secure: YHkhMjp5bOE8unA9zwpwLuPy0V9Ml3Sa5uQ8SFAnyDIDoo7YC5SZHXf5FBOOUlL9u0+buYNKT9YseiSUCpqMK09Q1JsN4xZXl660QjaZTYNki+1bleEAmGEYXr60XNOSs6c53b7nxg7FtS1ozRCgx43bEBKXCJKHnbPEVwQrcUI=
