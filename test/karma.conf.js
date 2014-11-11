@@ -60,6 +60,7 @@ module.exports = function (config) {
 	    browsers: ['PhantomJS'].concat(Object.keys(customLaunchers)),
 		reporters: ['spec', 'coverage', 'notify', 'saucelabs'],
 		singleRun: true,
+		captureTimeout: 120000,
 
 		coverageReporter: {
 			type: 'lcov',
