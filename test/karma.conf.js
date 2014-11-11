@@ -48,8 +48,9 @@ module.exports = function (config) {
     	},
 
     	sauceLabs: {
-	        testName: 'angular-locker unit tests',
-			recordScreenshots: false
+	        testName: 'angular-locker',
+			recordScreenshots: false,
+			tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER
 	    },
 	    customLaunchers: customLaunchers,
 	    browsers: ['PhantomJS'].concat(Object.keys(customLaunchers)),
