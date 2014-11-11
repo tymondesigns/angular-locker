@@ -49,13 +49,8 @@ module.exports = function (config) {
 
     	sauceLabs: {
 	        testName: 'angular-locker unit tests',
-			recordScreenshots: false,
-			connectOptions: {
-				port: 4445,
-				logfile: 'sauce_connect.log'
-			}
+			recordScreenshots: false
 	    },
-	    startConnect: false,
 	    customLaunchers: customLaunchers,
 	    browsers: ['PhantomJS'].concat(Object.keys(customLaunchers)),
 		reporters: ['spec', 'coverage', 'notify', 'saucelabs'],
