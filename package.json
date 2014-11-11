@@ -32,6 +32,7 @@
     "karma-jasmine": "~0.2.0",
     "karma-notify-reporter": "^0.1.1",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sauce-launcher": "^0.2.10",
     "karma-spec-reporter": "0.0.13",
     "semver": "^3.0.1",
     "streamqueue": "^0.1.1"
