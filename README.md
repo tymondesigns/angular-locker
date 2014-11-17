@@ -196,7 +196,7 @@ This will return an object containing all the key/value pairs in storage
 ```js
 locker.all();
 // or
-locker.setNamespace('somethingElse').all();
+locker.namespace('somethingElse').all();
 ```
 
 #### counting items
@@ -206,7 +206,7 @@ To count the number of items within a given namespace:
 ```js
 locker.count();
 // or
-locker.setNamespace('somethingElse').count();
+locker.namespace('somethingElse').count();
 ```
 
 ----------------------------
@@ -251,7 +251,7 @@ you can remove all the items within the currently set namespace via the `clean()
 ```js
 locker.clean();
 // or
-locker.setNamespace('someOtherNamespace').clean();
+locker.namespace('someOtherNamespace').clean();
 ```
 #### removing all items within the currently set storage driver
 
