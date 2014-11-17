@@ -170,6 +170,7 @@
 			 * e.g. lockerProvider.setStorageDriver('session');
 			 */
 			setDefaultDriver: _setStorageDriver,
+			setStorageDriver: _setStorageDriver, // backwards compatible alias for now
 
 			/**
 			 * getStorageDriver
@@ -181,6 +182,7 @@
 			 * e.g. lockerProvider.setNamespace('myAppName');
 			 */
 			setDefaultNamespace: _setNamespace,
+			setNamespace: _setNamespace, // backwards compatible alias for now
 
 			/**
 			 * getNamespace
@@ -353,6 +355,7 @@
 					 * @return {Object}
 					 */
 					driver: _setStorageDriver,
+					setStorageDriver: _setStorageDriver, // backwards compatible alias for now
 
 					/**
 					 * setNamespace - same as above. Added here so that it can be chained on the fly
@@ -361,6 +364,7 @@
 					 * @return {Object}
 					 */
 					namespace: _setNamespace,
+					setNamespace: _setNamespace, // backwards compatible alias for now
 
 					/**
 					 * supported - check whether the browser supports local/session storage
