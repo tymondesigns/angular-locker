@@ -42,8 +42,8 @@ Configure via `lockerProvider` (*optional*)
 
 ```js
 .config(function config(lockerProvider) {
-	lockerProvider.setStorageDriver('session');
-	lockerProvider.setNamespace('myAppName');
+	lockerProvider.setDefaultDriver('session');
+	lockerProvider.setDefaultNamespace('myAppName');
 }]);
 ```
 
@@ -53,6 +53,21 @@ inject `locker` into your controller/service/directive etc
 .factory('MyFactory', function MyFactory(locker) {
 	locker.put('someKey', 'someVal');
 });
+```
+
+----------------------------
+
+### Switching drivers
+
+There may be times where you will want to dynamically switch between using local and session storage.
+To achieve this, simply use the `driver()` setter to specify what storage driver you want to use, as follows:
+
+```js
+// put an item into session storage
+locker.driver('session').put('sessionKey', ['some', 'session', 'data']);
+
+// this time use local storage
+locker.driver('local').get('localKey', ['some', 'persistent', 'things']);
 ```
 
 ----------------------------
