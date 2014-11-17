@@ -90,12 +90,12 @@
 		},
 
 		/**
-		 * _parseFn - if value is a function then execute, otherwise just return
+		 * _value - if value is a function then execute, otherwise just return
 		 *
 		 * @param  {Mixed} value
 		 * @return {Mixed}
 		 */
-		_parseFn = function (value) {
+		_value = function (value) {
 			return typeof value === 'function' ? value() : value;
 		},
 
@@ -106,7 +106,7 @@
 		 * @return {Boolean}
 		 */
 		_itemExists = function (key) {
-			key = _parseFn(key);
+			key = _value(key);
 			return storage.hasOwnProperty(prefix + key);
 		},
 
@@ -129,7 +129,7 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
-			value = _parseFn(value);
+			value = _value(value);
 			storage = value === 'session' ? window.sessionStorage : window.localStorage;
 			return this;
 		},
@@ -149,7 +149,7 @@
 		 * @param {String} value
 		 */
 		_setNamespace = function (value) {
-			namespace = _parseFn(value);
+			namespace = _value(value);
 			prefix = namespace === '' ? '' : namespace + separator;
 			return this;
 		},
@@ -205,10 +205,10 @@
 					 */
 					put: function (key, value) {
 						if (!key) return false;
-						key = _parseFn(key);
+						key = _value(key);
 						if (!angular.isObject(key)) {
 							if (!value) return false;
-							value = _parseFn(value);
+							value = _value(value);
 							_setItem(key, value);
 						} else {
 							angular.forEach(key, function (value, key) {
@@ -299,7 +299,7 @@
 					 * @return {Object}
 					 */
 					remove: function (key) {
-						key = _parseFn(key);
+						key = _value(key);
 						if (!angular.isArray(key)) {
 							_removeItem(key);
 						} else {
