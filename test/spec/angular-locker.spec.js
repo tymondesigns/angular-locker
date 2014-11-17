@@ -21,9 +21,6 @@ describe('angular-locker', function () {
 			expect( provider.getDefaultDriver() ).toEqual('local');
 			provider.setDefaultDriver('session');
 			expect( provider.getDefaultDriver() ).toEqual('session');
-
-			provider.setDefaultDriver('somethingNotExpected');
-			expect( provider.getDefaultDriver() ).toEqual('session');
 		}));
 
 		it('should set a default storage driver via function', inject(function () {
@@ -33,6 +30,15 @@ describe('angular-locker', function () {
 				if (shouldUseSession) return 'session';
 			});
 			expect( provider.getDefaultDriver() ).toEqual('session');
+		}));
+
+		it('should warn in the console if storage driver that does not exist is used', inject(function () {
+			spyOn(console, 'warn');
+
+			provider.setDefaultDriver('somethingNotExpected');
+
+			expect(console.warn).toHaveBeenCalled();
+			expect( provider.getDefaultDriver() ).toEqual('local');
 		}));
 
 		it('should set a default namespace', inject(function () {

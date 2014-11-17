@@ -135,7 +135,7 @@
 		 */
 		_setStorageDriver = function (value) {
 			if (! drivers.hasOwnProperty(_value(value))) {
-				console.warn('angular-locker - The driver "' + value + '" does not exist. no action taken');
+				console.warn('angular-locker - The driver "' + value + '" does not exist. No action taken');
 			} else {
 				storage = drivers[_value(value)]();
 			}
