@@ -48,7 +48,7 @@
 		 * @param {Mixed} value
 		 */
 		_setItem = function (key, value) {
-			value = _serializeValue(value);
+			value = _serialize(value);
 
 			try {
 				storage.setItem(prefix + key, value);
@@ -62,12 +62,12 @@
 		},
 
 		/**
-		 * _serializeValue - try to encode value as json, or just return the value upon failure
+		 * _serialize - try to encode value as json, or just return the value upon failure
 		 *
 		 * @param  {Mixed} value
 		 * @return {Mixed}
 		 */
-		_serializeValue = function (value) {
+		_serialize = function (value) {
 			try {
 				return angular.toJson(value);
 			} catch (e) {
@@ -76,12 +76,12 @@
 		},
 
 		/**
-		 * _unserializeValue - try to parse value as json, if it fails then it probably isn't json so just return it
+		 * _unserialize - try to parse value as json, if it fails then it probably isn't json so just return it
 		 *
 		 * @param  {String} value
 		 * @return {Object|String}
 		 */
-		_unserializeValue = function (value) {
+		_unserialize = function (value) {
 			try {
 				return angular.fromJson(value);
 			} catch (e) {
@@ -169,23 +169,23 @@
 			 * setStorageDriver - allow setting of default storage driver via `lockerProvider`
 			 * e.g. lockerProvider.setStorageDriver('session');
 			 */
-			setStorageDriver: _setStorageDriver,
+			setDefaultDriver: _setStorageDriver,
 
 			/**
 			 * getStorageDriver
 			 */
-			getStorageDriver: _getStorageDriver,
+			getDefaultDriver: _getStorageDriver,
 
 			/**
 			 * setNamespace - allow setting of default namespace via `lockerProvider`
 			 * e.g. lockerProvider.setNamespace('myAppName');
 			 */
-			setNamespace: _setNamespace,
+			setDefaultNamespace: _setNamespace,
 
 			/**
 			 * getNamespace
 			 */
-			getNamespace: _getNamespace,
+			getDefaultNamespace: _getNamespace,
 
 			/**
 			 * the locker service
@@ -241,7 +241,7 @@
 					get: function (key, def) {
 						if (!angular.isArray(key)) {
 							if (!this.has(key)) return arguments.length === 2 ? def : void 0;
-							return _unserializeValue(storage.getItem(prefix + key));
+							return _unserialize(storage.getItem(prefix + key));
 						}
 
 						var items = {};
@@ -352,7 +352,7 @@
 					 *
 					 * @return {Object}
 					 */
-					setStorageDriver: _setStorageDriver,
+					driver: _setStorageDriver,
 
 					/**
 					 * setNamespace - same as above. Added here so that it can be chained on the fly
@@ -360,7 +360,7 @@
 					 *
 					 * @return {Object}
 					 */
-					setNamespace: _setNamespace,
+					namespace: _setNamespace,
 
 					/**
 					 * supported - check whether the browser supports local/session storage

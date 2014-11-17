@@ -18,38 +18,38 @@ describe('angular-locker', function () {
 		}));
 
 		it('should set a default storage driver', inject(function () {
-			expect( provider.getStorageDriver() ).toEqual('local');
-			provider.setStorageDriver('session');
-			expect( provider.getStorageDriver() ).toEqual('session');
+			expect( provider.getDefaultDriver() ).toEqual('local');
+			provider.setDefaultDriver('session');
+			expect( provider.getDefaultDriver() ).toEqual('session');
 
-			provider.setStorageDriver('somethingNotExpected');
-			expect( provider.getStorageDriver() ).toEqual('local');
+			provider.setDefaultDriver('somethingNotExpected');
+			expect( provider.getDefaultDriver() ).toEqual('local');
 		}));
 
 		it('should set a default storage driver via function', inject(function () {
-			expect( provider.getStorageDriver() ).toEqual('local');
-			provider.setStorageDriver(function () {
+			expect( provider.getDefaultDriver() ).toEqual('local');
+			provider.setDefaultDriver(function () {
 				var shouldUseSession = true;
 				if (shouldUseSession) return 'session';
 			});
-			expect( provider.getStorageDriver() ).toEqual('session');
+			expect( provider.getDefaultDriver() ).toEqual('session');
 		}));
 
 		it('should set a default namespace', inject(function () {
-			expect( provider.getNamespace() ).toEqual('locker');
-			provider.setNamespace('myApp');
-			expect( provider.getNamespace() ).toEqual('myApp');
-			provider.setNamespace('');
-			expect( provider.getNamespace() ).toEqual('');
+			expect( provider.getDefaultNamespace() ).toEqual('locker');
+			provider.setDefaultNamespace('myApp');
+			expect( provider.getDefaultNamespace() ).toEqual('myApp');
+			provider.setDefaultNamespace('');
+			expect( provider.getDefaultNamespace() ).toEqual('');
 		}));
 
 		it('should set a default namespace via function', inject(function () {
-			expect( provider.getNamespace() ).toEqual('locker');
-			provider.setNamespace(function () {
+			expect( provider.getDefaultNamespace() ).toEqual('locker');
+			provider.setDefaultNamespace(function () {
 				var arr = ['myApp', 'coolApp', 'somethingElse'];
 				return arr[1];
 			});
-			expect( provider.getNamespace() ).toEqual('coolApp');
+			expect( provider.getDefaultNamespace() ).toEqual('coolApp');
 		}));
 
 	});
@@ -162,10 +162,10 @@ describe('angular-locker', function () {
 
 			it('should put an item into the locker in a different namespace', inject(function () {
 				locker.put('foo', 'defaultNamespace');
-				locker.setNamespace('someOtherNamespace').put('foo', 'newNamespace');
+				locker.namespace('someOtherNamespace').put('foo', 'newNamespace');
 
 				expect( locker.get('foo') ).toEqual('newNamespace');
-				expect( locker.setNamespace('locker').get('foo') ).toEqual('defaultNamespace');
+				expect( locker.namespace('locker').get('foo') ).toEqual('defaultNamespace');
 			}));
 
 			it('should return false if key/value params are missing', inject(function () {
@@ -275,7 +275,7 @@ describe('angular-locker', function () {
 
 				// var all = store;
 				var all = locker.all();
-				var none = locker.setNamespace('something').all();
+				var none = locker.namespace('something').all();
 
 				expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
 				expect( Object.keys(none).length ).toEqual(0);
@@ -295,7 +295,7 @@ describe('angular-locker', function () {
 				locker.put('something.foo.bar', ['someValue']);
 
 				expect( locker.count() ).toEqual(21);
-				expect(locker.setNamespace('something').count()).toEqual(0);
+				expect(locker.namespace('something').count()).toEqual(0);
 			}));
 
 		});
@@ -352,14 +352,14 @@ describe('angular-locker', function () {
 			}));
 
 			it('should remove all items within a namespace', inject(function () {
-				provider.setNamespace('someOtherNamespace');
+				provider.setDefaultNamespace('someOtherNamespace');
 				locker.put('keyInOtherNamespace', 'someVal');
-				locker.setNamespace('wontBeCleaned').put('keyInOtherNamespace', 'someVal');
+				locker.namespace('wontBeCleaned').put('keyInOtherNamespace', 'someVal');
 
 				locker.clean('someOtherNamespace');
 
-				expect( locker.setNamespace('locker').get('keyInOtherNamespace') ).toBeUndefined();
-				expect( locker.setNamespace('wontBeCleaned').get('keyInOtherNamespace') ).toBeDefined();
+				expect( locker.namespace('locker').get('keyInOtherNamespace') ).toBeUndefined();
+				expect( locker.namespace('wontBeCleaned').get('keyInOtherNamespace') ).toBeDefined();
 			}));
 
 			it('should empty the locker', inject(function () {
@@ -395,10 +395,10 @@ describe('angular-locker', function () {
 			}));
 
 			it('should determine whether an item exists in locker within another namespace', inject(function () {
-				locker.setNamespace('differentNs').put('randKeyNs', Math.random());
+				locker.namespace('differentNs').put('randKeyNs', Math.random());
 
-				expect( locker.setNamespace('differentNs').has('randKeyNs') ).toBeTruthy();
-				expect( locker.setNamespace('loremipsumdolorsitamet').has('randKeyNs') ).toBeFalsy();
+				expect( locker.namespace('differentNs').has('randKeyNs') ).toBeTruthy();
+				expect( locker.namespace('loremipsumdolorsitamet').has('randKeyNs') ).toBeFalsy();
 			}));
 
 		});
