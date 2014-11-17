@@ -26,7 +26,7 @@
 
 
 		/**
-		 * _supported - check whether the browser supports local/session storage
+		 * _supported - check whether the browser supports web storage
 		 *
 		 * @return {Boolean}
 		 */
@@ -166,11 +166,10 @@
 		return {
 
 			/**
-			 * setStorageDriver - allow setting of default storage driver via `lockerProvider`
-			 * e.g. lockerProvider.setStorageDriver('session');
+			 * setDefaultDriver - allow setting of default storage driver via `lockerProvider`
+			 * e.g. lockerProvider.setDefaultDriver('session');
 			 */
 			setDefaultDriver: _setStorageDriver,
-			setStorageDriver: _setStorageDriver, // backwards compatible alias for now
 
 			/**
 			 * getStorageDriver
@@ -178,11 +177,10 @@
 			getDefaultDriver: _getStorageDriver,
 
 			/**
-			 * setNamespace - allow setting of default namespace via `lockerProvider`
-			 * e.g. lockerProvider.setNamespace('myAppName');
+			 * setDefaultNamespace - allow setting of default namespace via `lockerProvider`
+			 * e.g. lockerProvider.setDefaultNamespace('myAppName');
 			 */
 			setDefaultNamespace: _setNamespace,
-			setNamespace: _setNamespace, // backwards compatible alias for now
 
 			/**
 			 * getNamespace
@@ -349,22 +347,20 @@
 					},
 
 					/**
-					 * setStorageDriver - same as above. Added here so that it can be chained on the fly
-					 * e.g. locker.setStorageDriver('session').put('sessionVar', 'I am volatile');
+					 * driver - same as above. Added here so that it can be chained on the fly
+					 * e.g. locker.driver('session').put('sessionVar', 'I am volatile');
 					 *
 					 * @return {Object}
 					 */
 					driver: _setStorageDriver,
-					setStorageDriver: _setStorageDriver, // backwards compatible alias for now
 
 					/**
-					 * setNamespace - same as above. Added here so that it can be chained on the fly
-					 * e.g. locker.setNamespace('myAppName').put('appVar', 'someVar);
+					 * namespace - same as above. Added here so that it can be chained on the fly
+					 * e.g. locker.namespace('myAppName').put('appVar', 'someVar);
 					 *
 					 * @return {Object}
 					 */
 					namespace: _setNamespace,
-					setNamespace: _setNamespace, // backwards compatible alias for now
 
 					/**
 					 * supported - check whether the browser supports local/session storage
