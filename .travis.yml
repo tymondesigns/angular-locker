@@ -2,9 +2,6 @@ language: node_js
 node_js:
   - "0.10"
   - "0.11"
-addons:
-  code_climate:
-    repo_token: 1127d7870ffcfe9bfd904d031f78b9e5b9b919e1901b8a0e12a7e66edfe039c9
 before_script:
   - npm install -g gulp
   - npm install -g bower
@@ -13,3 +10,8 @@ before_script:
 after_script:
   - cat test/coverage/lcov/lcov.info | codeclimate
 script: gulp
+env:
+  global:
+    - secure: jGnioqs1TSYzv+IfKLf6weOn7b7+xkEkGPhnVJ/YngvGBiyu5G3aFdJRV5xZos4H2lhhsIHUej1ZocLM61bFLdgLp8p5khEXP8TSZPsO3OGyAj4ZhFRtNwK6vcY1y1Lez8CA/3Clikz8iSm5Twg83hwofLr7C57kQJ22gruISm4=
+    - secure: cigU5ReZLTT2l75BFfEvSBGy+GZ68ivSfs561Kc22vSDidEBb/1x1Ydv7cjNLbyGoT43MJBYFHL5xeyyY9haBn03sUpXHu/PjNULJFfQUWpizqhfSmC7OZJNVuonESruq4k7yHWGgUEE9aHuJGi8cDw1cB0k6TMAtY7LExQNLaE=
+    - secure: YHkhMjp5bOE8unA9zwpwLuPy0V9Ml3Sa5uQ8SFAnyDIDoo7YC5SZHXf5FBOOUlL9u0+buYNKT9YseiSUCpqMK09Q1JsN4xZXl660QjaZTYNki+1bleEAmGEYXr60XNOSs6c53b7nxg7FtS1ozRCgx43bEBKXCJKHnbPEVwQrcUI=
