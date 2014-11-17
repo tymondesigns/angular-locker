@@ -23,7 +23,7 @@ describe('angular-locker', function () {
 			expect( provider.getDefaultDriver() ).toEqual('session');
 
 			provider.setDefaultDriver('somethingNotExpected');
-			expect( provider.getDefaultDriver() ).toEqual('local');
+			expect( provider.getDefaultDriver() ).toEqual('session');
 		}));
 
 		it('should set a default storage driver via function', inject(function () {

@@ -16,14 +16,22 @@
 
 	.provider('locker', function locker () {
 
-		/**
-		 * set some defaults
-		 */
-		var storage = window.localStorage,
-		namespace = 'locker',
+		// set some defaults
+		var namespace = 'locker',
 		separator = '.',
 		prefix = namespace === '' ? '' : namespace + separator,
 
+		drivers = {
+			local: function () {
+				return window.localStorage;
+			},
+			session: function () {
+				return window.sessionStorage;
+			}
+		},
+
+		// default to localStorage
+		storage = drivers.local(),
 
 		/**
 		 * _supported - check whether the browser supports web storage
@@ -86,10 +94,8 @@
 		 * @param {Mixed} value
 		 */
 		_setItem = function (key, value) {
-			value = _serialize(value);
-
 			try {
-				storage.setItem(prefix + key, value);
+				storage.setItem(prefix + key, _serialize(value));
 			} catch (e) {
 				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
 					console.warn('angular-locker - Your browser storage quota has been exceeded');
@@ -116,7 +122,7 @@
 		 * @return {void|Boolean}
 		 */
 		_removeItem = function (key) {
-			if (!_itemExists(key)) return false;
+			if (! _itemExists(key)) return false;
 			storage.removeItem(prefix + key);
 			return true;
 		},
@@ -128,7 +134,11 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
-			storage = _value(value) === 'session' ? window.sessionStorage : window.localStorage;
+			if (! drivers.hasOwnProperty(_value(value))) {
+				console.warn('angular-locker - The driver "' + value + '" does not exist. no action taken');
+			} else {
+				storage = drivers[_value(value)]();
+			}
 			return this;
 		},
 
@@ -138,7 +148,7 @@
 		 * @return {String}
 		 */
 		_getStorageDriver = function () {
-			return storage === window.localStorage ? 'local' : 'session';
+			return storage === drivers.local() ? 'local' : 'session';
 		},
 
 		/**
@@ -200,10 +210,10 @@
 					 * @return {Object}
 					 */
 					put: function (key, value) {
-						if (!key) return false;
+						if (! key) return false;
 						key = _value(key);
-						if (!angular.isObject(key)) {
-							if (!value) return false;
+						if (! angular.isObject(key)) {
+							if (! value) return false;
 							value = _value(value);
 							_setItem(key, value);
 						} else {
@@ -222,7 +232,7 @@
 					 * @return {Boolean}
 					 */
 					add: function (key, value) {
-						if (!this.has(key)) {
+						if (! this.has(key)) {
 							this.put(key, value);
 							return true;
 						}
@@ -237,8 +247,8 @@
 					 * @return {Mixed}
 					 */
 					get: function (key, def) {
-						if (!angular.isArray(key)) {
-							if (!this.has(key)) return arguments.length === 2 ? def : void 0;
+						if (! angular.isArray(key)) {
+							if (! this.has(key)) return arguments.length === 2 ? def : void 0;
 							return _unserialize(storage.getItem(prefix + key));
 						}
 
@@ -296,7 +306,7 @@
 					 */
 					remove: function (key) {
 						key = _value(key);
-						if (!angular.isArray(key)) {
+						if (! angular.isArray(key)) {
 							_removeItem(key);
 						} else {
 							angular.forEach(key, function (key) {
