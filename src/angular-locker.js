@@ -42,26 +42,6 @@
 		},
 
 		/**
-		 * _setItem - set the item in storage - try to stringify if not a string (object/array)
-		 *
-		 * @param {String} key
-		 * @param {Mixed} value
-		 */
-		_setItem = function (key, value) {
-			value = _serialize(value);
-
-			try {
-				storage.setItem(prefix + key, value);
-			} catch (e) {
-				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-					console.warn('angular-locker - Your browser storage quota has been exceeded');
-				} else {
-					console.warn('angular-locker - Could not add item with key "' + key + '"', e);
-				}
-			}
-		},
-
-		/**
 		 * _serialize - try to encode value as json, or just return the value upon failure
 		 *
 		 * @param  {Mixed} value
@@ -100,14 +80,33 @@
 		},
 
 		/**
+		 * _setItem - set the item in storage - try to stringify if not a string (object/array)
+		 *
+		 * @param {String} key
+		 * @param {Mixed} value
+		 */
+		_setItem = function (key, value) {
+			value = _serialize(value);
+
+			try {
+				storage.setItem(prefix + key, value);
+			} catch (e) {
+				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
+					console.warn('angular-locker - Your browser storage quota has been exceeded');
+				} else {
+					console.warn('angular-locker - Could not add item with key "' + key + '"', e);
+				}
+			}
+		},
+
+		/**
 		 * _itemExists - check whether the item exists in storage
 		 *
 		 * @param  {String} key
 		 * @return {Boolean}
 		 */
 		_itemExists = function (key) {
-			key = _value(key);
-			return storage.hasOwnProperty(prefix + key);
+			return storage.hasOwnProperty(prefix + _value(key));
 		},
 
 		/**
@@ -129,8 +128,7 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
-			value = _value(value);
-			storage = value === 'session' ? window.sessionStorage : window.localStorage;
+			storage = _value(value) === 'session' ? window.sessionStorage : window.localStorage;
 			return this;
 		},
 

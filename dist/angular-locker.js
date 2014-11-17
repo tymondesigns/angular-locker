@@ -26,7 +26,7 @@
 
 
 		/**
-		 * _supported - check whether the browser supports local/session storage
+		 * _supported - check whether the browser supports web storage
 		 *
 		 * @return {Boolean}
 		 */
@@ -38,26 +38,6 @@
 				return true;
 			} catch (e) {
 				return false;
-			}
-		},
-
-		/**
-		 * _setItem - set the item in storage - try to stringify if not a string (object/array)
-		 *
-		 * @param {String} key
-		 * @param {Mixed} value
-		 */
-		_setItem = function (key, value) {
-			value = _serialize(value);
-
-			try {
-				storage.setItem(prefix + key, value);
-			} catch (e) {
-				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-					console.warn('angular-locker - Your browser storage quota has been exceeded');
-				} else {
-					console.warn('angular-locker - Could not add item with key "' + key + '"', e);
-				}
 			}
 		},
 
@@ -90,13 +70,33 @@
 		},
 
 		/**
-		 * _parseFn - if value is a function then execute, otherwise just return
+		 * _value - if value is a function then execute, otherwise just return
 		 *
 		 * @param  {Mixed} value
 		 * @return {Mixed}
 		 */
-		_parseFn = function (value) {
+		_value = function (value) {
 			return typeof value === 'function' ? value() : value;
+		},
+
+		/**
+		 * _setItem - set the item in storage - try to stringify if not a string (object/array)
+		 *
+		 * @param {String} key
+		 * @param {Mixed} value
+		 */
+		_setItem = function (key, value) {
+			value = _serialize(value);
+
+			try {
+				storage.setItem(prefix + key, value);
+			} catch (e) {
+				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
+					console.warn('angular-locker - Your browser storage quota has been exceeded');
+				} else {
+					console.warn('angular-locker - Could not add item with key "' + key + '"', e);
+				}
+			}
 		},
 
 		/**
@@ -106,8 +106,7 @@
 		 * @return {Boolean}
 		 */
 		_itemExists = function (key) {
-			key = _parseFn(key);
-			return storage.hasOwnProperty(prefix + key);
+			return storage.hasOwnProperty(prefix + _value(key));
 		},
 
 		/**
@@ -129,8 +128,7 @@
 		 * @return {Object}
 		 */
 		_setStorageDriver = function (value) {
-			value = _parseFn(value);
-			storage = value === 'session' ? window.sessionStorage : window.localStorage;
+			storage = _value(value) === 'session' ? window.sessionStorage : window.localStorage;
 			return this;
 		},
 
@@ -149,7 +147,7 @@
 		 * @param {String} value
 		 */
 		_setNamespace = function (value) {
-			namespace = _parseFn(value);
+			namespace = _value(value);
 			prefix = namespace === '' ? '' : namespace + separator;
 			return this;
 		},
@@ -166,11 +164,10 @@
 		return {
 
 			/**
-			 * setStorageDriver - allow setting of default storage driver via `lockerProvider`
-			 * e.g. lockerProvider.setStorageDriver('session');
+			 * setDefaultDriver - allow setting of default storage driver via `lockerProvider`
+			 * e.g. lockerProvider.setDefaultDriver('session');
 			 */
 			setDefaultDriver: _setStorageDriver,
-			setStorageDriver: _setStorageDriver, // backwards compatible alias for now
 
 			/**
 			 * getStorageDriver
@@ -178,11 +175,10 @@
 			getDefaultDriver: _getStorageDriver,
 
 			/**
-			 * setNamespace - allow setting of default namespace via `lockerProvider`
-			 * e.g. lockerProvider.setNamespace('myAppName');
+			 * setDefaultNamespace - allow setting of default namespace via `lockerProvider`
+			 * e.g. lockerProvider.setDefaultNamespace('myAppName');
 			 */
 			setDefaultNamespace: _setNamespace,
-			setNamespace: _setNamespace, // backwards compatible alias for now
 
 			/**
 			 * getNamespace
@@ -205,10 +201,10 @@
 					 */
 					put: function (key, value) {
 						if (!key) return false;
-						key = _parseFn(key);
+						key = _value(key);
 						if (!angular.isObject(key)) {
 							if (!value) return false;
-							value = _parseFn(value);
+							value = _value(value);
 							_setItem(key, value);
 						} else {
 							angular.forEach(key, function (value, key) {
@@ -299,7 +295,7 @@
 					 * @return {Object}
 					 */
 					remove: function (key) {
-						key = _parseFn(key);
+						key = _value(key);
 						if (!angular.isArray(key)) {
 							_removeItem(key);
 						} else {
@@ -349,22 +345,20 @@
 					},
 
 					/**
-					 * setStorageDriver - same as above. Added here so that it can be chained on the fly
-					 * e.g. locker.setStorageDriver('session').put('sessionVar', 'I am volatile');
+					 * driver - same as above. Added here so that it can be chained on the fly
+					 * e.g. locker.driver('session').put('sessionVar', 'I am volatile');
 					 *
 					 * @return {Object}
 					 */
 					driver: _setStorageDriver,
-					setStorageDriver: _setStorageDriver, // backwards compatible alias for now
 
 					/**
-					 * setNamespace - same as above. Added here so that it can be chained on the fly
-					 * e.g. locker.setNamespace('myAppName').put('appVar', 'someVar);
+					 * namespace - same as above. Added here so that it can be chained on the fly
+					 * e.g. locker.namespace('myAppName').put('appVar', 'someVar);
 					 *
 					 * @return {Object}
 					 */
 					namespace: _setNamespace,
-					setNamespace: _setNamespace, // backwards compatible alias for now
 
 					/**
 					 * supported - check whether the browser supports local/session storage
