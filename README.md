@@ -67,7 +67,7 @@ To achieve this, simply use the `driver()` setter to specify what storage driver
 locker.driver('session').put('sessionKey', ['some', 'session', 'data']);
 
 // this time use local storage
-locker.driver('local').get('localKey', ['some', 'persistent', 'things']);
+locker.driver('local').put('localKey', ['some', 'persistent', 'things']);
 ```
 
 ----------------------------
