@@ -64,6 +64,13 @@ describe('angular-locker', function () {
 
 		describe('adding items to locker', function () {
 
+			it('should switch drivers when chained', inject(function () {
+				// provider.setDefaultNamespace('local');
+				// locker.driver('session').put('foo', 'bar');
+
+				// expect( locker.get('foo') ).toBeUndefined();
+			}));
+
 			it('should put a string into the locker', inject(function () {
 				var str = 'someVal';
 				locker.put('someKey', str);
