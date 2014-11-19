@@ -150,13 +150,13 @@
 		if (! key) return false;
 		key = _value(key);
 
-		if (! angular.isObject(key)) {
-			if (! value) return false;
-			this._setItem(key, _value(value));
-		} else {
+		if (angular.isObject(key)) {
 			angular.forEach(key, function (value, key) {
 				this._setItem(key, value);
-			});
+			}, this);
+		} else {
+			if (! value) return false;
+			this._setItem(key, _value(value));
 		}
 
 		return this;
@@ -222,7 +222,7 @@
 		} else {
 			angular.forEach(key, function (key) {
 				this._removeItem(key);
-			});
+			}, this);
 		}
 
 		return this;
@@ -268,7 +268,7 @@
 	Locker.prototype.clean = function () {
 		angular.forEach(this._driver, function (value, key) {
 			this._removeItem(key);
-		});
+		}, this);
 		return this;
 	};
 

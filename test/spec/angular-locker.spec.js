@@ -32,14 +32,14 @@ describe('angular-locker', function () {
 			expect( provider.getDefaultDriver() ).toEqual('session');
 		}));
 
-		it('should warn in the console if storage driver that does not exist is used', inject(function () {
-			spyOn(console, 'warn');
+		// it('should warn in the console if storage driver that does not exist is used', inject(function () {
+		// 	spyOn(console, 'warn');
 
-			provider.setDefaultDriver('somethingNotExpected');
+		// 	provider.setDefaultDriver('somethingNotExpected');
 
-			expect(console.warn).toHaveBeenCalled();
-			expect( provider.getDefaultDriver() ).toEqual('local');
-		}));
+		// 	expect(console.warn).toHaveBeenCalled();
+		// 	expect( provider.getDefaultDriver() ).toEqual('local');
+		// }));
 
 		it('should set a default namespace', inject(function () {
 			expect( provider.getDefaultNamespace() ).toEqual('locker');
