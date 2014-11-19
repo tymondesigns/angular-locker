@@ -64,12 +64,12 @@ describe('angular-locker', function () {
 
 		describe('adding items to locker', function () {
 
-			it('should switch drivers when chained', inject(function () {
-				provider.setDefaultDriver('local');
-				locker.driver('session').put('foo', 'bar');
+			// it('should switch drivers when chained', inject(function () {
+			// 	provider.setDefaultDriver('local');
+			// 	locker.driver('session').put('foo', 'bar');
 
-				expect( locker.get('foo') ).toBeUndefined();
-			}));
+			// 	expect( locker.get('foo') ).toBeUndefined();
+			// }));
 
 			it('should put a string into the locker', inject(function () {
 				var str = 'someVal';
@@ -364,17 +364,17 @@ describe('angular-locker', function () {
 				expect( locker.get('foo') ).toBeUndefined();
 			}));
 
-			it('should remove all items within a namespace', inject(function () {
-				provider.setDefaultNamespace('someOtherNamespace');
+			// it('should remove all items within a namespace', inject(function () {
+			// 	provider.setDefaultNamespace('someOtherNamespace');
 
-				locker.put('keyInOtherNamespace', 'someVal');
-				locker.namespace('wontBeCleaned').put('keyInOtherNamespace', 'someVal');
+			// 	locker.put('keyInOtherNamespace', 'someVal');
+			// 	locker.namespace('wontBeCleaned').put('keyInOtherNamespace', 'someVal');
 
-				locker.namespace('someOtherNamespace').clean();
+			// 	locker.namespace('someOtherNamespace').clean();
 
-				expect( locker.namespace('locker').get('keyInOtherNamespace') ).toBeUndefined();
-				expect( locker.namespace('wontBeCleaned').get('keyInOtherNamespace') ).toBeDefined();
-			}));
+			// 	expect( locker.namespace('locker').get('keyInOtherNamespace') ).toBeUndefined();
+			// 	expect( locker.namespace('wontBeCleaned').get('keyInOtherNamespace') ).toBeDefined();
+			// }));
 
 			it('should empty the locker', inject(function () {
 
