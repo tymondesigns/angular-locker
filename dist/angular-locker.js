@@ -13,7 +13,7 @@
 	'use strict';
 
 	/**
-	 * _serialize - try to encode value as json, or just return the value upon failure
+	 * Try to encode value as json, or just return the value upon failure
 	 *
 	 * @param  {Mixed} value
 	 * @return {Mixed}
@@ -27,7 +27,7 @@
 	},
 
 	/**
-	 * _unserialize - try to parse value as json, if it fails then it probably isn't json so just return it
+	 * Try to parse value as json, if it fails then it probably isn't json so just return it
 	 *
 	 * @param  {String} value
 	 * @return {Object|String}
@@ -41,7 +41,7 @@
 	},
 
 	/**
-	 * _value - if value is a function then execute, otherwise just return
+	 * If value is a function then execute, otherwise just return
 	 *
 	 * @param  {Mixed} value
 	 * @return {Mixed}
@@ -69,6 +69,14 @@
 		this._namespace = namespace;
 
 		/**
+		 * @type {Object}
+		 */
+		this._registeredDrivers = {
+			local: window.localStorage,
+			session: window.sessionStorage
+		};
+
+		/**
 		 * @type {String}
 		 */
 		this._separator = '.';
@@ -76,8 +84,8 @@
 		/**
 		 * Build the storage key from the namspace
 		 *
-		 * @param  {[type]} key
-		 * @return {[type]}     [description]
+		 * @param  {String}  key
+		 * @return {String}
 		 */
 		this._getPrefix = function (key) {
 			return this._namespace + this._separator + key;
@@ -90,13 +98,11 @@
 		 * @return {Storage}
 		 */
 		this._resolveDriver = function (driver) {
-			// natively supported drivers
-			var registeredDrivers = {
-				local: window.localStorage,
-				session: window.sessionStorage
-			};
+			if (! this._registeredDrivers.hasOwnProperty(driver)) {
+				console.warn('angular-locker - The driver "' + driver + '" was not found. Defaulting to local.');
+			}
 
-			return registeredDrivers[driver];
+			return this._registeredDrivers[driver] || this._registeredDrivers.local;
 		};
 
 		/**
@@ -327,6 +333,10 @@
 			return this;
 		},
 
+		getDriver: function () {
+			return this._driver;
+		},
+
 		/**
 		 * Set the namespace
 		 *
@@ -374,7 +384,7 @@
 		return {
 
 			/**
-			 * setDefaultDriver - allow setting of default storage driver via `lockerProvider`
+			 * Allow setting of default storage driver via `lockerProvider`
 			 * e.g. lockerProvider.setDefaultDriver('session');
 			 */
 			setDefaultDriver: function (driver) {
@@ -383,14 +393,14 @@
 			},
 
 			/**
-			 * getStorageDriver
+			 * getDefaultDriver
 			 */
 			getDefaultDriver: function () {
 				return defaultDriver;
 			},
 
 			/**
-			 * setDefaultNamespace - allow setting of default namespace via `lockerProvider`
+			 * Allow setting of default namespace via `lockerProvider`
 			 * e.g. lockerProvider.setDefaultNamespace('myAppName');
 			 */
 			setDefaultNamespace: function (namespace) {
@@ -399,7 +409,7 @@
 			},
 
 			/**
-			 * getNamespace
+			 * getDefaultNamespace
 			 */
 			getDefaultNamespace: function () {
 				return defaultNamespace;

@@ -69,6 +69,14 @@
 		this._namespace = namespace;
 
 		/**
+		 * @type {Object}
+		 */
+		this._registeredDrivers = {
+			local: window.localStorage,
+			session: window.sessionStorage
+		};
+
+		/**
 		 * @type {String}
 		 */
 		this._separator = '.';
@@ -76,8 +84,8 @@
 		/**
 		 * Build the storage key from the namspace
 		 *
-		 * @param  {[type]} key
-		 * @return {[type]}     [description]
+		 * @param  {String}  key
+		 * @return {String}
 		 */
 		this._getPrefix = function (key) {
 			return this._namespace + this._separator + key;
@@ -90,13 +98,11 @@
 		 * @return {Storage}
 		 */
 		this._resolveDriver = function (driver) {
-			// natively supported drivers
-			var registeredDrivers = {
-				local: window.localStorage,
-				session: window.sessionStorage
-			};
+			if (! this._registeredDrivers.hasOwnProperty(driver)) {
+				console.warn('angular-locker - The driver "' + driver + '" was not found. Defaulting to local.');
+			}
 
-			return registeredDrivers[driver];
+			return this._registeredDrivers[driver] || this._registeredDrivers.local;
 		};
 
 		/**
@@ -325,6 +331,10 @@
 		driver: function (driver) {
 			this._driver = this._resolveDriver(driver);
 			return this;
+		},
+
+		getDriver: function () {
+			return this._driver;
 		},
 
 		/**
