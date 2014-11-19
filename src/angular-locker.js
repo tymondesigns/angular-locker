@@ -374,7 +374,7 @@
 		return {
 
 			/**
-			 * setDefaultDriver - allow setting of default storage driver via `lockerProvider`
+			 * Allow setting of default storage driver via `lockerProvider`
 			 * e.g. lockerProvider.setDefaultDriver('session');
 			 */
 			setDefaultDriver: function (driver) {
@@ -383,14 +383,14 @@
 			},
 
 			/**
-			 * getStorageDriver
+			 * getDefaultDriver
 			 */
 			getDefaultDriver: function () {
 				return defaultDriver;
 			},
 
 			/**
-			 * setDefaultNamespace - allow setting of default namespace via `lockerProvider`
+			 * Allow setting of default namespace via `lockerProvider`
 			 * e.g. lockerProvider.setDefaultNamespace('myAppName');
 			 */
 			setDefaultNamespace: function (namespace) {
@@ -399,7 +399,7 @@
 			},
 
 			/**
-			 * getNamespace
+			 * getDefaultNamespace
 			 */
 			getDefaultNamespace: function () {
 				return defaultNamespace;
