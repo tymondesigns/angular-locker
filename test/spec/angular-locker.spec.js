@@ -65,7 +65,7 @@ describe('angular-locker', function () {
 		describe('adding items to locker', function () {
 
 			it('should switch drivers when chained', inject(function () {
-				provider.setDefaultNamespace('local');
+				provider.setDefaultDriver('local');
 				locker.driver('session').put('foo', 'bar');
 
 				expect( locker.get('foo') ).toBeUndefined();
@@ -366,10 +366,11 @@ describe('angular-locker', function () {
 
 			it('should remove all items within a namespace', inject(function () {
 				provider.setDefaultNamespace('someOtherNamespace');
+
 				locker.put('keyInOtherNamespace', 'someVal');
 				locker.namespace('wontBeCleaned').put('keyInOtherNamespace', 'someVal');
 
-				locker.clean('someOtherNamespace');
+				locker.namespace('someOtherNamespace').clean();
 
 				expect( locker.namespace('locker').get('keyInOtherNamespace') ).toBeUndefined();
 				expect( locker.namespace('wontBeCleaned').get('keyInOtherNamespace') ).toBeDefined();

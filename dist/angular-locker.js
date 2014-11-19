@@ -350,10 +350,6 @@
 			session: function (namespace) {
 				return new Locker(window.sessionStorage, namespace);
 			}
-		},
-
-		storage = function (driver) {
-			return drivers[driver || defaultDriver](defaultNamespace);
 		};
 
 		return {
@@ -394,7 +390,7 @@
 			 * the locker service
 			 */
 			$get: function () {
-				return storage();
+				return drivers[defaultDriver](defaultNamespace);
 			}
 		};
 
