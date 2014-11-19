@@ -13,7 +13,7 @@
 	'use strict';
 
 	/**
-	 * _serialize - try to encode value as json, or just return the value upon failure
+	 * Try to encode value as json, or just return the value upon failure
 	 *
 	 * @param  {Mixed} value
 	 * @return {Mixed}
@@ -27,7 +27,7 @@
 	},
 
 	/**
-	 * _unserialize - try to parse value as json, if it fails then it probably isn't json so just return it
+	 * Try to parse value as json, if it fails then it probably isn't json so just return it
 	 *
 	 * @param  {String} value
 	 * @return {Object|String}
@@ -41,7 +41,7 @@
 	},
 
 	/**
-	 * _value - if value is a function then execute, otherwise just return
+	 * If value is a function then execute, otherwise just return
 	 *
 	 * @param  {Mixed} value
 	 * @return {Mixed}
@@ -58,8 +58,19 @@
 	 */
 	var Locker = function (driver, namespace) {
 
+		/**
+		 * @type {Storage}
+		 */
 		this._driver = driver;
+
+		/**
+		 * @type {String}
+		 */
 		this._namespace = namespace;
+
+		/**
+		 * @type {String}
+		 */
 		this._separator = '.';
 
 		/**
@@ -140,199 +151,207 @@
 	};
 
 	/**
-	 * Add a new item to storage (even if it already exists)
+	 * Define the public api
 	 *
-	 * @param  {Mixed}  key
-	 * @param  {Mixed}  value
-	 * @return {self}
+	 * @type {Object}
 	 */
-	Locker.prototype.put = function (key, value) {
-		if (! key) return false;
-		key = _value(key);
+	Locker.prototype = {
 
-		if (angular.isObject(key)) {
-			angular.forEach(key, function (value, key) {
-				this._setItem(key, value);
+		/**
+		 * Add a new item to storage (even if it already exists)
+		 *
+		 * @param  {Mixed}  key
+		 * @param  {Mixed}  value
+		 * @return {self}
+		 */
+		put: function (key, value) {
+			if (! key) return false;
+			key = _value(key);
+
+			if (angular.isObject(key)) {
+				angular.forEach(key, function (value, key) {
+					this._setItem(key, value);
+				}, this);
+			} else {
+				if (! value) return false;
+				this._setItem(key, _value(value));
+			}
+
+			return this;
+		},
+
+		/**
+		 * Add an item to storage if it doesn't already exist
+		 *
+		 * @param  {Mixed}  key
+		 * @param  {Mixed}  value
+		 * @return {Boolean}
+		 */
+		add: function (key, value) {
+			if (! this.has(key)) {
+				this.put(key, value);
+				return true;
+			}
+			return false;
+		},
+
+		/**
+		 * Retrieve the specified item from storage
+		 *
+		 * @param  {String|Array}  key
+		 * @param  {Mixed}  def
+		 * @return {Mixed}
+		 */
+		get: function (key, def) {
+			if (! angular.isArray(key)) {
+				if (! this.has(key)) return arguments.length === 2 ? def : void 0;
+				return this._getItem(key);
+			}
+
+			var items = {};
+			angular.forEach(key, function (k) {
+				if (this.has(k)) items[k] = this._getItem(k);
 			}, this);
-		} else {
-			if (! value) return false;
-			this._setItem(key, _value(value));
-		}
 
-		return this;
-	};
+			return items;
+		},
 
-	/**
-	 * Add an item to storage if it doesn't already exist
-	 *
-	 * @param  {Mixed}  key
-	 * @param  {Mixed}  value
-	 * @return {Boolean}
-	 */
-	Locker.prototype.add = function (key, value) {
-		if (! this.has(key)) {
-			this.put(key, value);
-			return true;
-		}
-		return false;
-	};
+		/**
+		 * Determine whether the item exists in storage
+		 *
+		 * @param  {String|Function}  key
+		 * @return {Boolean}
+		 */
+		has: function (key) {
+			return this._exists(key);
+		},
 
-	/**
-	 * Retrieve the specified item from storage
-	 *
-	 * @param  {String|Array}  key
-	 * @param  {Mixed}  def
-	 * @return {Mixed}
-	 */
-	Locker.prototype.get = function (key, def) {
-		if (! angular.isArray(key)) {
-			if (! this.has(key)) return arguments.length === 2 ? def : void 0;
-			return this._getItem(key);
-		}
+		/**
+		 * Remove specified item(s) from storage
+		 *
+		 * @param  {Mixed}  key
+		 * @return {Object}
+		 */
+		remove: function (key) {
+			key = _value(key);
 
-		var items = {};
-		angular.forEach(key, function (k) {
-			if (this.has(k)) items[k] = this._getItem(k);
-		}, this);
+			if (! angular.isArray(key)) {
+				this._removeItem(key);
+			} else {
+				angular.forEach(key, function (key) {
+					this._removeItem(key);
+				}, this);
+			}
 
-		return items;
-	};
+			return this;
+		},
 
-	/**
-	 * Determine whether the item exists in storage
-	 *
-	 * @param  {String|Function}  key
-	 * @return {Boolean}
-	 */
-	Locker.prototype.has = function (key) {
-		return this._exists(key);
-	};
+		/**
+		 * Retrieve the specified item from storage and then remove it
+		 *
+		 * @param  {String|Array}  key
+		 * @param  {Mixed}  def
+		 * @return {Mixed}
+		 */
+		pull: function (key, def) {
+			var value = this.get(key, def);
+			this.remove(key);
+			return value;
+		},
 
-	/**
-	 * Remove specified item(s) from storage
-	 *
-	 * @param  {Mixed}  key
-	 * @return {Object}
-	 */
-	Locker.prototype.remove = function (key) {
-		key = _value(key);
+		/**
+		 * all - return all items in storage within the current namespace
+		 *
+		 * @return {Object}
+		 */
+		all: function () {
+			var items = {};
+			angular.forEach(this._driver, function (value, key) {
+				var split = key.split(this._separator);
+				if (split.length > 1 && split[0] === this._namespace) {
+					split.splice(0, 1);
+					key = split.join(this._separator);
+				}
+				if (this.has(key)) items[key] = this.get(key);
+			}, this);
 
-		if (! angular.isArray(key)) {
-			this._removeItem(key);
-		} else {
-			angular.forEach(key, function (key) {
+			return items;
+		},
+
+		/**
+		 * Remove all items set within the current namespace
+		 *
+		 * @return {self}
+		 */
+		clean: function () {
+			angular.forEach(this._driver, function (value, key) {
 				this._removeItem(key);
 			}, this);
-		}
+			return this;
+		},
 
-		return this;
-	};
+		/**
+		 * Empty the current storage driver completely. careful now
+		 *
+		 * @return {self}
+		 */
+		empty: function () {
+			this._driver.clear();
+			return this;
+		},
 
-	/**
-	 * Retrieve the specified item from storage and then remove it
-	 *
-	 * @param  {String|Array}  key
-	 * @param  {Mixed}  def
-	 * @return {Mixed}
-	 */
-	Locker.prototype.pull = function (key, def) {
-		var value = this.get(key, def);
-		this.remove(key);
-		return value;
-	};
-
-	/**
-	 * all - return all items in storage within the current namespace
-	 *
-	 * @return {Object}
-	 */
-	Locker.prototype.all = function () {
-		var items = {};
-		angular.forEach(this._driver, function (value, key) {
-			var split = key.split(this._separator);
-			if (split.length > 1 && split[0] === this._namespace) {
-				split.splice(0, 1);
-				key = split.join(this._separator);
+		/**
+		 * Get the total number of items within the current namespace
+		 *
+		 * @return {Integer}
+		 */
+		count: function () {
+			var all = this.all(), count = 0, k;
+			for (k in all) {
+				if (all.hasOwnProperty(k)) {
+					count++;
+				}
 			}
-			if (this.has(key)) items[key] = this.get(key);
-		}, this);
 
-		return items;
-	};
+			return count;
+		},
 
-	/**
-	 * Remove all items set within the current namespace
-	 *
-	 * @return {self}
-	 */
-	Locker.prototype.clean = function () {
-		angular.forEach(this._driver, function (value, key) {
-			this._removeItem(key);
-		}, this);
-		return this;
-	};
+		/**
+		 * Set the storage driver
+		 *
+		 * @param  {String} driver
+		 * @return {self}
+		 */
+		driver: function (driver) {
+			this._driver = this._resolveDriver(driver);
+			return this;
+		},
 
-	/**
-	 * Empty the current storage driver completely. careful now
-	 *
-	 * @return {self}
-	 */
-	Locker.prototype.empty = function () {
-		this._driver.clear();
-		return this;
-	};
+		/**
+		 * Set the namespace
+		 *
+		 * @param  {String} namespace
+		 * @return {self}
+		 */
+		namespace: function (namespace) {
+			this._namespace = namespace;
+			return this;
+		},
 
-	/**
-	 * Get the total number of items within the current namespace
-	 *
-	 * @return {Integer}
-	 */
-	Locker.prototype.count = function () {
-		var all = this.all(), count = 0, k;
-		for (k in all) {
-			if (all.hasOwnProperty(k)) {
-				count++;
+		/**
+		 * Check browser support
+		 *
+		 * @return {Boolean}
+		 */
+		supported: function () {
+			var t = 't';
+			try {
+				localStorage.setItem(t, t);
+				localStorage.removeItem(t);
+				return true;
+			} catch (e) {
+				return false;
 			}
-		}
-
-		return count;
-	};
-
-	/**
-	 * Set the storage driver
-	 *
-	 * @param  {String} driver
-	 * @return {self}
-	 */
-	Locker.prototype.driver = function (driver) {
-		this._driver = this._resolveDriver(driver);
-		return this;
-	};
-
-	/**
-	 * Set the namespace
-	 *
-	 * @param  {String} namespace
-	 * @return {self}
-	 */
-	Locker.prototype.namespace = function (namespace) {
-		this._namespace = namespace;
-		return this;
-	};
-
-	/**
-	 * Check browser support
-	 *
-	 * @return {Boolean}
-	 */
-	Locker.prototype.supported = function () {
-		var t = 't';
-		try {
-			localStorage.setItem(t, t);
-			localStorage.removeItem(t);
-			return true;
-		} catch (e) {
-			return false;
 		}
 	};
 
