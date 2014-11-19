@@ -358,27 +358,37 @@
 
 		return {
 
-			// /**
-			//  * setDefaultDriver - allow setting of default storage driver via `lockerProvider`
-			//  * e.g. lockerProvider.setDefaultDriver('session');
-			//  */
-			// setDefaultDriver: _setStorageDriver,
+			/**
+			 * setDefaultDriver - allow setting of default storage driver via `lockerProvider`
+			 * e.g. lockerProvider.setDefaultDriver('session');
+			 */
+			setDefaultDriver: function (driver) {
+				defaultDriver = _value(driver);
+				return this;
+			},
 
-			// /**
-			//  * getStorageDriver
-			//  */
-			// getDefaultDriver: _getStorageDriver,
+			/**
+			 * getStorageDriver
+			 */
+			getDefaultDriver: function () {
+				return defaultDriver;
+			},
 
-			// /**
-			//  * setDefaultNamespace - allow setting of default namespace via `lockerProvider`
-			//  * e.g. lockerProvider.setDefaultNamespace('myAppName');
-			//  */
-			// setDefaultNamespace: _setNamespace,
+			/**
+			 * setDefaultNamespace - allow setting of default namespace via `lockerProvider`
+			 * e.g. lockerProvider.setDefaultNamespace('myAppName');
+			 */
+			setDefaultNamespace: function (namespace) {
+				defaultNamespace = _value(namespace);
+				return this;
+			},
 
-			// /**
-			//  * getNamespace
-			//  */
-			// getDefaultNamespace: _getNamespace,
+			/**
+			 * getNamespace
+			 */
+			getDefaultNamespace: function () {
+				return defaultNamespace;
+			},
 
 			/**
 			 * the locker service
