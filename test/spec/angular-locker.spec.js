@@ -38,7 +38,7 @@ describe('angular-locker', function () {
 			locker.driver('somethingNotExpected');
 
 			expect(console.warn).toHaveBeenCalled();
-			expect( locker.getDriver() ).toEqual(window.localStorage);
+			expect( locker._driver ).toEqual(window.localStorage);
 		}));
 
 		it('should set a default namespace', inject(function () {

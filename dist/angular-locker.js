@@ -13,40 +13,12 @@
 	'use strict';
 
 	/**
-	 * Try to encode value as json, or just return the value upon failure
-	 *
-	 * @param  {Mixed} value
-	 * @return {Mixed}
-	 */
-	var _serialize = function (value) {
-		try {
-			return angular.toJson(value);
-		} catch (e) {
-			return value;
-		}
-	},
-
-	/**
-	 * Try to parse value as json, if it fails then it probably isn't json so just return it
-	 *
-	 * @param  {String} value
-	 * @return {Object|String}
-	 */
-	_unserialize = function (value) {
-		try {
-			return angular.fromJson(value);
-		} catch (e) {
-			return value;
-		}
-	},
-
-	/**
 	 * If value is a function then execute, otherwise just return
 	 *
 	 * @param  {Mixed} value
 	 * @return {Mixed}
 	 */
-	_value = function (value) {
+	var _value = function (value) {
 		return typeof value === 'function' ? value() : value;
 	};
 
@@ -102,7 +74,36 @@
 				console.warn('angular-locker - The driver "' + driver + '" was not found. Defaulting to local.');
 			}
 
+			// fallback gracefully to localStorage
 			return this._registeredDrivers[driver] || this._registeredDrivers.local;
+		};
+
+		/**
+		 * Try to encode value as json, or just return the value upon failure
+		 *
+		 * @param  {Mixed} value
+		 * @return {Mixed}
+		 */
+		this._serialize = function (value) {
+			try {
+				return angular.toJson(value);
+			} catch (e) {
+				return value;
+			}
+		};
+
+		/**
+		 * Try to parse value as json, if it fails then it probably isn't json so just return it
+		 *
+		 * @param  {String} value
+		 * @return {Object|String}
+		 */
+		this._unserialize = function (value) {
+			try {
+				return angular.fromJson(value);
+			} catch (e) {
+				return value;
+			}
 		};
 
 		/**
@@ -113,7 +114,7 @@
 		 */
 		this._setItem = function (key, value) {
 			try {
-				this._driver.setItem(this._getPrefix(key), _serialize(value));
+				this._driver.setItem(this._getPrefix(key), this._serialize(value));
 			} catch (e) {
 				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
 					console.warn('angular-locker - Your browser storage quota has been exceeded');
@@ -130,7 +131,7 @@
 		 * @return {Mixed}
 		 */
 		this._getItem = function (key) {
-			return _unserialize(this._driver.getItem(this._getPrefix(key)));
+			return this._unserialize(this._driver.getItem(this._getPrefix(key)));
 		};
 
 		/**
@@ -333,10 +334,6 @@
 			return this;
 		},
 
-		getDriver: function () {
-			return this._driver;
-		},
-
 		/**
 		 * Set the namespace
 		 *
@@ -373,12 +370,8 @@
 		defaultNamespace = 'locker',
 
 		drivers = {
-			local: function (namespace) {
-				return new Locker(window.localStorage, namespace);
-			},
-			session: function (namespace) {
-				return new Locker(window.sessionStorage, namespace);
-			}
+			local: new Locker(window.localStorage, defaultNamespace),
+			session: new Locker(window.sessionStorage, defaultNamespace)
 		};
 
 		return {
@@ -419,7 +412,7 @@
 			 * the locker service
 			 */
 			$get: function () {
-				return drivers[defaultDriver](defaultNamespace);
+				return drivers[defaultDriver];
 			}
 		};
 
