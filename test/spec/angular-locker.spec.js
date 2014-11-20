@@ -356,7 +356,7 @@ describe('angular-locker', function () {
 
 				expect( locker.get('something') ).not.toBeDefined();
 				expect( locker.get('anotherThing') ).not.toBeDefined();
-				expect( locker.get('lorem') ).toBeTruhty();
+				expect( locker.get('lorem') ).toBeTruthy();
 			}));
 
 			it('should remove multiple items from locker by passing an array', inject(function () {
