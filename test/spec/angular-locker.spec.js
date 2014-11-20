@@ -64,12 +64,12 @@ describe('angular-locker', function () {
 
 		describe('adding items to locker', function () {
 
-			// it('should switch drivers when chained', inject(function () {
-			// 	provider.setDefaultDriver('local');
-			// 	locker.driver('session').put('foo', 'bar');
+			it('should switch drivers when chained', inject(function () {
+				provider.setDefaultDriver('local');
+				locker.driver('session').put('foo', 'bar');
 
-			// 	expect( locker.get('foo') ).toBeUndefined();
-			// }));
+				expect( locker.get('foo') ).toBeUndefined();
+			}));
 
 			it('should put a string into the locker', inject(function () {
 				var str = 'someVal';

@@ -324,25 +324,23 @@
 		},
 
 		/**
-		 * Set the storage driver
+		 * Set the storage driver Set on a new instance to enable overriding defaults
 		 *
 		 * @param  {String} driver
 		 * @return {self}
 		 */
 		driver: function (driver) {
-			this._driver = this._resolveDriver(driver);
-			return this;
+			return new Locker(this._resolveDriver(driver), this._namespace);
 		},
 
 		/**
-		 * Set the namespace
+		 * Set the namespace on a new instance to enable overriding defaults
 		 *
 		 * @param  {String} namespace
 		 * @return {self}
 		 */
 		namespace: function (namespace) {
-			this._namespace = namespace;
-			return this;
+			return new Locker(this._driver, namespace);
 		},
 
 		/**
