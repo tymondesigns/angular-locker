@@ -15,7 +15,7 @@
 	/**
 	 * If value is a function then execute, otherwise just return
 	 *
-	 * @param  {Mixed} value
+	 * @param  {Mixed}  value
 	 * @return {Mixed}
 	 */
 	var _value = function (value) {
@@ -81,7 +81,7 @@
 		/**
 		 * Try to encode value as json, or just return the value upon failure
 		 *
-		 * @param  {Mixed} value
+		 * @param  {Mixed}  value
 		 * @return {Mixed}
 		 */
 		this._serialize = function (value) {
@@ -95,7 +95,7 @@
 		/**
 		 * Try to parse value as json, if it fails then it probably isn't json so just return it
 		 *
-		 * @param  {String} value
+		 * @param  {String}  value
 		 * @return {Object|String}
 		 */
 		this._unserialize = function (value) {
@@ -292,9 +292,7 @@
 		 * @return {self}
 		 */
 		clean: function () {
-			angular.forEach(this._driver, function (value, key) {
-				this._removeItem(key);
-			}, this);
+			this.remove(Object.keys(this.all()));
 
 			return this;
 		},
@@ -316,20 +314,13 @@
 		 * @return {Integer}
 		 */
 		count: function () {
-			var all = this.all(), count = 0, k;
-			for (k in all) {
-				if (all.hasOwnProperty(k)) {
-					count++;
-				}
-			}
-
-			return count;
+			return Object.keys(this.all()).length;
 		},
 
 		/**
 		 * Set the storage driver Set on a new instance to enable overriding defaults
 		 *
-		 * @param  {String} driver
+		 * @param  {String}  driver
 		 * @return {self}
 		 */
 		driver: function (driver) {
@@ -339,7 +330,7 @@
 		/**
 		 * Set the namespace on a new instance to enable overriding defaults
 		 *
-		 * @param  {String} namespace
+		 * @param  {String}  namespace
 		 * @return {self}
 		 */
 		namespace: function (namespace) {
@@ -382,6 +373,8 @@
 			/**
 			 * Allow setting of default storage driver via `lockerProvider`
 			 * e.g. lockerProvider.setDefaultDriver('session');
+			 *
+			 * @param {String}  driver
 			 */
 			setDefaultDriver: function (driver) {
 				defaults.driver = _value(driver);
@@ -398,6 +391,8 @@
 			/**
 			 * Allow setting of default namespace via `lockerProvider`
 			 * e.g. lockerProvider.setDefaultNamespace('myAppName');
+			 * 
+			 * @param {String}  namespace
 			 */
 			setDefaultNamespace: function (namespace) {
 				defaults.namespace = _value(namespace);

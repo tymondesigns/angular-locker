@@ -364,17 +364,17 @@ describe('angular-locker', function () {
 				expect( locker.get('foo') ).toBeUndefined();
 			}));
 
-			// it('should remove all items within a namespace', inject(function () {
-			// 	provider.setDefaultNamespace('someOtherNamespace');
+			it('should remove all items within a namespace', inject(function () {
 
-			// 	locker.put('keyInOtherNamespace', 'someVal');
-			// 	locker.namespace('wontBeCleaned').put('keyInOtherNamespace', 'someVal');
+				locker.put('foo', 'bar');
 
-			// 	locker.namespace('someOtherNamespace').clean();
+				locker.namespace('otherNamespace').put('fooOther', 'barOther');
 
-			// 	expect( locker.namespace('locker').get('keyInOtherNamespace') ).toBeUndefined();
-			// 	expect( locker.namespace('wontBeCleaned').get('keyInOtherNamespace') ).toBeDefined();
-			// }));
+				locker.clean();
+
+				expect( locker.namespace('otherNamespace').get('fooOther') ).toEqual('barOther');
+				expect( locker.get('foo') ).toBeUndefined();
+			}));
 
 			it('should empty the locker', inject(function () {
 
