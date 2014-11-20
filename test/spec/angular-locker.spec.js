@@ -78,6 +78,14 @@ describe('angular-locker', function () {
 				expect( locker.get('someKey') ).toEqual(str);
 			}));
 
+			it('should put a boolean into the locker', inject(function () {
+				locker.put('someKey', false);
+				locker.put('someKey1', true);
+
+				expect( locker.get('someKey') ).toEqual(false);
+				expect( locker.get('someKey1') ).toEqual(true);
+			}));
+
 			it('should put an object into the locker', inject(function () {
 				var obj = {
 					foo: 'bar',

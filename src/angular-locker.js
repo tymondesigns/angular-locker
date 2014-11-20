@@ -19,7 +19,7 @@
 	 * @return {Mixed}
 	 */
 	var _value = function (value) {
-		return typeof value === 'function' ? value() : value;
+		return angular.isFunction(value) ? value() : value;
 	};
 
 	/**
@@ -180,7 +180,7 @@
 					this._setItem(key, value);
 				}, this);
 			} else {
-				if (! value) return false;
+				if (! angular.isDefined(value)) return false;
 				this._setItem(key, _value(value));
 			}
 
@@ -304,7 +304,7 @@
 		 */
 		empty: function () {
 			this._driver.clear();
-			
+
 			return this;
 		},
 
@@ -340,13 +340,15 @@
 		/**
 		 * Check browser support
 		 *
+		 * @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
+		 * @param {String}  driver
 		 * @return {Boolean}
 		 */
-		supported: function () {
-			var t = 't';
+		supported: function (driver) {
+			var l = 'l';
 			try {
-				localStorage.setItem(t, t);
-				localStorage.removeItem(t);
+				this._resolveDriver(driver || 'local').setItem(l, l);
+				this._resolveDriver(driver || 'local').removeItem(l);
 				return true;
 			} catch (e) {
 				return false;
@@ -391,7 +393,7 @@
 			/**
 			 * Allow setting of default namespace via `lockerProvider`
 			 * e.g. lockerProvider.setDefaultNamespace('myAppName');
-			 * 
+			 *
 			 * @param {String}  namespace
 			 */
 			setDefaultNamespace: function (namespace) {
