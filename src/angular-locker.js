@@ -28,7 +28,7 @@
 	 * @param {Storage} driver
 	 * @param {String}  namespace
 	 */
-	var Locker = function (driver, namespace) {
+	function Locker (driver, namespace) {
 
 		/**
 		 * @type {Storage}
@@ -155,7 +155,7 @@
 			this._driver.removeItem(this._getPrefix(key));
 			return true;
 		};
-	};
+	}
 
 	/**
 	 * Define the public api
@@ -263,6 +263,7 @@
 		pull: function (key, def) {
 			var value = this.get(key, def);
 			this.remove(key);
+
 			return value;
 		},
 
@@ -294,6 +295,7 @@
 			angular.forEach(this._driver, function (value, key) {
 				this._removeItem(key);
 			}, this);
+
 			return this;
 		},
 
@@ -304,6 +306,7 @@
 		 */
 		empty: function () {
 			this._driver.clear();
+			
 			return this;
 		},
 
@@ -364,12 +367,14 @@
 
 	.provider('locker', function locker () {
 
-		var defaultDriver = 'local',
-		defaultNamespace = 'locker',
+		var defaults = {
+			driver: 'local',
+			namespace: 'locker'
+		},
 
 		drivers = {
-			local: new Locker(window.localStorage, defaultNamespace),
-			session: new Locker(window.sessionStorage, defaultNamespace)
+			local: new Locker(window.localStorage, defaults.namespace),
+			session: new Locker(window.sessionStorage, defaults.namespace)
 		};
 
 		return {
@@ -379,7 +384,7 @@
 			 * e.g. lockerProvider.setDefaultDriver('session');
 			 */
 			setDefaultDriver: function (driver) {
-				defaultDriver = _value(driver);
+				defaults.driver = _value(driver);
 				return this;
 			},
 
@@ -387,7 +392,7 @@
 			 * getDefaultDriver
 			 */
 			getDefaultDriver: function () {
-				return defaultDriver;
+				return defaults.driver;
 			},
 
 			/**
@@ -395,7 +400,7 @@
 			 * e.g. lockerProvider.setDefaultNamespace('myAppName');
 			 */
 			setDefaultNamespace: function (namespace) {
-				defaultNamespace = _value(namespace);
+				defaults.namespace = _value(namespace);
 				return this;
 			},
 
@@ -403,14 +408,14 @@
 			 * getDefaultNamespace
 			 */
 			getDefaultNamespace: function () {
-				return defaultNamespace;
+				return defaults.namespace;
 			},
 
 			/**
 			 * the locker service
 			 */
 			$get: function () {
-				return drivers[defaultDriver];
+				return drivers[defaults.driver];
 			}
 		};
 
