@@ -13,7 +13,7 @@
 	'use strict';
 
 	/**
-	 * If value is a function then execute, otherwise just return
+	 * If value is a function then execute, otherwise return
 	 *
 	 * @param  {Mixed}  value
 	 * @return {Mixed}
@@ -25,8 +25,8 @@
 	/**
 	 * Define the Locker class
 	 *
-	 * @param {Storage} driver
-	 * @param {String}  namespace
+	 * @param {Storage}  driver
+	 * @param {String}   namespace
 	 */
 	function Locker (driver, namespace) {
 
@@ -210,17 +210,18 @@
 		 * @return {Mixed}
 		 */
 		get: function (key, def) {
-			if (! angular.isArray(key)) {
-				if (! this.has(key)) return arguments.length === 2 ? def : void 0;
-				return this._getItem(key);
+			if (angular.isArray(key)) {
+				var items = {};
+				angular.forEach(key, function (k) {
+					if (this.has(k)) items[k] = this._getItem(k);
+				}, this);
+
+				return items;
 			}
 
-			var items = {};
-			angular.forEach(key, function (k) {
-				if (this.has(k)) items[k] = this._getItem(k);
-			}, this);
+			if (! this.has(key)) return arguments.length === 2 ? def : void 0;
 
-			return items;
+			return this._getItem(key);
 		},
 
 		/**
@@ -242,12 +243,12 @@
 		remove: function (key) {
 			key = _value(key);
 
-			if (! angular.isArray(key)) {
-				this._removeItem(key);
-			} else {
+			if (angular.isArray(key)) {
 				angular.forEach(key, function (key) {
 					this._removeItem(key);
 				}, this);
+			} else {
+				this._removeItem(key);
 			}
 
 			return this;
@@ -268,7 +269,7 @@
 		},
 
 		/**
-		 * all - return all items in storage within the current namespace
+		 * Return all items in storage within the current namespace
 		 *
 		 * @return {Object}
 		 */
@@ -298,7 +299,7 @@
 		},
 
 		/**
-		 * Empty the current storage driver completely. careful now
+		 * Empty the current storage driver completely
 		 *
 		 * @return {self}
 		 */
@@ -318,7 +319,7 @@
 		},
 
 		/**
-		 * Set the storage driver Set on a new instance to enable overriding defaults
+		 * Set the storage driver on a new instance to enable overriding defaults
 		 *
 		 * @param  {String}  driver
 		 * @return {self}
@@ -409,7 +410,7 @@
 			},
 
 			/**
-			 * the locker service
+			 * The locker service
 			 */
 			$get: function () {
 				return drivers[defaults.driver];
