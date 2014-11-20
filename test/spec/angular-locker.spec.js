@@ -177,8 +177,8 @@ describe('angular-locker', function () {
 				locker.put('foo', 'defaultNamespace');
 				locker.namespace('someOtherNamespace').put('foo', 'newNamespace');
 
-				expect( locker.get('foo') ).toEqual('newNamespace');
-				expect( locker.namespace('locker').get('foo') ).toEqual('defaultNamespace');
+				expect( locker.get('foo') ).toEqual('defaultNamespace');
+				expect( locker.namespace('someOtherNamespace').get('foo') ).toEqual('newNamespace');
 			}));
 
 			it('should return false if key/value params are missing', inject(function () {
