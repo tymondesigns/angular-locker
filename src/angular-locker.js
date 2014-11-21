@@ -22,6 +22,10 @@
 		return angular.isFunction(value) ? value() : value;
 	};
 
+	var _error = function (message) {
+		throw new Error(message);
+	};
+
 	/**
 	 * Define the Locker class
 	 *
@@ -71,7 +75,7 @@
 		 */
 		this._resolveDriver = function (driver) {
 			if (! this._registeredDrivers.hasOwnProperty(driver)) {
-				console.warn('angular-locker - The driver "' + driver + '" was not found. Defaulting to local.');
+				_error('The driver "' + driver + '" was not found. Defaulting to local.');
 			}
 
 			// fallback gracefully to localStorage
@@ -117,9 +121,9 @@
 				this._driver.setItem(this._getPrefix(key), this._serialize(value));
 			} catch (e) {
 				if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-					console.warn('angular-locker - Your browser storage quota has been exceeded');
+					_error('Your browser storage quota has been exceeded');
 				} else {
-					console.warn('angular-locker - Could not add item with key "' + key + '"', e);
+					_error('Could not add item with key "' + key + '"');
 				}
 			}
 		};
@@ -240,7 +244,7 @@
 		 * @param  {Mixed}  key
 		 * @return {Object}
 		 */
-		remove: function (key) {
+		forget: function (key) {
 			key = _value(key);
 
 			if (angular.isArray(key)) {
@@ -263,7 +267,7 @@
 		 */
 		pull: function (key, def) {
 			var value = this.get(key, def);
-			this.remove(key);
+			this.forget(key);
 
 			return value;
 		},
@@ -293,7 +297,7 @@
 		 * @return {self}
 		 */
 		clean: function () {
-			this.remove(Object.keys(this.all()));
+			this.forget(Object.keys(this.all()));
 
 			return this;
 		},
@@ -358,6 +362,15 @@
 	};
 
 	angular.module('angular-locker', [])
+
+	.config(function ($provide) {
+		$provide.decorator('$exceptionHandler', ['$log', '$delegate', function($log, $delegate) {
+			return function(exception, cause) {
+				$log.debug('[angular-locker] - ' + exception.message);
+				$delegate(exception, cause);
+			};
+		}]);
+	})
 
 	.provider('locker', function locker () {
 

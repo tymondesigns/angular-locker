@@ -33,11 +33,11 @@ describe('angular-locker', function () {
 		}));
 
 		it('should warn in the console if storage driver that does not exist is used', inject(function () {
-			spyOn(console, 'warn');
 
-			locker.driver('somethingNotExpected');
+			expect(function () {
+				locker.driver('somethingNotExpected');
+			}).toThrowError();
 
-			expect(console.warn).toHaveBeenCalled();
 			expect( locker._driver ).toEqual(window.localStorage);
 		}));
 
@@ -213,21 +213,19 @@ describe('angular-locker', function () {
 				error.name = 'QUOTA_EXCEEDED_ERR';
 
 				spyOn(localStorage, 'setItem').and.throwError(error);
-				spyOn(console, 'warn');
 
-				locker.put('someKey', ['foo']);
-
-				expect(console.warn).toHaveBeenCalled();
+				expect(function () {
+					locker.put('someKey', ['foo']);
+				}).toThrowError();
 			}));
 
 			it('should catch the error when an item couldn\'t be added for some other reason', inject(function () {
 
 				spyOn(localStorage, 'setItem').and.throwError(new Error());
-				spyOn(console, 'warn');
 
-				locker.put('someKey', ['foo']);
-
-				expect(console.warn).toHaveBeenCalled();
+				expect(function () {
+					locker.put('someKey', ['foo']);
+				}).toThrowError();
 			}));
 
 		});
@@ -326,7 +324,7 @@ describe('angular-locker', function () {
 			it('should remove an item from locker', inject(function () {
 				locker.put('someKey', 'someVal');
 
-				locker.remove('someKey');
+				locker.forget('someKey');
 
 				expect( locker.get('someKey') ).not.toBeDefined();
 			}));
@@ -334,7 +332,7 @@ describe('angular-locker', function () {
 			it('should remove an item from locker when passing a function', inject(function () {
 				locker.put('someKey', 'someVal');
 
-				locker.remove(function () {
+				locker.forget(function () {
 					return 'someKey';
 				});
 
@@ -350,7 +348,7 @@ describe('angular-locker', function () {
 					};
 				});
 
-				locker.remove(function () {
+				locker.forget(function () {
 					return ['something', 'anotherThing'];
 				});
 
@@ -365,7 +363,7 @@ describe('angular-locker', function () {
 				locker.put('arrayKey', ['foo', 'bar']);
 				locker.put('foo', 'bar');
 
-				locker.remove(['objectKey', 'arrayKey1', 'foo']);
+				locker.forget(['objectKey', 'arrayKey1', 'foo']);
 
 				expect( locker.get('objectKey') ).not.toBeDefined();
 				expect( locker.get('arrayKey1') ).not.toBeDefined();
