@@ -64,13 +64,6 @@ describe('angular-locker', function () {
 
 		describe('adding items to locker', function () {
 
-			it('should switch drivers when chained', inject(function () {
-				provider.setDefaultDriver('local');
-				locker.driver('session').put('foo', 'bar');
-
-				expect( locker.get('foo') ).not.toBeDefined();
-			}));
-
 			it('should put a string into the locker', inject(function () {
 				var str = 'someVal';
 				locker.put('someKey', str);
@@ -226,6 +219,24 @@ describe('angular-locker', function () {
 				expect(function () {
 					locker.put('someKey', ['foo']);
 				}).toThrowError();
+			}));
+
+		});
+
+		describe('switching drivers/namespaces', function () {
+
+			it('should switch drivers when chained', inject(function () {
+				provider.setDefaultDriver('local');
+				locker.driver('session').put('foo', 'bar');
+
+				expect( locker.get('foo') ).not.toBeDefined();
+			}));
+
+			it('should switch namespaces when chained', inject(function () {
+
+				locker.namespace('fooBar').put('foo', 'bar');
+
+				expect( locker.get('foo') ).not.toBeDefined();
 			}));
 
 		});
@@ -390,6 +401,16 @@ describe('angular-locker', function () {
 
 				expect( locker.get('anotherKey') ).not.toBeDefined();
 
+			}));
+
+			it('should get the currently set driver', inject(function () {
+				expect( locker.getDriver() ).toEqual(window.localStorage);
+				expect( locker.driver('session').getDriver() ).toEqual(window.sessionStorage);
+			}));
+
+			it('should get the currently set namespace', inject(function () {
+				expect( locker.getNamespace() ).toEqual('locker');
+				expect( locker.namespace('foo').getNamespace() ).toEqual('foo');
 			}));
 
 		});

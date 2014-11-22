@@ -333,6 +333,15 @@
 		},
 
 		/**
+		 * Get the currently set driver
+		 *
+		 * @return {Storage}
+		 */
+		getDriver: function () {
+			return this._driver;
+		},
+
+		/**
 		 * Set the namespace on a new instance to enable overriding defaults
 		 *
 		 * @param  {String}  namespace
@@ -340,6 +349,15 @@
 		 */
 		namespace: function (namespace) {
 			return new Locker(this._driver, namespace);
+		},
+
+		/**
+		 * Get the currently set namespace
+		 *
+		 * @return {String}
+		 */
+		getNamespace: function () {
+			return this._namespace;
 		},
 
 		/**
@@ -363,14 +381,14 @@
 
 	angular.module('angular-locker', [])
 
-	.config(function ($provide) {
-		$provide.decorator('$exceptionHandler', ['$log', '$delegate', function($log, $delegate) {
-			return function(exception, cause) {
-				$log.debug('[angular-locker] - ' + exception.message);
-				$delegate(exception, cause);
-			};
-		}]);
-	})
+	// .config(function ($provide) {
+	// 	$provide.decorator('$exceptionHandler', ['$log', '$delegate', function($log, $delegate) {
+	// 		return function(exception, cause) {
+	// 			$log.debug('[angular-locker] - ' + exception.message);
+	// 			$delegate(exception, cause);
+	// 		};
+	// 	}]);
+	// })
 
 	.provider('locker', function locker () {
 
