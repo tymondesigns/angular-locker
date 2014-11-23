@@ -57,10 +57,10 @@ inject `locker` into your controller/service/directive etc
 
 ----------------------------
 
-### Switching drivers
+### Switching storage drivers
 
 There may be times where you will want to dynamically switch between using local and session storage.
-To achieve this, simply use the `driver()` setter to specify what storage driver you want to use, as follows:
+To achieve this, simply chain the `driver()` setter to specify what storage driver you want to use, as follows:
 
 ```js
 // put an item into session storage
@@ -69,6 +69,18 @@ locker.driver('session').put('sessionKey', ['some', 'session', 'data']);
 // this time use local storage
 locker.driver('local').get('localKey', ['some', 'persistent', 'things']);
 ```
+
+### Switching namespace
+
+There may be times where you will want to dynamically switch between using local and session storage.
+To achieve this, simply chain the `driver()` setter to specify what storage driver you want to use, as follows:
+
+```js
+// put an item into session storage
+locker.namespace('otherNamespace').put('foo', 'bar');
+```
+
+Omitting the driver or namespace setters will respect whatever default was specified via `lockerProvider`.
 
 ----------------------------
 
@@ -196,7 +208,7 @@ This will return an object containing all the key/value pairs in storage
 ```js
 locker.all();
 // or
-locker.setNamespace('somethingElse').all();
+locker.namespace('somethingElse').all();
 ```
 
 #### counting items
@@ -206,7 +218,7 @@ To count the number of items within a given namespace:
 ```js
 locker.count();
 // or
-locker.setNamespace('somethingElse').count();
+locker.namespace('somethingElse').count();
 ```
 
 ----------------------------
@@ -230,18 +242,18 @@ if (locker.has('user.authToken') ) {
 
 ### Removing items from locker
 
-The simplest way to remove an item is to pass the key to the `remove()` method
+The simplest way to remove an item is to pass the key to the `forget()` method
 
 ```js
-locker.remove('keyToRemove');
+locker.forget('keyToRemove');
 ```
 
 #### removing multiple items at once
 
-You can also pass an array to the remove method
+You can also pass an array.
 
 ```js
-locker.remove(['keyToRemove', 'anotherKeyToRemove', 'something', 'else']);
+locker.forget(['keyToRemove', 'anotherKeyToRemove', 'something', 'else']);
 ```
 
 #### removing all within namespace
@@ -251,7 +263,7 @@ you can remove all the items within the currently set namespace via the `clean()
 ```js
 locker.clean();
 // or
-locker.setNamespace('someOtherNamespace').clean();
+locker.namespace('someOtherNamespace').clean();
 ```
 #### removing all items within the currently set storage driver
 
