@@ -76,7 +76,7 @@ There may be times where you will want to dynamically switch between using local
 To achieve this, simply chain the `driver()` setter to specify what storage driver you want to use, as follows:
 
 ```js
-// put an item into session storage
+// add an item within a different namespace
 locker.namespace('otherNamespace').put('foo', 'bar');
 ```
 
