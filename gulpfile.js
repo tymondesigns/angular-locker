@@ -11,6 +11,7 @@ var gulp    = require('gulp'),
     semver  = require('semver'),
     streamqueue = require('streamqueue'),
     jeditor = require('gulp-json-editor'),
+    sourcemaps = require('gulp-sourcemaps'),
 	package = require('./package.json');
 
 var paths = {
@@ -44,10 +45,11 @@ var banner = [
 gulp.task('scripts', ['clean'], function() {
 	return gulp.src(paths.scripts)
 		.pipe(plumber())
-		// .pipe(header(banner, { package : package }))
 		.pipe(gulp.dest('dist/'))
 		.pipe(rename({ suffix: '.min' }))
+		.pipe(sourcemaps.init())
 		.pipe(uglify())
+		.pipe(sourcemaps.write('./'))
 		.pipe(header(banner, { package : package }))
 		.pipe(gulp.dest('dist/'));
 });
