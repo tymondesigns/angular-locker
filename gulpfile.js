@@ -24,6 +24,7 @@ var paths = {
 		'src/angular-locker.js'
 	],
 	test: [
+		'test/mock/storageMock.js',
 		'test/spec/**/*.js'
 	],
 	versions: [

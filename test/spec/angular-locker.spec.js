@@ -1,62 +1,69 @@
 describe('angular-locker', function () {
 
-	var provider, locker, store = {}, prefix = 'locker.';
-
-	beforeEach(module('angular-locker', function (lockerProvider) {
-		provider = lockerProvider;
-		locker = lockerProvider.$get();
+	beforeEach(module('angular-locker', function ($provide) {
+		$provide.value('$window', {
+			localStorage: storageMock(),
+			sessionStorage: storageMock()
+		});
 	}));
-
-	afterEach(function() {
-		locker.empty();
-	});
 
 	describe('lockerProvider', function () {
 
-		it('should be defined', inject(function () {
-			expect(provider).toBeDefined();
-		}));
-
-		it('should set a default storage driver', inject(function () {
-			expect( provider.getDefaultDriver() ).toEqual('local');
-			provider.setDefaultDriver('session');
-			expect( provider.getDefaultDriver() ).toEqual('session');
-		}));
-
-		it('should set a default storage driver via function', inject(function () {
-			expect( provider.getDefaultDriver() ).toEqual('local');
-			provider.setDefaultDriver(function () {
-				var shouldUseSession = true;
-				if (shouldUseSession) return 'session';
+		it('should be defined', function () {
+			module(function(lockerProvider) {
+				expect(lockerProvider).toBeDefined();
 			});
-			expect( provider.getDefaultDriver() ).toEqual('session');
-		}));
+		});
 
-		it('should warn in the console if storage driver that does not exist is used', inject(function () {
-
-			expect(function () {
-				locker.driver('somethingNotExpected');
-			}).toThrowError();
-
-			expect( locker._driver ).toEqual(window.localStorage);
-		}));
-
-		it('should set a default namespace', inject(function () {
-			expect( provider.getDefaultNamespace() ).toEqual('locker');
-			provider.setDefaultNamespace('myApp');
-			expect( provider.getDefaultNamespace() ).toEqual('myApp');
-			provider.setDefaultNamespace('');
-			expect( provider.getDefaultNamespace() ).toEqual('');
-		}));
-
-		it('should set a default namespace via function', inject(function () {
-			expect( provider.getDefaultNamespace() ).toEqual('locker');
-			provider.setDefaultNamespace(function () {
-				var arr = ['myApp', 'coolApp', 'somethingElse'];
-				return arr[1];
+		it('should set a default storage driver', function () {
+			module(function(lockerProvider) {
+				expect( lockerProvider.getDefaultDriver() ).toEqual('local');
+				lockerProvider.setDefaultDriver('session');
+				expect( lockerProvider.getDefaultDriver() ).toEqual('session');
 			});
-			expect( provider.getDefaultNamespace() ).toEqual('coolApp');
-		}));
+		});
+
+		it('should set a default storage driver via function', function () {
+			module(function(lockerProvider) {
+				expect( lockerProvider.getDefaultDriver() ).toEqual('local');
+				lockerProvider.setDefaultDriver(function () {
+					var shouldUseSession = true;
+					if (shouldUseSession) return 'session';
+				});
+				expect( lockerProvider.getDefaultDriver() ).toEqual('session');
+			});
+		});
+
+		it('should throw an error if storage driver that does not exist is used', function () {
+			module(function(lockerProvider) {
+				expect(function () {
+					locker.driver('somethingNotExpected');
+				}).toThrowError();
+
+				expect( locker._driver ).toEqual($window.localStorage);
+			});
+		});
+
+		it('should set a default namespace', function () {
+			module(function(lockerProvider) {
+				expect( lockerProvider.getDefaultNamespace() ).toEqual('locker');
+				lockerProvider.setDefaultNamespace('myApp');
+				expect( lockerProvider.getDefaultNamespace() ).toEqual('myApp');
+				lockerProvider.setDefaultNamespace('');
+				expect( lockerProvider.getDefaultNamespace() ).toEqual('');
+			});
+		});
+
+		it('should set a default namespace via function', function () {
+			module(function(lockerProvider) {
+				expect( lockerProvider.getDefaultNamespace() ).toEqual('locker');
+				lockerProvider.setDefaultNamespace(function () {
+					var arr = ['myApp', 'coolApp', 'somethingElse'];
+					return arr[1];
+				});
+				expect( lockerProvider.getDefaultNamespace() ).toEqual('coolApp');
+			});
+		});
 
 	});
 
@@ -64,14 +71,14 @@ describe('angular-locker', function () {
 
 		describe('adding items to locker', function () {
 
-			it('should put a string into the locker', inject(function () {
+			it('should put a string into the locker', inject(function (locker) {
 				var str = 'someVal';
 				locker.put('someKey', str);
 
 				expect( locker.get('someKey') ).toEqual(str);
 			}));
 
-			it('should put a boolean into the locker', inject(function () {
+			it('should put a boolean into the locker', inject(function (locker) {
 				locker.put('someKey', false);
 				locker.put('someKey1', true);
 
@@ -79,7 +86,7 @@ describe('angular-locker', function () {
 				expect( locker.get('someKey1') ).toEqual(true);
 			}));
 
-			it('should put an object into the locker', inject(function () {
+			it('should put an object into the locker', inject(function (locker) {
 				var obj = {
 					foo: 'bar',
 					bar: 'baz',
@@ -98,7 +105,7 @@ describe('angular-locker', function () {
 				expect( result.baz.bar ).toBeFalsy();
 			}));
 
-			it('should put an array into the locker', inject(function () {
+			it('should put an array into the locker', inject(function (locker) {
 				var arr1 = ['foo', 123.456, true, { foo: 'bar' }];
 				var arr2 = ['foo', 'bar', 'baz'];
 
@@ -115,7 +122,7 @@ describe('angular-locker', function () {
 				expect( result2[0] ).toEqual('foo');
 			}));
 
-			it('should put a key value object into the locker via first param', inject(function () {
+			it('should put a key value object into the locker via first param', inject(function (locker) {
 				var obj = {
 					foo: 'bar',
 					bar: 'baz',
@@ -134,7 +141,7 @@ describe('angular-locker', function () {
 				expect( locker.get('bob').lorem ).toBeTruthy();
 			}));
 
-			it('should put an item into the locker when passing a function as second param', inject(function () {
+			it('should put an item into the locker when passing a function as second param', inject(function (locker) {
 
 				locker.put('fnKey', function () {
 					return 12 * 12;
@@ -143,7 +150,7 @@ describe('angular-locker', function () {
 				expect( locker.get('fnKey') ).toEqual(144);
 			}));
 
-			it('should put an item into the locker when passing a function as first param', inject(function () {
+			it('should put an item into the locker when passing a function as first param', inject(function (locker) {
 
 				locker.put(function () {
 					return {
@@ -159,7 +166,7 @@ describe('angular-locker', function () {
 				expect( angular.isObject(locker.get('anotherKey')) ).toBeTruthy();
 			}));
 
-			it('should put an item into the locker if it doesn\'t already exist', inject(function () {
+			it('should put an item into the locker if it doesn\'t already exist', inject(function (locker) {
 
 				locker.put('foo', 'loremipsumdolorsitamet');
 				var added = locker.add('foo', ['foo', 'bar', 'baz']);
@@ -174,7 +181,7 @@ describe('angular-locker', function () {
 				expect( locker.get('bar1') ).toEqual('foobazbob');
 			}));
 
-			it('should put an item into the locker in a different namespace', inject(function () {
+			it('should put an item into the locker in a different namespace', inject(function (locker) {
 				locker.put('foo', 'defaultNamespace');
 				locker.namespace('someOtherNamespace').put('foo', 'newNamespace');
 
@@ -182,7 +189,7 @@ describe('angular-locker', function () {
 				expect( locker.namespace('someOtherNamespace').get('foo') ).toEqual('newNamespace');
 			}));
 
-			it('should return false if key/value params are missing', inject(function () {
+			it('should return false if key/value params are missing', inject(function (locker) {
 
 				var result1 = locker.put('aKey');
 				var result2 = locker.put(null, 'aVal');
@@ -190,31 +197,31 @@ describe('angular-locker', function () {
 				expect( result1 && result2 ).toBeFalsy();
 			}));
 
-			it('should fail silently if value cannot be serialized and unserialized', inject(function () {
+			it('should fail silently if value cannot be serialized and unserialized', inject(function (locker) {
 
-				spyOn(angular, 'toJson').and.throwError();
+				spyOn(angular, 'toJson').and.throwError(new Error());
+				spyOn(angular, 'fromJson').and.throwError(new Error());
 
 				var result = locker.put('foo', ['bar', 'baz']).get('foo');
 
 				expect( result ).toBeDefined();
-				expect( angular.isArray(result) ).toBeFalsy();
 			}));
 
-			it('should catch the error when the browser reports storage is full', inject(function () {
+			it('should catch the error when the browser reports storage is full', inject(function ($window, locker) {
 
 				var error = new Error();
 				error.name = 'QUOTA_EXCEEDED_ERR';
 
-				spyOn(localStorage, 'setItem').and.throwError(error);
+				spyOn($window.localStorage, 'setItem').and.throwError(error);
 
 				expect(function () {
 					locker.put('someKey', ['foo']);
 				}).toThrowError();
 			}));
 
-			it('should catch the error when an item couldn\'t be added for some other reason', inject(function () {
+			it('should catch the error when an item couldn\'t be added for some other reason', inject(function ($window, locker) {
 
-				spyOn(localStorage, 'setItem').and.throwError(new Error());
+				spyOn($window.localStorage, 'setItem').and.throwError(new Error());
 
 				expect(function () {
 					locker.put('someKey', ['foo']);
@@ -225,14 +232,18 @@ describe('angular-locker', function () {
 
 		describe('switching drivers/namespaces', function () {
 
-			it('should switch drivers when chained', inject(function () {
-				provider.setDefaultDriver('local');
-				locker.driver('session').put('foo', 'bar');
+			it('should switch drivers when chained', function () {
+				module(function(lockerProvider) {
+					lockerProvider.setDefaultDriver('local');
+				});
 
-				expect( locker.get('foo') ).not.toBeDefined();
-			}));
+				inject(function (locker) {
+					locker.driver('session').put('foo', 'bar');
+					expect( locker.get('foo') ).not.toBeDefined();
+				});
+			});
 
-			it('should switch namespaces when chained', inject(function () {
+			it('should switch namespaces when chained', inject(function (locker) {
 
 				locker.namespace('fooBar').put('foo', 'bar');
 
@@ -243,7 +254,7 @@ describe('angular-locker', function () {
 
 		describe('retrieving items from locker', function () {
 
-			it('should return specified default value if item not in locker', inject(function () {
+			it('should return specified default value if item not in locker', inject(function (locker) {
 				var obj = { foo: 'bar', bar: 123, baz: true };
 
 				locker.put('somethingThatDoesExist', 'exists');
@@ -267,7 +278,7 @@ describe('angular-locker', function () {
 				expect( result2 ).toEqual(obj);
 			}));
 
-			it('should return an object containing the key/value pairs passed in via array', inject(function () {
+			it('should return an object containing the key/value pairs passed in via array', inject(function (locker) {
 
 				locker.put(function () {
 					return {
@@ -285,7 +296,7 @@ describe('angular-locker', function () {
 
 			}));
 
-			it('should return a value and then delete the item', inject(function () {
+			it('should return a value and then delete the item', inject(function (locker) {
 				var str = 'someVal456';
 				locker.put('someKey123', str);
 
@@ -295,7 +306,7 @@ describe('angular-locker', function () {
 				expect( locker.get('someKey123') ).not.toBeDefined();
 			}));
 
-			it('should return all items within current namespace', inject(function () {
+			it('should return all items within current namespace', inject(function (locker) {
 
 				for (var i=0; i<20; i++) {
 					locker.put('aKey' + i, 'aVal' + i);
@@ -317,7 +328,7 @@ describe('angular-locker', function () {
 				expect( Object.keys(all).length ).toEqual(21);
 			}));
 
-			it('should count the items within current namespace', inject(function () {
+			it('should count the items within current namespace', inject(function (locker) {
 				for (var i=0; i<20; i++) {
 					locker.put('aKey' + i, 'aVal' + i);
 				}
@@ -332,7 +343,7 @@ describe('angular-locker', function () {
 
 		describe('removing items from locker', function () {
 
-			it('should remove an item from locker', inject(function () {
+			it('should remove an item from locker', inject(function (locker) {
 				locker.put('someKey', 'someVal');
 
 				locker.forget('someKey');
@@ -340,7 +351,7 @@ describe('angular-locker', function () {
 				expect( locker.get('someKey') ).not.toBeDefined();
 			}));
 
-			it('should remove an item from locker when passing a function', inject(function () {
+			it('should remove an item from locker when passing a function', inject(function (locker) {
 				locker.put('someKey', 'someVal');
 
 				locker.forget(function () {
@@ -350,7 +361,7 @@ describe('angular-locker', function () {
 				expect( locker.get('someKey') ).not.toBeDefined();
 			}));
 
-			it('should remove multiple items from locker when passing a function', inject(function () {
+			it('should remove multiple items from locker when passing a function', inject(function (locker) {
 				locker.put(function () {
 					return {
 						'something': 'some value',
@@ -368,7 +379,7 @@ describe('angular-locker', function () {
 				expect( locker.get('lorem') ).toBeTruthy();
 			}));
 
-			it('should remove multiple items from locker by passing an array', inject(function () {
+			it('should remove multiple items from locker by passing an array', inject(function (locker) {
 
 				locker.put('objectKey', {foo: 'bar'});
 				locker.put('arrayKey', ['foo', 'bar']);
@@ -381,7 +392,7 @@ describe('angular-locker', function () {
 				expect( locker.get('foo') ).not.toBeDefined();
 			}));
 
-			it('should remove all items within a namespace', inject(function () {
+			it('should remove all items within a namespace', inject(function (locker) {
 
 				locker.put('foo', 'bar');
 
@@ -393,7 +404,7 @@ describe('angular-locker', function () {
 				expect( locker.get('foo') ).not.toBeDefined();
 			}));
 
-			it('should empty the locker', inject(function () {
+			it('should empty the locker', inject(function (locker) {
 
 				locker.put('anotherKey', { someObj: true, foo: 'barbaz' });
 
@@ -403,12 +414,12 @@ describe('angular-locker', function () {
 
 			}));
 
-			it('should get the currently set driver', inject(function () {
-				expect( locker.getDriver() ).toEqual(window.localStorage);
-				expect( locker.driver('session').getDriver() ).toEqual(window.sessionStorage);
+			it('should get the currently set driver', inject(function ($window, locker) {
+				expect( locker.getDriver() ).toEqual($window.localStorage);
+				expect( locker.driver('session').getDriver() ).toEqual($window.sessionStorage);
 			}));
 
-			it('should get the currently set namespace', inject(function () {
+			it('should get the currently set namespace', inject(function (locker) {
 				expect( locker.getNamespace() ).toEqual('locker');
 				expect( locker.namespace('foo').getNamespace() ).toEqual('foo');
 			}));
@@ -417,14 +428,14 @@ describe('angular-locker', function () {
 
 		describe('checking existence in locker', function () {
 
-			it('should determine whether an item exists in locker', inject(function () {
+			it('should determine whether an item exists in locker', inject(function (locker) {
 				locker.put('randKey', Math.random());
 
 				expect( locker.has('randKey') ).toBeTruthy();
 				expect( locker.has('loremipsumdolorsitamet') ).toBeFalsy();
 			}));
 
-			it('should determine whether an item exists in locker when passing a function', inject(function () {
+			it('should determine whether an item exists in locker when passing a function', inject(function (locker) {
 				locker.put('randKey', Math.random());
 
 				var result = locker.has(function () {
@@ -435,7 +446,7 @@ describe('angular-locker', function () {
 				expect( locker.has('loremipsumdolorsitamet') ).toBeFalsy();
 			}));
 
-			it('should determine whether an item exists in locker within another namespace', inject(function () {
+			it('should determine whether an item exists in locker within another namespace', inject(function (locker) {
 				locker.namespace('differentNs').put('randKeyNs', Math.random());
 
 				expect( locker.namespace('differentNs').has('randKeyNs') ).toBeTruthy();
@@ -446,17 +457,15 @@ describe('angular-locker', function () {
 
 		describe('checking browser support', function () {
 
-			it('should return true if storage is supported', inject(function () {
-
-				spyOn(window, 'Storage').and.returnValue(function(){});
+			it('should return true if storage is supported', inject(function ($window, locker) {
 
 				expect( locker.supported() ).toBeTruthy();
 
 			}));
 
-			it('should return false if storage is not supported', inject(function () {
+			it('should return false if storage is not supported', inject(function ($window, locker) {
 
-				spyOn(window.localStorage, 'setItem').and.throwError(new Error());
+				spyOn($window.localStorage, 'setItem').and.throwError(new Error());
 
 				expect( locker.supported() ).toBeFalsy();
 

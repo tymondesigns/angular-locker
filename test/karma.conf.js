@@ -78,7 +78,7 @@ module.exports = function (config) {
 		captureTimeout: 120000,
 
 		coverageReporter: {
-			type: 'html',
+			type: 'lcov',
 			dir: 'coverage/',
 			subdir: function(browser) {
 				return 'lcov';
