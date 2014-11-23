@@ -14,6 +14,15 @@
 
 	angular.module('angular-locker', [])
 
+	.config(function ($provide) {
+		$provide.decorator('$exceptionHandler', ['$log', '$delegate', function($log, $delegate) {
+			return function(exception, cause) {
+				$log.debug('[angular-locker] - ' + exception.message);
+				$delegate(exception, cause);
+			};
+		}]);
+	})
+
 	.provider('locker', function () {
 
 		/**
@@ -77,11 +86,7 @@
 			/**
 			 * The locker service
 			 */
-			$get: ['$window', '$log', '$rootScope', function ($window, $log, $rootScope) {
-
-				var _error = function (message) {
-					throw new Error(message);
-				};
+			$get: ['$window', '$rootScope', function ($window, $rootScope) {
 
 				/**
 				 * Define the Locker class
@@ -154,7 +159,7 @@
 					 */
 					this._resolveDriver = function (driver) {
 						if (! this._registeredDrivers.hasOwnProperty(driver)) {
-							_error('The driver "' + driver + '" was not found. Defaulting to local.');
+							throw new Error('The driver "' + driver + '" was not found. Defaulting to local.');
 						}
 
 						// fallback gracefully to localStorage
@@ -201,9 +206,9 @@
 							$rootScope.$emit('locker.item.added', value);
 						} catch (e) {
 							if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-								_error('Your browser storage quota has been exceeded');
+								throw new Error('Your browser storage quota has been exceeded');
 							} else {
-								_error('Could not add item with key "' + key + '"');
+								throw new Error('Could not add item with key "' + key + '"');
 							}
 						}
 					};
