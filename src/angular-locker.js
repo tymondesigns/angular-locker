@@ -203,7 +203,7 @@
 					this._setItem = function (key, value) {
 						try {
 							this._driver.setItem(this._getPrefix(key), this._serialize(value));
-							$rootScope.$emit('locker.item.added', value);
+							$rootScope.$emit('locker.item.added', key, value);
 						} catch (e) {
 							if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
 								throw new Error('Your browser storage quota has been exceeded');
