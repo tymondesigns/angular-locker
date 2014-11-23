@@ -77,7 +77,7 @@
 			/**
 			 * The locker service
 			 */
-			$get: ['$window', '$log', function ($window, $log) {
+			$get: ['$window', '$log', '$rootScope', function ($window, $log, $rootScope) {
 
 				var _error = function (message) {
 					throw new Error(message);
@@ -100,6 +100,28 @@
 					 * @type {String}
 					 */
 					this._namespace = namespace;
+
+					/**
+					 * Check browser support
+					 *
+					 * @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
+					 * @param  {String}  driver
+					 * @return {Boolean}
+					 */
+					this._checkSupport = function (driver) {
+						if (typeof this._supported === 'undefined') {
+							var l = 'l';
+							try {
+								this._resolveDriver(driver || 'local').setItem(l, l);
+								this._resolveDriver(driver || 'local').removeItem(l);
+								this._supported = true;
+							} catch (e) {
+								this._supported = false;
+							}
+						}
+
+						return this._supported;
+					};
 
 					/**
 					 * @type {Object}
@@ -176,6 +198,7 @@
 					this._setItem = function (key, value) {
 						try {
 							this._driver.setItem(this._getPrefix(key), this._serialize(value));
+							$rootScope.$emit('locker.item.added', value);
 						} catch (e) {
 							if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
 								_error('Your browser storage quota has been exceeded');
@@ -214,6 +237,7 @@
 					this._removeItem = function (key) {
 						if (! this._exists(key)) return false;
 						this._driver.removeItem(this._getPrefix(key));
+						$rootScope.$emit('locker.item.removed', key);
 						return true;
 					};
 				}
@@ -425,18 +449,7 @@
 					 * @return {Boolean}
 					 */
 					supported: function (driver) {
-						if (typeof this._supported === 'undefined') {
-							var l = 'l';
-							try {
-								this._resolveDriver(driver || 'local').setItem(l, l);
-								this._resolveDriver(driver || 'local').removeItem(l);
-								this._supported = true;
-							} catch (e) {
-								this._supported = false;
-							}
-						}
-
-						return this._supported;
+						return this._checkSupport(driver);
 					}
 				};
 
