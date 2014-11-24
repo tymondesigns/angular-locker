@@ -65,6 +65,12 @@ describe('angular-locker', function () {
 			});
 		});
 
+		it('should throw an error when setting a driver that is not registered', inject(function (locker) {
+			expect(function () {
+				locker.driver('foo');
+			}).toThrowError();
+		}));
+
 	});
 
 	describe('lockerService', function () {
