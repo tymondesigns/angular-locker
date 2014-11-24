@@ -15,6 +15,10 @@
 	angular.module('angular-locker', [])
 
 	.config(function ($provide) {
+
+        /**
+         * Decorate the exception handler
+         */
 		$provide.decorator('$exceptionHandler', ['$log', '$delegate', function($log, $delegate) {
 			return function(exception, cause) {
 				$log.debug('[angular-locker] - ' + exception.message);
