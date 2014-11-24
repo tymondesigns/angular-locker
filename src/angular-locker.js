@@ -36,6 +36,17 @@
 		};
 
 		/**
+		 * Get the key of an object by the value
+		 *
+		 * @param  {Object}  obj
+		 * @param  {Mixed}   value
+		 * @return {String}
+		 */
+		var _keyByVal = function (obj, value) {
+			return Object.keys(obj).filter(function (key) { return obj[key] === value; })[0];
+		};
+
+		/**
 		 * Set the default driver and namespace
 		 *
 		 * @type {Object}
@@ -97,9 +108,32 @@
 				function Locker (driver, namespace) {
 
 					/**
+					 * @type {Object}
+					 */
+					this._registeredDrivers = {
+						local: $window.localStorage,
+						session: $window.sessionStorage
+					};
+
+					/**
+					 * Get the Storage instance from the key
+					 *
+					 * @param  {String}  driver
+					 * @return {Storage}
+					 */
+					this._resolveDriver = function (driver) {
+						if (! this._registeredDrivers.hasOwnProperty(driver)) {
+							throw new Error('The driver "' + driver + '" was not found. Defaulting to local.');
+						}
+
+						// fallback gracefully to localStorage
+						return this._registeredDrivers[driver] || this._registeredDrivers.local;
+					};
+
+					/**
 					 * @type {Storage}
 					 */
-					this._driver = driver;
+					this._driver = this._resolveDriver(driver);
 
 					/**
 					 * @type {String}
@@ -129,14 +163,6 @@
 					};
 
 					/**
-					 * @type {Object}
-					 */
-					this._registeredDrivers = {
-						local: $window.localStorage,
-						session: $window.sessionStorage
-					};
-
-					/**
 					 * @type {String}
 					 */
 					this._separator = '.';
@@ -149,21 +175,6 @@
 					 */
 					this._getPrefix = function (key) {
 						return this._namespace + this._separator + key;
-					};
-
-					/**
-					 * Get the Storage instance from the key
-					 *
-					 * @param  {String}  driver
-					 * @return {Storage}
-					 */
-					this._resolveDriver = function (driver) {
-						if (! this._registeredDrivers.hasOwnProperty(driver)) {
-							throw new Error('The driver "' + driver + '" was not found. Defaulting to local.');
-						}
-
-						// fallback gracefully to localStorage
-						return this._registeredDrivers[driver] || this._registeredDrivers.local;
 					};
 
 					/**
@@ -203,7 +214,12 @@
 					this._setItem = function (key, value) {
 						try {
 							this._driver.setItem(this._getPrefix(key), this._serialize(value));
-							$rootScope.$emit('locker.item.added', key, value);
+							$rootScope.$emit('locker.item.added', {
+								driver: this._driver,
+								namespace: this._namespace,
+								key: key,
+								value: value
+							});
 						} catch (e) {
 							if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
 								throw new Error('Your browser storage quota has been exceeded');
@@ -242,7 +258,12 @@
 					this._removeItem = function (key) {
 						if (! this._exists(key)) return false;
 						this._driver.removeItem(this._getPrefix(key));
-						$rootScope.$emit('locker.item.removed', key);
+						$rootScope.$emit('locker.item.removed', {
+							driver: this._driver,
+							namespace: this._namespace,
+							key: key
+						});
+
 						return true;
 					};
 				}
@@ -289,6 +310,7 @@
 							this.put(key, value);
 							return true;
 						}
+
 						return false;
 					},
 
@@ -415,7 +437,7 @@
 					 * @return {self}
 					 */
 					driver: function (driver) {
-						return new Locker(this._resolveDriver(driver), this._namespace);
+						return new Locker(driver, this._namespace);
 					},
 
 					/**
@@ -434,7 +456,7 @@
 					 * @return {self}
 					 */
 					namespace: function (namespace) {
-						return new Locker(this._driver, namespace);
+						return new Locker(_keyByVal(this._registeredDrivers, this._driver), namespace);
 					},
 
 					/**
@@ -464,8 +486,8 @@
 				 * @type {Object}
 				 */
 				var drivers = {
-					local: new Locker($window.localStorage, defaults.namespace),
-					session: new Locker($window.sessionStorage, defaults.namespace)
+					local: new Locker('local', defaults.namespace),
+					session: new Locker('session', defaults.namespace)
 				};
 
 				return drivers[defaults.driver];
