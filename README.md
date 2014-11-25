@@ -339,10 +339,6 @@ $ bower install
 $ gulp
 ```
 
-## Todo
-
-- [ ] Add async support via [localForage](https://github.com/mozilla/localForage)
-
 ## License
 
 The MIT License (MIT)
