@@ -219,7 +219,7 @@
                         try {
                             this._driver.setItem(this._getPrefix(key), this._serialize(value));
                             $rootScope.$emit('locker.item.added', {
-                                driver: this._driver,
+                                driver: _keyByVal(this._registeredDrivers, this._driver),
                                 namespace: this._namespace,
                                 key: key,
                                 value: value
@@ -263,7 +263,7 @@
                         if (! this._exists(key)) return false;
                         this._driver.removeItem(this._getPrefix(key));
                         $rootScope.$emit('locker.item.removed', {
-                            driver: this._driver,
+                            driver: _keyByVal(this._registeredDrivers, this._driver),
                             namespace: this._namespace,
                             key: key
                         });
