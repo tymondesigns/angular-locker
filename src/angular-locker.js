@@ -135,6 +135,16 @@
                     };
 
                     /**
+                     * Get the driver key (local/session) by the Storage instance
+                     *
+                     * @param  {Storage}  driver
+                     * @return {String}
+                     */
+                    this._deriveDriver = function (driver) {
+                        return _keyByVal(this._registeredDrivers, driver);
+                    };
+
+                    /**
                      * @type {Storage}
                      */
                     this._driver = this._resolveDriver(driver);
@@ -219,7 +229,7 @@
                         try {
                             this._driver.setItem(this._getPrefix(key), this._serialize(value));
                             $rootScope.$emit('locker.item.added', {
-                                driver: _keyByVal(this._registeredDrivers, this._driver),
+                                driver: this._deriveDriver(this._driver),
                                 namespace: this._namespace,
                                 key: key,
                                 value: value
@@ -263,7 +273,7 @@
                         if (! this._exists(key)) return false;
                         this._driver.removeItem(this._getPrefix(key));
                         $rootScope.$emit('locker.item.removed', {
-                            driver: _keyByVal(this._registeredDrivers, this._driver),
+                            driver: this._deriveDriver(this._driver),
                             namespace: this._namespace,
                             key: key
                         });
@@ -460,7 +470,7 @@
                      * @return {self}
                      */
                     namespace: function (namespace) {
-                        return new Locker(_keyByVal(this._registeredDrivers, this._driver), namespace);
+                        return new Locker(this._deriveDriver(this._driver), namespace);
                     },
 
                     /**
