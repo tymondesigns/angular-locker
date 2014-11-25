@@ -220,6 +220,21 @@
                     };
 
                     /**
+                     * Trigger an event
+                     *
+                     * @param  {String} name
+                     * @param  {Object} payload
+                     * @return {void}
+                     */
+                    this._event = function (name, payload) {
+                        var data = angular.extend(payload, {
+                            driver: _keyByVal(this._registeredDrivers, this._driver),
+                            namespace: this._namespace,
+                        });
+                        $rootScope.$emit(name, data);
+                    };
+
+                    /**
                      * Add to storage
                      *
                      * @param {String}  key
@@ -228,20 +243,9 @@
                     this._setItem = function (key, value) {
                         try {
                             if (this._exists(key)) {
-                                $rootScope.$emit('locker.item.updated', {
-                                    driver: _keyByVal(this._registeredDrivers, this._driver),
-                                    namespace: this._namespace,
-                                    key: key,
-                                    oldValue: this._getItem(key),
-                                    newValue: value
-                                });
+                                this._event('locker.item.updated', { key: key, oldValue: this._getItem(key), newValue: value });
                             } else {
-                              $rootScope.$emit('locker.item.added', {
-                                  driver: _keyByVal(this._registeredDrivers, this._driver),
-                                  namespace: this._namespace,
-                                  key: key,
-                                  value: value
-                              });
+                                this._event('locker.item.added', { key: key, value: value });
                             }
 
                             this._driver.setItem(this._getPrefix(key), this._serialize(value));
@@ -283,11 +287,8 @@
                     this._removeItem = function (key) {
                         if (! this._exists(key)) return false;
                         this._driver.removeItem(this._getPrefix(key));
-                        $rootScope.$emit('locker.item.removed', {
-                            driver: this._deriveDriver(this._driver),
-                            namespace: this._namespace,
-                            key: key
-                        });
+
+                        this._event('locker.item.forgotten', { key: key });
 
                         return true;
                     };
