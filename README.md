@@ -267,6 +267,54 @@ locker.namespace('someOtherNamespace').clean();
 ```js
 locker.empty();
 ```
+
+----------------------------
+
+### Events
+
+A total of 3 events can be fired during various operations, these are:
+
+```
+// fired when a new item is added to storage
+$rootScope.$on('locker.item.added', function (e, data) {
+    // data is equal to:
+    {
+    	driver: 'local', // the driver that is set when the event is fired
+    	namespace: 'locker', // the namespace that is set when the event is fired
+    	key: 'foo', // the key that was added
+    	value: 'bar' // the value that was added
+    }
+});
+```
+
+```
+// fired when an item is removed from storage
+$rootScope.$on('locker.item.forgotten', function (e, data) {
+    // data is equal to:
+    {
+    	driver: 'local', // the driver that is set when the event is fired
+    	namespace: 'locker', // the namespace that is set when the event is fired
+    	key: 'foo', // the key that was removed
+    }
+});
+```
+
+```
+// fired when an item's value changes to something new
+$rootScope.$on('locker.item.updated', function (e, data) {
+    // data is equal to:
+    {
+    	driver: 'local', // the driver that is set when the event is fired
+    	namespace: 'locker', // the namespace that is set when the event is fired
+    	key: 'foo', // the key that was updated
+    	oldValue: 'bar', // the value that was set before the item was updated
+    	newValue: 'baz' // the new value that the item was updated to
+    }
+});
+```
+
+These can be useful, for example, when you need to detect changes in other tabs of your application, e.g. if the user logs out.
+
 ----------------------------
 
 ## Browser Compatibility
