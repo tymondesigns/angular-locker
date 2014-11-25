@@ -281,8 +281,8 @@ A total of 3 events can be fired during various operations, these are:
 $rootScope.$on('locker.item.added', function (e, data) {
     // data is equal to:
     {
-    	driver: 'local', // the driver that is set when the event is fired
-    	namespace: 'locker', // the namespace that is set when the event is fired
+    	driver: 'local', // the driver that was set when the event was fired
+    	namespace: 'locker', // the namespace that was set when the event was fired
     	key: 'foo', // the key that was added
     	value: 'bar' // the value that was added
     }
@@ -294,8 +294,8 @@ $rootScope.$on('locker.item.added', function (e, data) {
 $rootScope.$on('locker.item.forgotten', function (e, data) {
     // data is equal to:
     {
-    	driver: 'local', // the driver that is set when the event is fired
-    	namespace: 'locker', // the namespace that is set when the event is fired
+    	driver: 'local', // the driver that was set when the event was fired
+    	namespace: 'locker', // the namespace that was set when the event was fired
     	key: 'foo', // the key that was removed
     }
 });
@@ -306,8 +306,8 @@ $rootScope.$on('locker.item.forgotten', function (e, data) {
 $rootScope.$on('locker.item.updated', function (e, data) {
     // data is equal to:
     {
-    	driver: 'local', // the driver that is set when the event is fired
-    	namespace: 'locker', // the namespace that is set when the event is fired
+    	driver: 'local', // the driver that was set when the event was fired
+    	namespace: 'locker', // the namespace that was set when the event was fired
     	key: 'foo', // the key that was updated
     	oldValue: 'bar', // the value that was set before the item was updated
     	newValue: 'baz' // the new value that the item was updated to
