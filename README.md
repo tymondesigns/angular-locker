@@ -274,7 +274,7 @@ locker.empty();
 
 A total of 3 events can be fired during various operations, these are:
 
-```
+```js
 // fired when a new item is added to storage
 $rootScope.$on('locker.item.added', function (e, data) {
     // data is equal to:
@@ -287,7 +287,7 @@ $rootScope.$on('locker.item.added', function (e, data) {
 });
 ```
 
-```
+```js
 // fired when an item is removed from storage
 $rootScope.$on('locker.item.forgotten', function (e, data) {
     // data is equal to:
@@ -299,7 +299,7 @@ $rootScope.$on('locker.item.forgotten', function (e, data) {
 });
 ```
 
-```
+```js
 // fired when an item's value changes to something new
 $rootScope.$on('locker.item.updated', function (e, data) {
     // data is equal to:
