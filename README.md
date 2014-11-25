@@ -67,7 +67,7 @@ To achieve this, simply chain the `driver()` setter to specify what storage driv
 locker.driver('session').put('sessionKey', ['some', 'session', 'data']);
 
 // this time use local storage
-locker.driver('local').get('localKey', ['some', 'persistent', 'things']);
+locker.driver('local').get('localKey');
 ```
 
 ### Switching namespace
