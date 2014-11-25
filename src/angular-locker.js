@@ -228,9 +228,10 @@
                      */
                     this._event = function (name, payload) {
                         var data = angular.extend(payload, {
-                            driver: _keyByVal(this._registeredDrivers, this._driver),
+                            driver: this._deriveDriver(this._driver),
                             namespace: this._namespace,
                         });
+
                         $rootScope.$emit(name, data);
                     };
 
@@ -242,7 +243,7 @@
                      */
                     this._setItem = function (key, value) {
                         try {
-                            if (this._exists(key)) {
+                            if (this._exists(key) && this._getItem(key) !== value) {
                                 this._event('locker.item.updated', { key: key, oldValue: this._getItem(key), newValue: value });
                             } else {
                                 this._event('locker.item.added', { key: key, value: value });
