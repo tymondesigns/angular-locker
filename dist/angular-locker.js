@@ -227,13 +227,24 @@
                      */
                     this._setItem = function (key, value) {
                         try {
+                            if (this._exists(key)) {
+                                $rootScope.$emit('locker.item.updated', {
+                                    driver: _keyByVal(this._registeredDrivers, this._driver),
+                                    namespace: this._namespace,
+                                    key: key,
+                                    oldValue: this._getItem(key),
+                                    newValue: value
+                                });
+                            } else {
+                              $rootScope.$emit('locker.item.added', {
+                                  driver: _keyByVal(this._registeredDrivers, this._driver),
+                                  namespace: this._namespace,
+                                  key: key,
+                                  value: value
+                              });
+                            }
+
                             this._driver.setItem(this._getPrefix(key), this._serialize(value));
-                            $rootScope.$emit('locker.item.added', {
-                                driver: this._deriveDriver(this._driver),
-                                namespace: this._namespace,
-                                key: key,
-                                value: value
-                            });
                         } catch (e) {
                             if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
                                 throw new Error('Your browser storage quota has been exceeded');
