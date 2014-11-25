@@ -226,6 +226,8 @@ You can determine whether an item exists in the current namespace via
 
 ```js
 locker.has('someKey') // true or false
+// or
+locker.namespace('foo').has('bar');
 
 // e.g.
 if (locker.has('user.authToken') ) {
