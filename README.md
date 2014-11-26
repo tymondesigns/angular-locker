@@ -315,8 +315,6 @@ $rootScope.$on('locker.item.updated', function (e, data) {
 });
 ```
 
-These can be useful, for example, when you need to detect changes in other tabs of your application, e.g. if the user logs out.
-
 ----------------------------
 
 ## Browser Compatibility
