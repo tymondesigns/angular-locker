@@ -215,6 +215,8 @@ describe('angular-locker', function () {
 
             it('should catch the error when the browser reports storage is full', inject(function ($window, locker) {
 
+                spyOn(locker, '_checkSupport').and.returnValue(true);
+
                 var error = new Error();
                 error.name = 'QUOTA_EXCEEDED_ERR';
 
@@ -227,6 +229,7 @@ describe('angular-locker', function () {
 
             it('should catch the error when an item couldn\'t be added for some other reason', inject(function ($window, locker) {
 
+                spyOn(locker, '_checkSupport').and.returnValue(true);
                 spyOn($window.localStorage, 'setItem').and.throwError(new Error());
 
                 expect(function () {

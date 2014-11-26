@@ -270,20 +270,24 @@
                      * @param {Mixed}  value
                      */
                     this._setItem = function (key, value) {
-                        try {
-                            var oldVal = this._getItem(key);
-                            this._driver.setItem(this._getPrefix(key), this._serialize(value));
-                            if (this._exists(key) && ! angular.equals(oldVal, value)) {
-                                this._event('locker.item.updated', { key: key, oldValue: oldVal, newValue: value });
-                            } else {
-                                this._event('locker.item.added', { key: key, value: value });
+                        if (this._checkSupport()) {
+                            try {
+                                var oldVal = this._getItem(key);
+                                this._driver.setItem(this._getPrefix(key), this._serialize(value));
+                                if (this._exists(key) && ! angular.equals(oldVal, value)) {
+                                    this._event('locker.item.updated', { key: key, oldValue: oldVal, newValue: value });
+                                } else {
+                                    this._event('locker.item.added', { key: key, value: value });
+                                }
+                            } catch (e) {
+                                if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
+                                    throw new Error('Your browser storage quota has been exceeded');
+                                } else {
+                                    throw new Error('Could not add item with key "' + key + '"');
+                                }
                             }
-                        } catch (e) {
-                            if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-                                throw new Error('Your browser storage quota has been exceeded');
-                            } else {
-                                throw new Error('Could not add item with key "' + key + '"');
-                            }
+                        } else {
+                            // not supported
                         }
                     };
 
@@ -294,7 +298,11 @@
                      * @return {Mixed}
                      */
                     this._getItem = function (key) {
-                        return this._unserialize(this._driver.getItem(this._getPrefix(key)));
+                        if (this._checkSupport()) {
+                            return this._unserialize(this._driver.getItem(this._getPrefix(key)));
+                        } else {
+                            // not supported
+                        }
                     };
 
                     /**
@@ -304,7 +312,11 @@
                      * @return {Boolean}
                      */
                     this._exists = function (key) {
-                        return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
+                        if (this._checkSupport()) {
+                            return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
+                        } else {
+                            // not supported
+                        }
                     };
 
                     /**
@@ -314,12 +326,16 @@
                      * @return {Boolean}
                      */
                     this._removeItem = function (key) {
-                        if (! this._exists(key)) return false;
-                        this._driver.removeItem(this._getPrefix(key));
+                        if (this._checkSupport()) {
+                            if (! this._exists(key)) return false;
+                            this._driver.removeItem(this._getPrefix(key));
 
-                        this._event('locker.item.forgotten', { key: key });
+                            this._event('locker.item.forgotten', { key: key });
 
-                        return true;
+                            return true;
+                        } else {
+                            // not supported
+                        }
                     };
                 }
 
