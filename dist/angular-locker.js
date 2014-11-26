@@ -57,7 +57,8 @@
          */
         var defaults = {
             driver: 'local',
-            namespace: 'locker'
+            namespace: 'locker',
+            eventsEnabled: true
         };
 
         return {
@@ -74,7 +75,7 @@
             },
 
             /**
-             * getDefaultDriver
+             * Get the default driver
              */
             getDefaultDriver: function () {
                 return defaults.driver;
@@ -92,10 +93,27 @@
             },
 
             /**
-             * getDefaultNamespace
+             * Get the default namespace
              */
             getDefaultNamespace: function () {
                 return defaults.namespace;
+            },
+
+            /**
+             * Set whether the events are enabled
+             *
+             * @param {Boolean}  enabled
+             */
+            setEventsEnabled: function (enabled) {
+                defaults.eventsEnabled = enabled;
+                return this;
+            },
+
+            /**
+             * Get whether the events are enabled
+             */
+            getEventsEnabled: function () {
+                return defaults.eventsEnabled;
             },
 
             /**
@@ -109,7 +127,7 @@
                  * @param {Storage}  driver
                  * @param {String}   namespace
                  */
-                function Locker (driver, namespace) {
+                function Locker (driver, namespace, eventsEnabled) {
 
                     /**
                      * @type {Object}
@@ -153,6 +171,11 @@
                      * @type {String}
                      */
                     this._namespace = namespace;
+
+                    /**
+                     * @type {Boolean}
+                     */
+                    this._eventsEnabled = eventsEnabled;
 
                     /**
                      * Check browser support
@@ -232,12 +255,12 @@
                      * @return {void}
                      */
                     this._event = function (name, payload) {
-                        var data = angular.extend(payload, {
-                            driver: this._deriveDriver(this._driver),
-                            namespace: this._namespace,
-                        });
-
-                        $rootScope.$emit(name, data);
+                        if (this._eventsEnabled) {
+                            $rootScope.$emit(name, angular.extend(payload, {
+                                driver: this._deriveDriver(this._driver),
+                                namespace: this._namespace,
+                            }));
+                        }
                     };
 
                     /**
@@ -468,7 +491,7 @@
                      * @param  {Object}  $scope
                      * @param  {String}  key
                      * @param  {Mixed}   def
-                     * @return {}
+                     * @return {self}
                      */
                     bind: function ($scope, key, def) {
                         if (angular.isUndefined( $scope.$eval(key) )) {
@@ -479,6 +502,8 @@
                         this._watchers[key + $scope.$id] = $scope.$watch(key, function (newVal) {
                             if (angular.isDefined(newVal)) self.put(key, newVal);
                         }, angular.isObject($scope[key]));
+
+                        return this;
                     },
 
                     /**
@@ -486,7 +511,7 @@
                      *
                      * @param  {Object}  $scope
                      * @param  {String}  key
-                     * @return {}
+                     * @return {self}
                      */
                     unbind: function ($scope, key) {
                         $parse(key).assign($scope, null);
@@ -494,6 +519,8 @@
                         if (this._watchers[key + $scope]) {
                             delete this._watchers[key + $scope];
                         }
+
+                        return this;
                     },
 
                     /**
@@ -503,7 +530,7 @@
                      * @return {self}
                      */
                     driver: function (driver) {
-                        return new Locker(driver, this._namespace);
+                        return new Locker(driver, this._namespace, this._eventsEnabled);
                     },
 
                     /**
@@ -522,7 +549,7 @@
                      * @return {self}
                      */
                     namespace: function (namespace) {
-                        return new Locker(this._deriveDriver(this._driver), namespace);
+                        return new Locker(this._deriveDriver(this._driver), namespace, this._eventsEnabled);
                     },
 
                     /**
@@ -552,8 +579,8 @@
                  * @type {Object}
                  */
                 var drivers = {
-                    local: new Locker('local', defaults.namespace),
-                    session: new Locker('session', defaults.namespace)
+                    local: new Locker('local', defaults.namespace, defaults.eventsEnabled),
+                    session: new Locker('session', defaults.namespace, defaults.eventsEnabled)
                 };
 
                 return drivers[defaults.driver];
