@@ -101,7 +101,7 @@
             /**
              * The locker service
              */
-            $get: ['$window', '$rootScope', function ($window, $rootScope) {
+            $get: ['$window', '$rootScope', '$parse', function ($window, $rootScope, $parse) {
 
                 /**
                  * Define the Locker class
@@ -182,6 +182,11 @@
                     this._separator = '.';
 
                     /**
+                     * @type {Object}
+                     */
+                    this._watchers = {};
+
+                    /**
                      * Build the storage key from the namspace
                      *
                      * @param  {String}  key
@@ -228,9 +233,10 @@
                      */
                     this._event = function (name, payload) {
                         var data = angular.extend(payload, {
-                            driver: _keyByVal(this._registeredDrivers, this._driver),
+                            driver: this._deriveDriver(this._driver),
                             namespace: this._namespace,
                         });
+
                         $rootScope.$emit(name, data);
                     };
 
@@ -242,13 +248,13 @@
                      */
                     this._setItem = function (key, value) {
                         try {
-                            if (this._exists(key)) {
-                                this._event('locker.item.updated', { key: key, oldValue: this._getItem(key), newValue: value });
+                            var oldVal = this._getItem(key);
+                            this._driver.setItem(this._getPrefix(key), this._serialize(value));
+                            if (this._exists(key) && ! angular.equals(oldVal, value)) {
+                                this._event('locker.item.updated', { key: key, oldValue: oldVal, newValue: value });
                             } else {
                                 this._event('locker.item.added', { key: key, value: value });
                             }
-
-                            this._driver.setItem(this._getPrefix(key), this._serialize(value));
                         } catch (e) {
                             if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
                                 throw new Error('Your browser storage quota has been exceeded');
@@ -437,7 +443,7 @@
                     },
 
                     /**
-                     * Empty the current storage driver completely
+                     * Empty the current storage driver completely. careful now.
                      *
                      * @return {self}
                      */
@@ -454,6 +460,40 @@
                      */
                     count: function () {
                         return Object.keys(this.all()).length;
+                    },
+
+                    /**
+                     * Bind a storage key to a $scope property
+                     *
+                     * @param  {Object}  $scope
+                     * @param  {String}  key
+                     * @param  {Mixed}   def
+                     * @return {}
+                     */
+                    bind: function ($scope, key, def) {
+                        if (angular.isUndefined( $scope.$eval(key) )) {
+                            $parse(key).assign($scope, this.get(key, def));
+                        }
+
+                        var self = this;
+                        this._watchers[key + $scope.$id] = $scope.$watch(key, function (newVal) {
+                            if (angular.isDefined(newVal)) self.put(key, newVal);
+                        }, angular.isObject($scope[key]));
+                    },
+
+                    /**
+                     * Unbind a storage key from a $scope property
+                     *
+                     * @param  {Object}  $scope
+                     * @param  {String}  key
+                     * @return {}
+                     */
+                    unbind: function ($scope, key) {
+                        $parse(key).assign($scope, null);
+                        this.forget(key);
+                        if (this._watchers[key + $scope]) {
+                            delete this._watchers[key + $scope];
+                        }
                     },
 
                     /**
