@@ -119,7 +119,7 @@
             /**
              * The locker service
              */
-            $get: ['$window', '$rootScope', '$parse', function ($window, $rootScope, $parse) {
+            $get: ['$window', '$rootScope', '$parse', '$log', function ($window, $rootScope, $parse, $log) {
 
                 /**
                  * Define the Locker class
@@ -287,7 +287,7 @@
                                 }
                             }
                         } else {
-                            // not supported
+                            $log.error('Your browser does not support localStorage');
                         }
                     };
 
@@ -301,7 +301,7 @@
                         if (this._checkSupport()) {
                             return this._unserialize(this._driver.getItem(this._getPrefix(key)));
                         } else {
-                            // not supported
+                            $log.error('Your browser does not support localStorage');
                         }
                     };
 
@@ -315,7 +315,7 @@
                         if (this._checkSupport()) {
                             return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
                         } else {
-                            // not supported
+                            $log.error('Your browser does not support localStorage');
                         }
                     };
 
@@ -334,7 +334,7 @@
 
                             return true;
                         } else {
-                            // not supported
+                            $log.error('Your browser does not support localStorage');
                         }
                     };
                 }
