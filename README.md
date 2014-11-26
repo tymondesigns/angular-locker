@@ -2,6 +2,7 @@ angular-locker
 ==============
 
 A simple & configurable abstraction for local/session storage in angular projects.
+
 Providing a fluent api to interact with local and session storage.
 
 [![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker/master.svg?style=flat-square)](https://travis-ci.org/tymondesigns/angular-locker)
@@ -41,8 +42,8 @@ Configure via `lockerProvider` (*optional*)
 
 ```js
 .config(function config(lockerProvider) {
-    lockerProvider.setDefaultDriver('session');
-                  .setDefaultNamespace('myAppName');
+    lockerProvider.setDefaultDriver('session')
+                  .setDefaultNamespace('myAppName')
                   .setEventsEnabled(false);
 }]);
 ```
