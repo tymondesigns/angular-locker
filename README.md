@@ -1,14 +1,13 @@
 angular-locker
 ==============
 
-A simple & configurable abstraction for local/session storage in angular projects
+A simple & configurable abstraction for local/session storage in angular projects.
+Providing a fluent api to interact with local and session storage.
 
 [![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker/master.svg?style=flat-square)](https://travis-ci.org/tymondesigns/angular-locker)
 [![Code Climate](http://img.shields.io/codeclimate/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
 [![Test Coverage](http://img.shields.io/codeclimate/coverage/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://www.opensource.org/licenses/MIT)
-
-Only `1.5kb` minified & gzipped!
 
 ## Installation
 
@@ -42,8 +41,9 @@ Configure via `lockerProvider` (*optional*)
 
 ```js
 .config(function config(lockerProvider) {
-	lockerProvider.setDefaultDriver('session');
-	lockerProvider.setDefaultNamespace('myAppName');
+    lockerProvider.setDefaultDriver('session');
+                  .setDefaultNamespace('myAppName');
+                  .setEventsEnabled(false);
 }]);
 ```
 
@@ -51,7 +51,7 @@ inject `locker` into your controller/service/directive etc
 
 ```js
 .factory('MyFactory', function MyFactory(locker) {
-	locker.put('someKey', 'someVal');
+    locker.put('someKey', 'someVal');
 });
 ```
 
@@ -102,9 +102,9 @@ Inserts specified key and return value of function
 
 ```js
 locker.put('someKey', function() {
-	var obj = { foo: 'bar', bar: 'baz' };
-	// some other logic
-	return obj;
+    var obj = { foo: 'bar', bar: 'baz' };
+    // some other logic
+    return obj;
 });
 ```
 
@@ -114,9 +114,9 @@ This will add each key/value pair as a **separate** item in storage
 
 ```js
 locker.put({
-	someKey: 'johndoe',
-	anotherKey: ['some', 'random', 'array'],
-	boolKey: true
+    someKey: 'johndoe',
+    anotherKey: ['some', 'random', 'array'],
+    boolKey: true
 });
 ```
 
@@ -126,16 +126,16 @@ Inserts each item from the returned Object, similar to above
 
 ```js
 locker.put(function() {
-	// some logic
-	return {
-		foo: ['lorem', 'ipsum', 'dolor'],
-		user: {
-			username: 'johndoe',
-			displayName: 'Johnny Doe',
-			active: true,
-			role: 'user'
-		}
-	};
+    // some logic
+    return {
+        foo: ['lorem', 'ipsum', 'dolor'],
+        user: {
+            username: 'johndoe',
+            displayName: 'Johnny Doe',
+            active: true,
+            role: 'user'
+        }
+    };
 });
 ```
 
@@ -176,9 +176,9 @@ locker.get(['someKey', 'anotherKey', 'foo']);
 
 // will return something like...
 {
-	someKey: 'someValue',
-	anotherKey: true,
-	foo: 'bar'
+    someKey: 'someValue',
+    anotherKey: true,
+    foo: 'bar'
 }
 ```
 
@@ -231,9 +231,9 @@ locker.namespace('foo').has('bar');
 
 // e.g.
 if (locker.has('user.authToken') ) {
-	// we're logged in
+    // we're logged in
 } else {
-	// go to login page or something
+    // go to login page or something
 }
 ```
 
@@ -274,43 +274,43 @@ locker.empty();
 
 ### Events
 
-A total of 3 events can be fired during various operations, these are:
+There are 3 events that can be fired during various operations, these are:
 
 ```js
 // fired when a new item is added to storage
-$rootScope.$on('locker.item.added', function (e, data) {
-    // data is equal to:
+$rootScope.$on('locker.item.added', function (e, payload) {
+    // payload is equal to:
     {
-    	driver: 'local', // the driver that was set when the event was fired
-    	namespace: 'locker', // the namespace that was set when the event was fired
-    	key: 'foo', // the key that was added
-    	value: 'bar' // the value that was added
+        driver: 'local', // the driver that was set when the event was fired
+        namespace: 'locker', // the namespace that was set when the event was fired
+        key: 'foo', // the key that was added
+        value: 'bar' // the value that was added
     }
 });
 ```
 
 ```js
 // fired when an item is removed from storage
-$rootScope.$on('locker.item.forgotten', function (e, data) {
-    // data is equal to:
+$rootScope.$on('locker.item.forgotten', function (e, payload) {
+    // payload is equal to:
     {
-    	driver: 'local', // the driver that was set when the event was fired
-    	namespace: 'locker', // the namespace that was set when the event was fired
-    	key: 'foo', // the key that was removed
+        driver: 'local', // the driver that was set when the event was fired
+        namespace: 'locker', // the namespace that was set when the event was fired
+        key: 'foo', // the key that was removed
     }
 });
 ```
 
 ```js
 // fired when an item's value changes to something new
-$rootScope.$on('locker.item.updated', function (e, data) {
-    // data is equal to:
+$rootScope.$on('locker.item.updated', function (e, payload) {
+    // payload is equal to:
     {
-    	driver: 'local', // the driver that was set when the event was fired
-    	namespace: 'locker', // the namespace that was set when the event was fired
-    	key: 'foo', // the key that was updated
-    	oldValue: 'bar', // the value that was set before the item was updated
-    	newValue: 'baz' // the new value that the item was updated to
+        driver: 'local', // the driver that was set when the event was fired
+        namespace: 'locker', // the namespace that was set when the event was fired
+        key: 'foo', // the key that was updated
+        oldValue: 'bar', // the value that was set before the item was updated
+        newValue: 'baz' // the new value that the item was updated to
     }
 });
 ```
@@ -323,7 +323,7 @@ To check if the browser natively supports local and session storage, you can do 
 
 ```js
 if (! locker.supported()) {
-	// load a polyfill?
+    // load a polyfill?
 }
 ```
 
