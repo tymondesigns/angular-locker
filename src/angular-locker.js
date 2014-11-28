@@ -119,7 +119,7 @@
             /**
              * The locker service
              */
-            $get: ['$window', '$rootScope', '$parse', '$log', function ($window, $rootScope, $parse, $log) {
+            $get: ['$window', '$rootScope', '$parse', function ($window, $rootScope, $parse) {
 
                 /**
                  * Define the Locker class
