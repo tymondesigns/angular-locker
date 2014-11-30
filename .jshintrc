@@ -17,6 +17,7 @@
   "unused": false,
   "trailing": false,
   "globals" : {
-    "angular": true
+    "angular": true,
+    "define": true
   }
 }

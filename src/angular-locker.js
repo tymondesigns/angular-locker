@@ -14,8 +14,7 @@
             return factory(root.angular);
         });
     } else if (typeof exports === 'object') {
-        var angular = root.angular || (window && window.angular);
-        module.exports = factory(angular);
+        module.exports = factory(root.angular || (window && window.angular));
     } else {
         factory(root.angular);
     }
@@ -24,19 +23,6 @@
     'use strict';
 
     angular.module('angular-locker', [])
-
-    .config(function ($provide) {
-
-        /**
-         * Decorate the exception handler
-         */
-        $provide.decorator('$exceptionHandler', ['$log', '$delegate', function($log, $delegate) {
-            return function(exception, cause) {
-                $log.debug('[angular-locker] - ' + exception.message);
-                $delegate(exception, cause);
-            };
-        }]);
-    })
 
     .provider('locker', function () {
 
@@ -189,6 +175,16 @@
                     this._eventsEnabled = eventsEnabled;
 
                     /**
+                     * @type {String}
+                     */
+                    this._separator = '.';
+
+                    /**
+                     * @type {Object}
+                     */
+                    this._watchers = {};
+
+                    /**
                      * Check browser support
                      *
                      * @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
@@ -209,16 +205,6 @@
 
                         return this._supported;
                     };
-
-                    /**
-                     * @type {String}
-                     */
-                    this._separator = '.';
-
-                    /**
-                     * @type {Object}
-                     */
-                    this._watchers = {};
 
                     /**
                      * Build the storage key from the namspace
@@ -292,13 +278,13 @@
                                 }
                             } catch (e) {
                                 if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-                                    throw new Error('Your browser storage quota has been exceeded');
+                                    throw new Error('The browser storage quota has been exceeded');
                                 } else {
                                     throw new Error('Could not add item with key "' + key + '"');
                                 }
                             }
                         } else {
-                            throw new Error('Your browser does not support localStorage');
+                            throw new Error('The browser does not support localStorage');
                         }
                     };
 
@@ -312,7 +298,7 @@
                         if (this._checkSupport()) {
                             return this._unserialize(this._driver.getItem(this._getPrefix(key)));
                         } else {
-                            throw new Error('Your browser does not support localStorage');
+                            throw new Error('The browser does not support localStorage');
                         }
                     };
 
@@ -326,7 +312,7 @@
                         if (this._checkSupport()) {
                             return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
                         } else {
-                            throw new Error('Your browser does not support localStorage');
+                            throw new Error('The browser does not support localStorage');
                         }
                     };
 
@@ -345,7 +331,7 @@
 
                             return true;
                         } else {
-                            throw new Error('Your browser does not support localStorage');
+                            throw new Error('The browser does not support localStorage');
                         }
                     };
                 }
@@ -544,6 +530,8 @@
                         $parse(key).assign($scope, null);
                         this.forget(key);
                         if (this._watchers[key + $scope]) {
+                            // execute the de-registration function
+                            this._watchers[key + $scope]();
                             delete this._watchers[key + $scope];
                         }
 
