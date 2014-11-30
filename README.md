@@ -3,7 +3,7 @@ angular-locker
 
 A simple & configurable abstraction for local/session storage in angular projects.
 
-Providing a fluent api to interact with local and session storage.
+It provides a fluent api to interact with local and session storage.
 
 [![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker/master.svg?style=flat-square)](https://travis-ci.org/tymondesigns/angular-locker)
 [![Code Climate](http://img.shields.io/codeclimate/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
