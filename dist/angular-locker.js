@@ -8,7 +8,18 @@
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-(function(window, angular, undefined) {
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(function () {
+            return factory(root.angular);
+        });
+    } else if (typeof exports === 'object') {
+        var angular = root.angular || (window && window.angular);
+        module.exports = factory(angular);
+    } else {
+        factory(root.angular);
+    }
+})(this, function (angular) {
 
     'use strict';
 
@@ -119,7 +130,7 @@
             /**
              * The locker service
              */
-            $get: ['$window', '$rootScope', '$parse', '$log', function ($window, $rootScope, $parse, $log) {
+            $get: ['$window', '$rootScope', '$parse', function ($window, $rootScope, $parse) {
 
                 /**
                  * Define the Locker class
@@ -287,7 +298,7 @@
                                 }
                             }
                         } else {
-                            $log.error('Your browser does not support localStorage');
+                            throw new Error('Your browser does not support localStorage');
                         }
                     };
 
@@ -301,7 +312,7 @@
                         if (this._checkSupport()) {
                             return this._unserialize(this._driver.getItem(this._getPrefix(key)));
                         } else {
-                            $log.error('Your browser does not support localStorage');
+                            throw new Error('Your browser does not support localStorage');
                         }
                     };
 
@@ -315,7 +326,7 @@
                         if (this._checkSupport()) {
                             return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
                         } else {
-                            $log.error('Your browser does not support localStorage');
+                            throw new Error('Your browser does not support localStorage');
                         }
                     };
 
@@ -334,7 +345,7 @@
 
                             return true;
                         } else {
-                            $log.error('Your browser does not support localStorage');
+                            throw new Error('Your browser does not support localStorage');
                         }
                     };
                 }
@@ -605,4 +616,4 @@
 
     });
 
-})(window, window.angular);
+});

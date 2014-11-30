@@ -8,7 +8,18 @@
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 
-(function(window, angular, undefined) {
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(function () {
+            return factory(root.angular);
+        });
+    } else if (typeof exports === 'object') {
+        var angular = root.angular || (window && window.angular);
+        module.exports = factory(angular);
+    } else {
+        factory(root.angular);
+    }
+})(this, function (angular) {
 
     'use strict';
 
@@ -605,4 +616,4 @@
 
     });
 
-})(window, window.angular);
+});
