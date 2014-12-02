@@ -246,7 +246,7 @@ describe('angular-locker', function () {
                 }).toThrowError();
             }));
 
-            it('should trigger added event when adding item to locker for thr first time', inject(function (locker, $rootScope) {
+            it('should trigger added event when adding item to locker for the first time', inject(function (locker, $rootScope) {
                 spyOn($rootScope, '$emit');
                 spyOn(locker, '_exists').and.returnValue(false);
 
@@ -478,6 +478,20 @@ describe('angular-locker', function () {
                 expect(function () {
                     locker.forget('someKey');
                 }).toThrowError();
+            }));
+
+            it('should trigger forgotten event when removing item from locker', inject(function (locker, $rootScope) {
+                spyOn($rootScope, '$emit');
+
+                locker.put('foo', 'bar');
+
+                locker.forget('foo');
+
+                expect($rootScope.$emit).toHaveBeenCalledWith('locker.item.forgotten', {
+                    key: 'foo',
+                    driver : 'local',
+                    namespace : 'locker'
+                });
             }));
 
         });
