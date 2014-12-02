@@ -318,6 +318,52 @@ $rootScope.$on('locker.item.updated', function (e, payload) {
 
 ----------------------------
 
+### Binding to a $scope property
+
+You can bind a scope property to a key in storage. Whenever the $scope value changes, it will automatically be persisted in storage. e.g.
+
+```js
+app.controller('AppCtrl', function ($scope) {
+    
+    locker.bind($scope, 'foo');
+    
+    $scope.foo = ['bar', 'baz'];
+    
+    locker.get('foo') // = ['bar', 'baz']
+        
+});
+```
+
+You can also set a default value via the third parameter:
+
+```js
+app.controller('AppCtrl', function ($scope) {
+    locker.bind($scope, 'foo', 'someDefault');
+    
+    $scope.foo // = 'someDefault'
+    
+    locker.get('foo') // = 'someDefault'
+    
+});
+```
+
+To unbind the $scope property, simply use the unbind method:
+
+
+```js
+app.controller('AppCtrl', function ($scope) {
+    
+    locker.unbind($scope, 'foo');
+    
+    $scope.foo // = null
+    
+    locker.get('foo') // = undefined
+        
+});
+```
+
+----------------------------
+
 ## Browser Compatibility
 
 To check if the browser natively supports local and session storage, you can do the following:
