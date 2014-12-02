@@ -508,6 +508,7 @@
                     bind: function ($scope, key, def) {
                         if (angular.isUndefined( $scope.$eval(key) )) {
                             $parse(key).assign($scope, this.get(key, def));
+                            if (! this.has(key)) this.put(key, def);
                         }
 
                         var self = this;
@@ -526,7 +527,7 @@
                      * @return {self}
                      */
                     unbind: function ($scope, key) {
-                        $parse(key).assign($scope, null);
+                        $parse(key).assign($scope, void 0);
                         this.forget(key);
                         if (this._watchers[key + $scope.$id]) {
                             // execute the de-registration function
