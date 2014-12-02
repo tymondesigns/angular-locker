@@ -355,7 +355,7 @@ app.controller('AppCtrl', function ($scope) {
     
     locker.unbind($scope, 'foo');
     
-    $scope.foo // = null
+    $scope.foo // = undefined
     
     locker.get('foo') // = undefined
         
