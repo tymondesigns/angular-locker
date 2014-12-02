@@ -260,6 +260,19 @@ describe('angular-locker', function () {
                 });
             }));
 
+            it('should not trigger events when events are disabled', function () {
+                module(function(lockerProvider) {
+                    lockerProvider.setEventsEnabled(false);
+                });
+
+                inject(function (locker, $rootScope) {
+                    spyOn($rootScope, '$emit');
+                    locker.put('foo', 'bar');
+
+                    expect($rootScope.$emit).not.toHaveBeenCalled();
+                });
+            });
+
             it('should trigger updated event when updating item already in locker', inject(function (locker, $rootScope) {
                 spyOn($rootScope, '$emit');
 
