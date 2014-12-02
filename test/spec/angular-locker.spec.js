@@ -255,8 +255,8 @@ describe('angular-locker', function () {
                 expect($rootScope.$emit).toHaveBeenCalledWith('locker.item.added', {
                     key: 'foo',
                     value: 'bar',
-                    driver : 'local',
-                    namespace : 'locker'
+                    driver: 'local',
+                    namespace: 'locker'
                 });
             }));
 
@@ -270,8 +270,8 @@ describe('angular-locker', function () {
                     key: 'foo',
                     oldValue: 'bar',
                     newValue: 'baz',
-                    driver : 'local',
-                    namespace : 'locker'
+                    driver: 'local',
+                    namespace: 'locker'
                 });
             }));
 
@@ -489,8 +489,8 @@ describe('angular-locker', function () {
 
                 expect($rootScope.$emit).toHaveBeenCalledWith('locker.item.forgotten', {
                     key: 'foo',
-                    driver : 'local',
-                    namespace : 'locker'
+                    driver: 'local',
+                    namespace: 'locker'
                 });
             }));
 
