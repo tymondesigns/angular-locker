@@ -237,6 +237,44 @@ describe('angular-locker', function () {
                 }).toThrowError();
             }));
 
+            it('should throw an error when adding item and no browser support detected', inject(function ($window, locker) {
+
+                spyOn(locker, '_checkSupport').and.returnValue(false);
+
+                expect(function () {
+                    locker.put('someKey', ['foo']);
+                }).toThrowError();
+            }));
+
+            it('should trigger added event when adding item to locker for thr first time', inject(function (locker, $rootScope) {
+                spyOn($rootScope, '$emit');
+                spyOn(locker, '_exists').and.returnValue(false);
+
+                locker.put('foo', 'bar');
+
+                expect($rootScope.$emit).toHaveBeenCalledWith('locker.item.added', {
+                    key: 'foo',
+                    value: 'bar',
+                    driver : 'local',
+                    namespace : 'locker'
+                });
+            }));
+
+            it('should trigger updated event when updating item already in locker', inject(function (locker, $rootScope) {
+                spyOn($rootScope, '$emit');
+
+                locker.put('foo', 'bar');
+                locker.put('foo', 'baz');
+
+                expect($rootScope.$emit).toHaveBeenCalledWith('locker.item.updated', {
+                    key: 'foo',
+                    oldValue: 'bar',
+                    newValue: 'baz',
+                    driver : 'local',
+                    namespace : 'locker'
+                });
+            }));
+
         });
 
         describe('switching drivers/namespaces', function () {
@@ -348,6 +386,16 @@ describe('angular-locker', function () {
                 expect(locker.namespace('something').count()).toEqual(0);
             }));
 
+            it('should throw an error when getting item and no browser support detected', inject(function ($window, locker) {
+
+                spyOn(locker, '_checkSupport').and.returnValue(false);
+                spyOn(locker, 'has').and.returnValue(true);
+
+                expect(function () {
+                    locker.get('someKey');
+                }).toThrowError();
+            }));
+
         });
 
         describe('removing items from locker', function () {
@@ -423,14 +471,13 @@ describe('angular-locker', function () {
 
             }));
 
-            it('should get the currently set driver', inject(function ($window, locker) {
-                expect( locker.getDriver() ).toEqual($window.localStorage);
-                expect( locker.driver('session').getDriver() ).toEqual($window.sessionStorage);
-            }));
+            it('should throw an error when removing item and no browser support detected', inject(function ($window, locker) {
 
-            it('should get the currently set namespace', inject(function (locker) {
-                expect( locker.getNamespace() ).toEqual('locker');
-                expect( locker.namespace('foo').getNamespace() ).toEqual('foo');
+                spyOn(locker, '_checkSupport').and.returnValue(false);
+
+                expect(function () {
+                    locker.forget('someKey');
+                }).toThrowError();
             }));
 
         });
@@ -462,6 +509,47 @@ describe('angular-locker', function () {
                 expect( locker.namespace('loremipsumdolorsitamet').has('randKeyNs') ).toBeFalsy();
             }));
 
+            it('should throw an error when checking has item and no browser support detected', inject(function ($window, locker) {
+
+                spyOn(locker, '_checkSupport').and.returnValue(false);
+
+                expect(function () {
+                    locker.has('someKey');
+                }).toThrowError();
+            }));
+
+        });
+
+        describe('checking browser support', function () {
+
+            it('should bind a variable to the scope', inject(function (locker, $rootScope) {
+                locker.bind($rootScope, 'foo');
+
+                $rootScope.foo = ['bar', 'baz'];
+                $rootScope.$apply();
+
+                expect(locker.get('foo')).toEqual(['bar', 'baz']);
+
+                $rootScope.foo = 123;
+                $rootScope.$apply();
+
+                expect(locker.get('foo')).toEqual(123);
+                expect(Object.keys(locker._watchers).length).toEqual(1);
+            }));
+
+            it('should unbind a variable from the scope', inject(function (locker, $rootScope) {
+                locker.bind($rootScope, 'foo');
+
+                $rootScope.foo = ['bar', 'baz'];
+                $rootScope.$apply();
+
+                expect(locker.get('foo')).toEqual(['bar', 'baz']);
+
+                locker.unbind($rootScope, 'foo');
+
+                expect($rootScope.foo).toBeNull();
+            }));
+
         });
 
         describe('checking browser support', function () {
@@ -480,6 +568,19 @@ describe('angular-locker', function () {
 
             }));
 
+        });
+
+        describe('misc', function () {
+
+            it('should get the currently set namespace', inject(function (locker) {
+                expect( locker.getNamespace() ).toEqual('locker');
+                expect( locker.namespace('foo').getNamespace() ).toEqual('foo');
+            }));
+
+            it('should get the currently set driver', inject(function ($window, locker) {
+                expect( locker.getDriver() ).toEqual($window.localStorage);
+                expect( locker.driver('session').getDriver() ).toEqual($window.sessionStorage);
+            }));
         });
 
     });

@@ -142,11 +142,10 @@
                      */
                     this._resolveDriver = function (driver) {
                         if (! this._registeredDrivers.hasOwnProperty(driver)) {
-                            throw new Error('The driver "' + driver + '" was not found. Defaulting to local.');
+                            throw new Error('The driver "' + driver + '" was not found.');
                         }
 
-                        // fallback gracefully to localStorage
-                        return this._registeredDrivers[driver] || this._registeredDrivers.local;
+                        return this._registeredDrivers[driver];
                     };
 
                     /**
@@ -529,9 +528,9 @@
                     unbind: function ($scope, key) {
                         $parse(key).assign($scope, null);
                         this.forget(key);
-                        if (this._watchers[key + $scope]) {
+                        if (this._watchers[key + $scope.$id]) {
                             // execute the de-registration function
-                            this._watchers[key + $scope]();
+                            this._watchers[key + $scope.$id]();
                             delete this._watchers[key + $scope];
                         }
 
