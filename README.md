@@ -9,6 +9,8 @@ It provides a fluent api to interact with local and session storage.
 [![Code Climate](http://img.shields.io/codeclimate/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
 [![Test Coverage](http://img.shields.io/codeclimate/coverage/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://www.opensource.org/licenses/MIT)
+[![NPM Release](https://img.shields.io/npm/v/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
+[![Bower Release](https://img.shields.io/bower/v/angular-locker.svg?style=flat-square)](http://bower.io/search/?q=angular%20locker)
 
 ## Installation
 
@@ -365,6 +367,8 @@ app.controller('AppCtrl', function ($scope) {
 ----------------------------
 
 ## Browser Compatibility
+
+IE8 is not supported because I am utilising `Object.keys()`
 
 To check if the browser natively supports local and session storage, you can do the following:
 
