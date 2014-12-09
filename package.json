@@ -13,6 +13,7 @@
     "angular": ">=1.2.0 <2.0.0"
   },
   "devDependencies": {
+    "angular-mocks": ">=1.2.0 <2.0.0",
     "gulp": "~3.8.6",
     "gulp-bump": "^0.1.11",
     "gulp-clean": "^0.2.4",
