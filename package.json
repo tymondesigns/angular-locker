@@ -1,10 +1,11 @@
 {
   "name": "angular-locker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple & configurable abstraction for local/session storage in angular projects",
   "author": "@tymondesigns",
   "license": "MIT",
   "homepage": "https://github.com/tymondesigns/angular-locker",
+  "keywords": ["angular-locker", "angular", "locker", "storage", "localStorage", "sessionStorage", "session", "local"],
   "repository": {
     "type": "git",
     "url": "http://github.com/tymondesigns/angular-locker.git"

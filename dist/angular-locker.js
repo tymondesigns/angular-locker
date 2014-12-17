@@ -532,7 +532,7 @@
                         if (this._watchers[key + $scope.$id]) {
                             // execute the de-registration function
                             this._watchers[key + $scope.$id]();
-                            delete this._watchers[key + $scope];
+                            delete this._watchers[key + $scope.$id];
                         }
 
                         return this;
