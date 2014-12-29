@@ -7,8 +7,6 @@ angular-locker
 
 A simple & configurable abstraction for local/session storage in angular projects. It provides a fluent api to interact with local and session storage.
 
-1.72 kB Minified & gzipped.
-
 [![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker/master.svg?style=flat-square)](https://travis-ci.org/tymondesigns/angular-locker)
 [![Code Climate](http://img.shields.io/codeclimate/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
 [![Test Coverage](http://img.shields.io/codeclimate/coverage/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
@@ -17,7 +15,7 @@ A simple & configurable abstraction for local/session storage in angular project
 
 * [Installation](#installation)
 * [Usage](#usage)
-    * [adding to your project](#usage-adding-to-your-project)
+    * [Adding to your project](#usage-adding-to-your-project)
     * [Switching storage drivers](#usage-switching-storage-drivers)
     * [Switching namespace](#usage-switching-namespace)
     * [Adding items to locker](#usage-adding-items-to-locker)
@@ -49,9 +47,11 @@ $ npm install angular-locker
 
 Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
 
+1.72 kB Minified & gzipped.
+
 <h2 id="usage">Usage</h2>
 
-<h3 id="usage-adding-to-your-project">adding to your project</h3>
+<h3 id="usage-adding-to-your-project">Adding to your project</h3>
 
 Add `angular-locker` as a dependency
 
