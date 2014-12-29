@@ -5,7 +5,16 @@
   "author": "@tymondesigns",
   "license": "MIT",
   "homepage": "https://github.com/tymondesigns/angular-locker",
-  "keywords": ["angular-locker", "angular", "locker", "storage", "localStorage", "sessionStorage", "session", "local"],
+  "keywords": [
+    "angular-locker",
+    "angular",
+    "locker",
+    "storage",
+    "localStorage",
+    "sessionStorage",
+    "session",
+    "local"
+  ],
   "repository": {
     "type": "git",
     "url": "http://github.com/tymondesigns/angular-locker.git"
@@ -15,6 +24,7 @@
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.0 <2.0.0",
+    "gitdown": "^1.2.6",
     "gulp": "~3.8.6",
     "gulp-bump": "^0.1.11",
     "gulp-clean": "^0.2.4",

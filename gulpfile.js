@@ -12,6 +12,7 @@ var gulp    = require('gulp'),
     streamqueue = require('streamqueue'),
     jeditor = require('gulp-json-editor'),
     sourcemaps = require('gulp-sourcemaps'),
+    gitdown = require('gitdown'),
     package = require('./package.json');
 
 var paths = {
@@ -78,11 +79,18 @@ gulp.task('test', function() {
         .on('error', function(err) { throw err; });
 });
 
+gulp.task('gitdown', function () {
+    return gitdown
+        .read('.gitdown/README.md')
+        .write('README.md');
+});
+
 gulp.task('default', [
     'lint',
     'clean',
     'scripts',
-    'test'
+    'test',
+    'gitdown'
 ]);
 
 var promptBump = function(callback) {
