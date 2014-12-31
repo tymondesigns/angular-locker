@@ -43,6 +43,10 @@ $ bower install angular-locker
 $ npm install angular-locker
 ```
 
+<h4 id="installation-via-jsdelivr-cdn">via jsDelivr CDN</h4>
+
+http://www.jsdelivr.com/#!angular.locker
+
 <h4 id="installation-manual">manual</h4>
 
 Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
