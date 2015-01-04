@@ -66,7 +66,7 @@ angular.module('myApp', ['angular-locker'])
 Configure via `lockerProvider` (*optional*)
 
 ```js
-.config(function config(lockerProvider) {
+.config(['lockerProvider', function config(lockerProvider) {
     lockerProvider.setDefaultDriver('session')
                   .setDefaultNamespace('myAppName')
                   .setEventsEnabled(false);
@@ -76,9 +76,9 @@ Configure via `lockerProvider` (*optional*)
 inject `locker` into your controller/service/directive etc
 
 ```js
-.factory('MyFactory', function MyFactory(locker) {
+.factory('MyFactory', ['locker', function MyFactory(locker) {
     locker.put('someKey', 'someVal');
-});
+}]);
 ```
 
 ----------------------------
@@ -271,6 +271,9 @@ The simplest way to remove an item is to pass the key to the `forget()` method
 
 ```js
 locker.forget('keyToRemove');
+// or
+locker.driver('session').forget('sessionKey');
+// etc..
 ```
 
 <h4 id="usage-removing-items-from-locker-removing-multiple-items-at-once">removing multiple items at once</h4>
@@ -348,7 +351,7 @@ $rootScope.$on('locker.item.updated', function (e, payload) {
 You can bind a scope property to a key in storage. Whenever the $scope value changes, it will automatically be persisted in storage. e.g.
 
 ```js
-app.controller('AppCtrl', function ($scope) {
+app.controller('AppCtrl', ['$scope', function ($scope) {
 
     locker.bind($scope, 'foo');
 
@@ -356,27 +359,28 @@ app.controller('AppCtrl', function ($scope) {
 
     locker.get('foo') // = ['bar', 'baz']
 
-});
+}]);
 ```
 
 You can also set a default value via the third parameter:
 
 ```js
-app.controller('AppCtrl', function ($scope) {
+app.controller('AppCtrl', ['$scope', function ($scope) {
+
     locker.bind($scope, 'foo', 'someDefault');
 
     $scope.foo // = 'someDefault'
 
     locker.get('foo') // = 'someDefault'
 
-});
+}]);
 ```
 
 To unbind the $scope property, simply use the unbind method:
 
 
 ```js
-app.controller('AppCtrl', function ($scope) {
+app.controller('AppCtrl', ['$scope', function ($scope) {
 
     locker.unbind($scope, 'foo');
 
@@ -384,7 +388,7 @@ app.controller('AppCtrl', function ($scope) {
 
     locker.get('foo') // = undefined
 
-});
+}]);
 ```
 
 ----------------------------
