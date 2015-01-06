@@ -51,7 +51,7 @@ http://www.jsdelivr.com/#!angular.locker
 
 Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
 
-1.72 kB Minified & gzipped.
+1.73 kB Minified & gzipped.
 
 <h2 id="usage">Usage</h2>
 

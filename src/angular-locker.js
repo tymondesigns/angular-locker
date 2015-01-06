@@ -48,6 +48,16 @@
         };
 
         /**
+         * Trigger an error
+         *
+         * @param  {String}  msg
+         * @return {void}
+         */
+        var _error = function (msg) {
+            throw new Error('[angular-locker] ' + msg);
+        };
+
+        /**
          * Set the default driver and namespace
          *
          * @type {Object}
@@ -68,7 +78,7 @@
              */
             setDefaultDriver: function (driver) {
                 defaults.driver = _value(driver);
-                
+
                 return this;
             },
 
@@ -87,7 +97,7 @@
              */
             setDefaultNamespace: function (namespace) {
                 defaults.namespace = _value(namespace);
-                
+
                 return this;
             },
 
@@ -105,7 +115,7 @@
              */
             setEventsEnabled: function (enabled) {
                 defaults.eventsEnabled = _value(enabled);
-                
+
                 return this;
             },
 
@@ -145,7 +155,7 @@
                      */
                     this._resolveDriver = function (driver) {
                         if (! this._registeredDrivers.hasOwnProperty(driver)) {
-                            throw new Error('The driver "' + driver + '" was not found.');
+                            _error('The driver "' + driver + '" was not found.');
                         }
 
                         return this._registeredDrivers[driver];
@@ -280,13 +290,13 @@
                                 }
                             } catch (e) {
                                 if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-                                    throw new Error('The browser storage quota has been exceeded');
+                                    _error('The browser storage quota has been exceeded');
                                 } else {
-                                    throw new Error('Could not add item with key "' + key + '"');
+                                    _error('Could not add item with key "' + key + '"');
                                 }
                             }
                         } else {
-                            throw new Error('The browser does not support localStorage');
+                            _error('The browser does not support localStorage');
                         }
                     };
 
@@ -300,7 +310,7 @@
                         if (this._checkSupport()) {
                             return this._unserialize(this._driver.getItem(this._getPrefix(key)));
                         } else {
-                            throw new Error('The browser does not support localStorage');
+                            _error('The browser does not support localStorage');
                         }
                     };
 
@@ -314,7 +324,7 @@
                         if (this._checkSupport()) {
                             return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
                         } else {
-                            throw new Error('The browser does not support localStorage');
+                            _error('The browser does not support localStorage');
                         }
                     };
 
@@ -333,7 +343,7 @@
 
                             return true;
                         } else {
-                            throw new Error('The browser does not support localStorage');
+                            _error('The browser does not support localStorage');
                         }
                     };
                 }
