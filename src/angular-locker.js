@@ -64,7 +64,7 @@
          */
         var defaults = {
             driver: 'local',
-            namespace: 'locker',
+            namespace: undefined,
             eventsEnabled: true
         };
 
@@ -225,7 +225,12 @@
                      * @return {String}
                      */
                     this._getPrefix = function (key) {
-                        return this._namespace + this._separator + key;
+                        if (!this._namespace) {
+                          return key
+                        }
+                        else {
+                          return this._namespace + this._separator + key;
+                        }
                     };
 
                     /**
