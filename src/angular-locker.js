@@ -68,6 +68,7 @@
              */
             setDefaultDriver: function (driver) {
                 defaults.driver = _value(driver);
+                
                 return this;
             },
 
@@ -86,6 +87,7 @@
              */
             setDefaultNamespace: function (namespace) {
                 defaults.namespace = _value(namespace);
+                
                 return this;
             },
 
@@ -102,7 +104,8 @@
              * @param {Boolean}  enabled
              */
             setEventsEnabled: function (enabled) {
-                defaults.eventsEnabled = enabled;
+                defaults.eventsEnabled = _value(enabled);
+                
                 return this;
             },
 
@@ -191,7 +194,7 @@
                      * @return {Boolean}
                      */
                     this._checkSupport = function (driver) {
-                        if (typeof this._supported === 'undefined') {
+                        if (angular.isUndefined(this._supported)) {
                             var l = 'l';
                             try {
                                 this._resolveDriver(driver || 'local').setItem(l, l);
