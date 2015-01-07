@@ -250,6 +250,7 @@ describe('angular-locker', function () {
                 spyOn($rootScope, '$emit');
                 spyOn(locker, '_exists').and.returnValue(false);
 
+                locker.setNamespace('locker');
                 locker.put('foo', 'bar');
 
                 expect($rootScope.$emit).toHaveBeenCalledWith('locker.item.added', {
@@ -276,6 +277,7 @@ describe('angular-locker', function () {
             it('should trigger updated event when updating item already in locker', inject(function (locker, $rootScope) {
                 spyOn($rootScope, '$emit');
 
+                locker.setNamespace('locker');
                 locker.put('foo', 'bar');
                 locker.put('foo', 'baz');
 
@@ -367,6 +369,7 @@ describe('angular-locker', function () {
             }));
 
             it('should return all items within current namespace', inject(function (locker) {
+                locker.setNamespace('locker');
 
                 for (var i=0; i<20; i++) {
                     locker.put('aKey' + i, 'aVal' + i);
@@ -389,6 +392,8 @@ describe('angular-locker', function () {
             }));
 
             it('should count the items within current namespace', inject(function (locker) {
+                locker.setNamespace('locker');
+
                 for (var i=0; i<20; i++) {
                     locker.put('aKey' + i, 'aVal' + i);
                 }
@@ -463,7 +468,7 @@ describe('angular-locker', function () {
             }));
 
             it('should remove all items within a namespace', inject(function (locker) {
-
+                locker.setNamespace('locker');
                 locker.put('foo', 'bar');
 
                 locker.namespace('otherNamespace').put('fooOther', 'barOther');
@@ -496,6 +501,7 @@ describe('angular-locker', function () {
             it('should trigger forgotten event when removing item from locker', inject(function (locker, $rootScope) {
                 spyOn($rootScope, '$emit');
 
+                locker.setNamespace('locker');
                 locker.put('foo', 'bar');
 
                 locker.forget('foo');
@@ -607,7 +613,7 @@ describe('angular-locker', function () {
         describe('misc', function () {
 
             it('should get the currently set namespace', inject(function (locker) {
-                expect( locker.getNamespace() ).toEqual('locker');
+                expect( locker.getNamespace() ).toEqual(undefined);
                 expect( locker.namespace('foo').getNamespace() ).toEqual('foo');
             }));
 
@@ -615,6 +621,12 @@ describe('angular-locker', function () {
                 expect( locker.getDriver() ).toEqual($window.localStorage);
                 expect( locker.driver('session').getDriver() ).toEqual($window.sessionStorage);
             }));
+
+            it('should set the currently set namespace', inject(function ($window, locker) {
+              locker.setNamespace('locker')
+              expect( locker.getNamespace() ).toEqual('locker');
+            }));
+
         });
 
     });

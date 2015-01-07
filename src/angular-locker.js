@@ -226,7 +226,7 @@
                      */
                     this._getPrefix = function (key) {
                         if (!this._namespace) {
-                          return key
+                          return key;
                         }
                         else {
                           return this._namespace + this._separator + key;
@@ -592,6 +592,15 @@
                      */
                     getNamespace: function () {
                         return this._namespace;
+                    },
+
+                    /**
+                    * Set the current namespace
+                    *
+                    * @return {String}
+                    */
+                    setNamespace: function (namespace) {
+                      this._namespace = namespace;
                     },
 
                     /**
