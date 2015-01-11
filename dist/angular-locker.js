@@ -225,6 +225,8 @@
                      * @return {String}
                      */
                     this._getPrefix = function (key) {
+                        if (! this._namespace) return key;
+
                         return this._namespace + this._separator + key;
                     };
 

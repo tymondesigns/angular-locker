@@ -51,6 +51,9 @@ describe('angular-locker', function () {
                 expect( lockerProvider.getDefaultNamespace() ).toEqual('myApp');
                 lockerProvider.setDefaultNamespace('');
                 expect( lockerProvider.getDefaultNamespace() ).toEqual('');
+
+                lockerProvider.setDefaultNamespace(false);
+                expect( lockerProvider.getDefaultNamespace() ).toEqual(false);
             });
         });
 
