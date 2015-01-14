@@ -193,9 +193,11 @@ describe('angular-locker', function () {
             it('should put an item into the locker in a different namespace', inject(function (locker) {
                 locker.put('foo', 'defaultNamespace');
                 locker.namespace('someOtherNamespace').put('foo', 'newNamespace');
+                locker.namespace(false).put('noNamespace', [true]);
 
                 expect( locker.get('foo') ).toEqual('defaultNamespace');
                 expect( locker.namespace('someOtherNamespace').get('foo') ).toEqual('newNamespace');
+                expect( locker.namespace(false).get('noNamespace') ).toEqual([true]);
             }));
 
             it('should return false if key/value params are missing', inject(function (locker) {
