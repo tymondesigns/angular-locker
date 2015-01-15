@@ -39,12 +39,12 @@
         /**
          * Get the key of an object by the value
          *
-         * @param  {Object}  obj
+         * @param  {Object}  object
          * @param  {Mixed}   value
          * @return {String}
          */
-        var _keyByVal = function (obj, value) {
-            return Object.keys(obj).filter(function (key) { return obj[key] === value; })[0];
+        var _keyByVal = function (object, value) {
+            return Object.keys(object).filter(function (key) { return object[key] === value; })[0];
         };
 
         /**
