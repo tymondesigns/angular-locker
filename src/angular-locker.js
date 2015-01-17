@@ -65,7 +65,8 @@
         var defaults = {
             driver: 'local',
             namespace: 'locker',
-            eventsEnabled: true
+            eventsEnabled: true,
+            separator: '.'
         };
 
         return {
@@ -124,6 +125,24 @@
              */
             getEventsEnabled: function () {
                 return defaults.eventsEnabled;
+            },
+
+            /**
+             * Set the separator to use with namespace in keys
+             *
+             * @param {String} separator
+             */
+            setSeparator: function (separator) {
+                defaults.separator = _value(separator);
+
+                return this;
+            },
+
+            /**
+             * Get the separator
+             */
+            getSeparator: function () {
+                return defaults.separator;
             },
 
             /**
@@ -189,7 +208,7 @@
                     /**
                      * @type {String}
                      */
-                    this._separator = '.';
+                    this._separator = defaults.separator;
 
                     /**
                      * @type {Object}
