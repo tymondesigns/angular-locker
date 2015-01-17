@@ -68,6 +68,30 @@ describe('angular-locker', function () {
             });
         });
 
+        it('should set a default separator', function () {
+            module(function(lockerProvider) {
+                expect( lockerProvider.getSeparator() ).toEqual('.');
+                lockerProvider.setSeparator('-');
+                expect( lockerProvider.getSeparator() ).toEqual('-');
+                lockerProvider.setSeparator('');
+                expect( lockerProvider.getSeparator() ).toEqual('');
+
+                lockerProvider.setSeparator(false);
+                expect( lockerProvider.getSeparator() ).toEqual(false);
+            });
+        });
+
+        it('should set a default separator via function', function () {
+            module(function(lockerProvider) {
+                expect( lockerProvider.getSeparator() ).toEqual('.');
+                lockerProvider.setSeparator(function () {
+                    var arr = ['.', '-', '!'];
+                    return arr[1];
+                });
+                expect( lockerProvider.getSeparator() ).toEqual('-');
+            });
+        });
+
         it('should throw an error when setting a driver that is not registered', inject(function (locker) {
             expect(function () {
                 locker.driver('foo');
@@ -623,7 +647,4 @@ describe('angular-locker', function () {
         });
 
     });
-
-
-
 });
