@@ -30,10 +30,11 @@
          * If value is a function then execute, otherwise return
          *
          * @param  {Mixed}  value
+         * @param  {Mixed}  parameter
          * @return {Mixed}
          */
-        var _value = function (value) {
-            return angular.isFunction(value) ? value() : value;
+        var _value = function (value, parameter) {
+            return angular.isFunction(value) ? value(parameter) : value;
         };
 
         /**
@@ -381,19 +382,20 @@
                      *
                      * @param  {Mixed}  key
                      * @param  {Mixed}  value
+                     * @param  {Mixed}  def
                      * @return {self}
                      */
-                    put: function (key, value) {
+                    put: function (key, value, def) {
                         if (! key) return false;
                         key = _value(key);
 
                         if (angular.isObject(key)) {
                             angular.forEach(key, function (value, key) {
-                                this._setItem(key, value);
+                                this._setItem(key, _value(value, this._getItem(key) || def || void 0));
                             }, this);
                         } else {
                             if (! angular.isDefined(value)) return false;
-                            this._setItem(key, _value(value));
+                            this._setItem(key, _value(value, this._getItem(key) || def || void 0));
                         }
 
                         return this;
