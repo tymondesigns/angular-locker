@@ -156,7 +156,7 @@
                  * @param {Storage}  driver
                  * @param {String}   namespace
                  */
-                function Locker (driver, namespace, eventsEnabled) {
+                function Locker (driver, namespace, eventsEnabled, separator) {
 
                     /**
                      * @type {Object}
@@ -208,7 +208,7 @@
                     /**
                      * @type {String}
                      */
-                    this._separator = defaults.separator;
+                    this._separator = separator;
 
                     /**
                      * @type {Object}
@@ -628,8 +628,8 @@
                  * @type {Object}
                  */
                 var drivers = {
-                    local: new Locker('local', defaults.namespace, defaults.eventsEnabled),
-                    session: new Locker('session', defaults.namespace, defaults.eventsEnabled)
+                    local: new Locker('local', defaults.namespace, defaults.eventsEnabled, defaults.separator),
+                    session: new Locker('session', defaults.namespace, defaults.eventsEnabled, defaults.separator)
                 };
 
                 return drivers[defaults.driver];

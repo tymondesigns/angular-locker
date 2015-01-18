@@ -65,7 +65,8 @@
         var defaults = {
             driver: 'local',
             namespace: 'locker',
-            eventsEnabled: true
+            eventsEnabled: true,
+            separator: '.'
         };
 
         return {
@@ -127,6 +128,24 @@
             },
 
             /**
+             * Set the separator to use with namespace in keys
+             *
+             * @param {String} separator
+             */
+            setSeparator: function (separator) {
+                defaults.separator = _value(separator);
+
+                return this;
+            },
+
+            /**
+             * Get the separator
+             */
+            getSeparator: function () {
+                return defaults.separator;
+            },
+
+            /**
              * The locker service
              */
             $get: ['$window', '$rootScope', '$parse', function ($window, $rootScope, $parse) {
@@ -137,7 +156,7 @@
                  * @param {Storage}  driver
                  * @param {String}   namespace
                  */
-                function Locker (driver, namespace, eventsEnabled) {
+                function Locker (driver, namespace, eventsEnabled, separator) {
 
                     /**
                      * @type {Object}
@@ -189,7 +208,7 @@
                     /**
                      * @type {String}
                      */
-                    this._separator = '.';
+                    this._separator = separator;
 
                     /**
                      * @type {Object}
@@ -609,8 +628,8 @@
                  * @type {Object}
                  */
                 var drivers = {
-                    local: new Locker('local', defaults.namespace, defaults.eventsEnabled),
-                    session: new Locker('session', defaults.namespace, defaults.eventsEnabled)
+                    local: new Locker('local', defaults.namespace, defaults.eventsEnabled, defaults.separator),
+                    session: new Locker('session', defaults.namespace, defaults.eventsEnabled, defaults.separator)
                 };
 
                 return drivers[defaults.driver];
