@@ -51,7 +51,7 @@ http://www.jsdelivr.com/#!angular.locker
 
 Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
 
-1.76 kB Minified & gzipped.
+1.75 kB Minified & gzipped.
 
 <h2 id="usage">Usage</h2>
 
@@ -69,9 +69,12 @@ Configure via `lockerProvider` (*optional*)
 .config(['lockerProvider', function config(lockerProvider) {
     lockerProvider.setDefaultDriver('session')
                   .setDefaultNamespace('myAppName')
+                  .setSeparator('.')
                   .setEventsEnabled(false);
 }]);
 ```
+
+*Note*: You can also pass `false` into `setDefaultNamespace()` if you prefer to not have a namespace in your keys.
 
 inject `locker` into your controller/service/directive etc
 

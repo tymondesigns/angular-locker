@@ -51,9 +51,12 @@ Configure via `lockerProvider` (*optional*)
 .config(['lockerProvider', function config(lockerProvider) {
     lockerProvider.setDefaultDriver('session')
                   .setDefaultNamespace('myAppName')
+                  .setSeparator('.')
                   .setEventsEnabled(false);
 }]);
 ```
+
+*Note*: You can also pass `false` into `setDefaultNamespace()` if you prefer to not have a namespace in your keys.
 
 inject `locker` into your controller/service/directive etc
 
