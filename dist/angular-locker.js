@@ -579,7 +579,7 @@
                      * @return {self}
                      */
                     driver: function (driver) {
-                        return new Locker(driver, this._namespace, this._eventsEnabled);
+                        return new Locker(driver, this._namespace, this._eventsEnabled, this._separator);
                     },
 
                     /**
@@ -598,7 +598,7 @@
                      * @return {self}
                      */
                     namespace: function (namespace) {
-                        return new Locker(this._deriveDriver(this._driver), namespace, this._eventsEnabled);
+                        return new Locker(this._deriveDriver(this._driver), namespace, this._eventsEnabled, this._separator);
                     },
 
                     /**
