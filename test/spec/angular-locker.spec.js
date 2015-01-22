@@ -97,7 +97,6 @@ describe('angular-locker', function () {
                 locker.driver('foo');
             }).toThrowError();
         }));
-
     });
 
     describe('lockerService', function () {
@@ -174,29 +173,76 @@ describe('angular-locker', function () {
                 expect( locker.get('bob').lorem ).toBeTruthy();
             }));
 
-            it('should put an item into the locker when passing a function as second param', inject(function (locker) {
+            describe('when passing a function as the second param', function () {
+              it('should put an item into the locker', inject(function (locker) {
 
                 locker.put('fnKey', function () {
-                    return 12 * 12;
+                  return 12 * 12;
                 });
 
                 expect( locker.get('fnKey') ).toEqual(144);
-            }));
+              }));
+
+              it('should pass the current value of the item to the function ', inject(function (locker) {
+                var value = null;
+
+                locker.put('fnKey', 1);
+
+                expect(locker.get('fnKey')).toEqual(1);
+
+                locker.put('fnKey', function (param) {
+                  value = param;
+                  return 2;
+                });
+
+                expect(locker.get('fnKey')).toEqual(2);
+                expect(value).toEqual(1);
+              }));
+
+              it('should pass the default to the funtion if the current item value does not exist', inject(function (locker) {
+                var value = null;
+
+                expect(locker.get('fnKey')).not.toBeDefined();
+
+                locker.put('fnKey', function (param) {
+                  value = param;
+                  return 2;
+                }, 1);
+
+                expect(locker.get('fnKey')).toEqual(2);
+                expect(value).toEqual(1);
+              }));
+
+              it('should pass undefined to the function if the current item value does not exist',
+              inject(function (locker) {
+                var value = null;
+
+                expect(locker.get('fnKey')).not.toBeDefined();
+
+                locker.put('fnKey', function (param) {
+                  value = param;
+                  return 2;
+                });
+
+                expect(locker.get('fnKey')).toEqual(2);
+                expect(value).not.toBeDefined();
+              }));
+            });
 
             it('should put an item into the locker when passing a function as first param', inject(function (locker) {
 
-                locker.put(function () {
-                    return {
-                        someKey: ['some', 'array'],
-                        anotherKey: { foo: 'bar', baz: true }
-                    };
-                });
+              locker.put(function () {
+                return {
+                  someKey: ['some', 'array'],
+                  anotherKey: { foo: 'bar', baz: true }
+                };
+              });
 
-                expect( locker.get('someKey') ).toBeDefined();
-                expect( locker.get('anotherKey') ).toBeDefined();
+              expect( locker.get('someKey') ).toBeDefined();
+              expect( locker.get('anotherKey') ).toBeDefined();
 
-                expect( angular.isArray(locker.get('someKey')) ).toBeTruthy();
-                expect( angular.isObject(locker.get('anotherKey')) ).toBeTruthy();
+              expect( angular.isArray(locker.get('someKey')) ).toBeTruthy();
+              expect( angular.isObject(locker.get('anotherKey')) ).toBeTruthy();
             }));
 
             it('should put an item into the locker if it doesn\'t already exist', inject(function (locker) {
@@ -316,7 +362,6 @@ describe('angular-locker', function () {
                     namespace: 'locker'
                 });
             }));
-
         });
 
         describe('switching drivers/namespaces', function () {
