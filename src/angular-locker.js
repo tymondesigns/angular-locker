@@ -374,10 +374,9 @@
                      *
                      * @param  {Mixed}  key
                      * @param  {Mixed}  value
-                     * @param  {Mixed}  def
                      * @return {self}
                      */
-                    put: function (key, value, def) {
+                    put: function (key, value) {
                         if (! key) return false;
                         key = _value(key);
 
@@ -387,7 +386,7 @@
                             }, this);
                         } else {
                             if (! angular.isDefined(value)) return false;
-                            this._setItem(key, _value(value, this._getItem(key) || def));
+                            this._setItem(key, _value(value, this._getItem(key)));
                         }
 
                         return this;
