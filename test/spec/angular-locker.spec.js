@@ -193,10 +193,10 @@ describe('angular-locker', function () {
 
                     locker.put('fnKey', function (param) {
                         value = param;
-                        return param * 2;
+                        return false;
                     });
 
-                    expect(locker.get('fnKey')).toEqual(2);
+                    expect(locker.get('fnKey')).toEqual(false);
                     expect(value).toEqual(1);
                 }));
 
