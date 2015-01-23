@@ -157,7 +157,7 @@
                  * @param {Storage}  driver
                  * @param {String}   namespace
                  */
-                function Locker (driver, namespace, eventsEnabled, separator) {
+                function Locker (driver, namespace) {
 
                     /**
                      * @type {Object}
@@ -204,12 +204,12 @@
                     /**
                      * @type {Boolean}
                      */
-                    this._eventsEnabled = eventsEnabled;
+                    this._eventsEnabled = defaults.eventsEnabled;
 
                     /**
                      * @type {String}
                      */
-                    this._separator = separator;
+                    this._separator = defaults.separator;
 
                     /**
                      * @type {Object}
@@ -581,7 +581,7 @@
                      * @return {self}
                      */
                     driver: function (driver) {
-                        return new Locker(driver, this._namespace, this._eventsEnabled, this._separator);
+                        return this.instance(driver, this._namespace);
                     },
 
                     /**
@@ -600,7 +600,7 @@
                      * @return {self}
                      */
                     namespace: function (namespace) {
-                        return new Locker(this._deriveDriver(this._driver), namespace, this._eventsEnabled, this._separator);
+                        return this.instance(this._deriveDriver(this._driver), namespace);
                     },
 
                     /**
@@ -621,6 +621,17 @@
                      */
                     supported: function (driver) {
                         return this._checkSupport(driver);
+                    },
+
+                    /**
+                     * Get an instance of Locker
+                     *
+                     * @param  {String} driver
+                     * @param  {String} namespace
+                     * @return {Locker}
+                     */
+                    instance: function (driver, namespace) {
+                        return new Locker(driver, namespace);
                     }
                 };
 
