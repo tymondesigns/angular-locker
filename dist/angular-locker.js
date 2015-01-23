@@ -391,7 +391,7 @@
 
                         if (angular.isObject(key)) {
                             angular.forEach(key, function (value, key) {
-                                this._setItem(key, _value(value, this._getItem(key) || def || void 0));
+                                this._setItem(key, value);
                             }, this);
                         } else {
                             if (! angular.isDefined(value)) return false;
