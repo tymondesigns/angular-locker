@@ -632,8 +632,8 @@
                  * @type {Object}
                  */
                 var drivers = {
-                    local: new Locker('local', defaults.namespace, defaults.eventsEnabled, defaults.separator),
-                    session: new Locker('session', defaults.namespace, defaults.eventsEnabled, defaults.separator)
+                    local: new Locker('local', defaults.namespace),
+                    session: new Locker('session', defaults.namespace)
                 };
 
                 return drivers[defaults.driver];
