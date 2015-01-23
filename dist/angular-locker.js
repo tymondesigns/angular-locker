@@ -157,7 +157,7 @@
                  * @param {Storage}  driver
                  * @param {String}   namespace
                  */
-                function Locker (driver, namespace, eventsEnabled, separator) {
+                function Locker (driver, namespace) {
 
                     /**
                      * @type {Object}
@@ -204,12 +204,12 @@
                     /**
                      * @type {Boolean}
                      */
-                    this._eventsEnabled = eventsEnabled;
+                    this._eventsEnabled = defaults.eventsEnabled;
 
                     /**
                      * @type {String}
                      */
-                    this._separator = separator;
+                    this._separator = defaults.separator;
 
                     /**
                      * @type {Object}
@@ -286,12 +286,12 @@
                      * @return {void}
                      */
                     this._event = function (name, payload) {
-                        if (this._eventsEnabled) {
-                            $rootScope.$emit(name, angular.extend(payload, {
-                                driver: this._deriveDriver(this._driver),
-                                namespace: this._namespace,
-                            }));
-                        }
+                        if (! this._eventsEnabled) return;
+
+                        $rootScope.$emit(name, angular.extend(payload, {
+                            driver: this._deriveDriver(this._driver),
+                            namespace: this._namespace,
+                        }));
                     };
 
                     /**
@@ -301,24 +301,22 @@
                      * @param {Mixed}  value
                      */
                     this._setItem = function (key, value) {
-                        if (this._checkSupport()) {
-                            try {
-                                var oldVal = this._getItem(key);
-                                this._driver.setItem(this._getPrefix(key), this._serialize(value));
-                                if (this._exists(key) && ! angular.equals(oldVal, value)) {
-                                    this._event('locker.item.updated', { key: key, oldValue: oldVal, newValue: value });
-                                } else {
-                                    this._event('locker.item.added', { key: key, value: value });
-                                }
-                            } catch (e) {
-                                if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
-                                    _error('The browser storage quota has been exceeded');
-                                } else {
-                                    _error('Could not add item with key "' + key + '"');
-                                }
+                        if (! this._checkSupport()) _error('The browser does not support localStorage');
+
+                        try {
+                            var oldVal = this._getItem(key);
+                            this._driver.setItem(this._getPrefix(key), this._serialize(value));
+                            if (this._exists(key) && ! angular.equals(oldVal, value)) {
+                                this._event('locker.item.updated', { key: key, oldValue: oldVal, newValue: value });
+                            } else {
+                                this._event('locker.item.added', { key: key, value: value });
                             }
-                        } else {
-                            _error('The browser does not support localStorage');
+                        } catch (e) {
+                            if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
+                                _error('The browser storage quota has been exceeded');
+                            } else {
+                                _error('Could not add item with key "' + key + '"');
+                            }
                         }
                     };
 
@@ -329,11 +327,9 @@
                      * @return {Mixed}
                      */
                     this._getItem = function (key) {
-                        if (this._checkSupport()) {
-                            return this._unserialize(this._driver.getItem(this._getPrefix(key)));
-                        } else {
-                            _error('The browser does not support localStorage');
-                        }
+                        if (! this._checkSupport()) _error('The browser does not support localStorage');
+
+                        return this._unserialize(this._driver.getItem(this._getPrefix(key)));
                     };
 
                     /**
@@ -343,11 +339,9 @@
                      * @return {Boolean}
                      */
                     this._exists = function (key) {
-                        if (this._checkSupport()) {
-                            return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
-                        } else {
-                            _error('The browser does not support localStorage');
-                        }
+                        if (! this._checkSupport()) _error('The browser does not support localStorage');
+
+                        return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
                     };
 
                     /**
@@ -357,16 +351,14 @@
                      * @return {Boolean}
                      */
                     this._removeItem = function (key) {
-                        if (this._checkSupport()) {
-                            if (! this._exists(key)) return false;
-                            this._driver.removeItem(this._getPrefix(key));
+                        if (! this._checkSupport()) _error('The browser does not support localStorage');
 
-                            this._event('locker.item.forgotten', { key: key });
+                        if (! this._exists(key)) return false;
+                        this._driver.removeItem(this._getPrefix(key));
 
-                            return true;
-                        } else {
-                            _error('The browser does not support localStorage');
-                        }
+                        this._event('locker.item.forgotten', { key: key });
+
+                        return true;
                     };
                 }
 
@@ -581,7 +573,7 @@
                      * @return {self}
                      */
                     driver: function (driver) {
-                        return new Locker(driver, this._namespace, this._eventsEnabled, this._separator);
+                        return this.instance(driver, this._namespace);
                     },
 
                     /**
@@ -600,7 +592,7 @@
                      * @return {self}
                      */
                     namespace: function (namespace) {
-                        return new Locker(this._deriveDriver(this._driver), namespace, this._eventsEnabled, this._separator);
+                        return this.instance(this._deriveDriver(this._driver), namespace);
                     },
 
                     /**
@@ -621,6 +613,17 @@
                      */
                     supported: function (driver) {
                         return this._checkSupport(driver);
+                    },
+
+                    /**
+                     * Get a new instance of Locker
+                     *
+                     * @param  {String}  driver
+                     * @param  {String}  namespace
+                     * @return {Locker}
+                     */
+                    instance: function (driver, namespace) {
+                        return new Locker(driver, namespace);
                     }
                 };
 
