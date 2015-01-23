@@ -395,7 +395,7 @@
                             }, this);
                         } else {
                             if (! angular.isDefined(value)) return false;
-                            this._setItem(key, _value(value, this._getItem(key) || def || void 0));
+                            this._setItem(key, _value(value, this._getItem(key) || def));
                         }
 
                         return this;
