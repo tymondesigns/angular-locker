@@ -374,10 +374,9 @@
                      *
                      * @param  {Mixed}  key
                      * @param  {Mixed}  value
-                     * @param  {Mixed}  def
                      * @return {self}
                      */
-                    put: function (key, value, def) {
+                    put: function (key, value) {
                         if (! key) return false;
                         key = _value(key);
 
@@ -387,7 +386,7 @@
                             }, this);
                         } else {
                             if (! angular.isDefined(value)) return false;
-                            this._setItem(key, _value(value, this._getItem(key) || def));
+                            this._setItem(key, _value(value, this._getItem(key)));
                         }
 
                         return this;
@@ -451,9 +450,7 @@
                         key = _value(key);
 
                         if (angular.isArray(key)) {
-                            angular.forEach(key, function (key) {
-                                this._removeItem(key);
-                            }, this);
+                            key.map(this._removeItem, this);
                         } else {
                             this._removeItem(key);
                         }
@@ -627,17 +624,8 @@
                     }
                 };
 
-                /**
-                 * Create the driver instances
-                 *
-                 * @type {Object}
-                 */
-                var drivers = {
-                    local: new Locker('local', defaults.namespace, defaults.eventsEnabled, defaults.separator),
-                    session: new Locker('session', defaults.namespace, defaults.eventsEnabled, defaults.separator)
-                };
-
-                return drivers[defaults.driver];
+                // return the default instance
+                return new Locker(defaults.driver, defaults.namespace);
             }]
         };
 

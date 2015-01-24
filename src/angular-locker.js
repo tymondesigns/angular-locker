@@ -33,8 +33,8 @@
          * @param  {Mixed}  parameter
          * @return {Mixed}
          */
-        var _value = function (value, parameter) {
-            return angular.isFunction(value) ? value(parameter) : value;
+        var _value = function (value, param) {
+            return angular.isFunction(value) ? value(param) : value;
         };
 
         /**
@@ -450,9 +450,7 @@
                         key = _value(key);
 
                         if (angular.isArray(key)) {
-                            angular.forEach(key, function (key) {
-                                this._removeItem(key);
-                            }, this);
+                            key.map(this._removeItem, this);
                         } else {
                             this._removeItem(key);
                         }
@@ -626,17 +624,8 @@
                     }
                 };
 
-                /**
-                 * Create the driver instances
-                 *
-                 * @type {Object}
-                 */
-                var drivers = {
-                    local: new Locker('local', defaults.namespace),
-                    session: new Locker('session', defaults.namespace)
-                };
-
-                return drivers[defaults.driver];
+                // return the default instance
+                return new Locker(defaults.driver, defaults.namespace);
             }]
         };
 
