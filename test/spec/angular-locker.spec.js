@@ -411,8 +411,6 @@ describe('angular-locker', function () {
 
                 var result = locker.get(['something', 'anotherThing']);
 
-                console.log(result);
-
                 expect( angular.isObject(result) ).toBeTruthy();
                 expect( result.something ).toEqual('some value');
                 expect( result ).not.toEqual( jasmine.objectContaining({ lorem: true }) );
