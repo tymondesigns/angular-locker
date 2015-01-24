@@ -5,7 +5,7 @@ Direct edits to this will be be overwritten. Look for Gitdown markup file under 
 angular-locker
 ==============
 
-A simple & configurable abstraction for local/session storage in angular projects. It provides a fluent api to interact with local and session storage.
+A simple & configurable abstraction for local/session storage in angular projects - providing a fluent api that is powerful and easy to use.
 
 [![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker/master.svg?style=flat-square)](https://travis-ci.org/tymondesigns/angular-locker)
 [![Code Climate](http://img.shields.io/codeclimate/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
@@ -135,6 +135,20 @@ locker.put('someKey', function() {
     // some other logic
     return obj;
 });
+```
+
+The current value will be passed into the function so you can perform logic on the current value, before returning it. e.g.
+
+```js
+locker.put('someKey', ['foo', 'bar']);
+
+locker.put('someKey', function(current) {
+    current.push('baz');
+
+    return current
+});
+
+locker.get('someKey') // = ['foo', 'bar', 'baz']
 ```
 
 <h4 id="usage-adding-items-to-locker-adding-multiple-items-at-once-by-passing-a-single-object">adding multiple items at once by passing a single object</h4>

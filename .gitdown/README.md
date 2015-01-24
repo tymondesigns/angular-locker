@@ -1,39 +1,13 @@
 angular-locker
 ==============
 
-A simple & configurable abstraction for local/session storage in angular projects. It provides a fluent api to interact with local and session storage.
+A simple & configurable abstraction for local/session storage in angular projects - providing a fluent api that is powerful and easy to use.
 
-[![Build Status](http://img.shields.io/travis/tymondesigns/angular-locker/master.svg?style=flat-square)](https://travis-ci.org/tymondesigns/angular-locker)
-[![Code Climate](http://img.shields.io/codeclimate/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
-[![Test Coverage](http://img.shields.io/codeclimate/coverage/github/tymondesigns/angular-locker.svg?style=flat-square)](https://codeclimate.com/github/tymondesigns/angular-locker)
-[![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://www.opensource.org/licenses/MIT)
-[![NPM Release](https://img.shields.io/npm/v/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
+{"gitdown": "include", "file": ".gitdown/_badges.md"}
 
 {"gitdown": "contents"}
 
-## Installation
-
-#### via bower
-
-```bash
-$ bower install angular-locker
-```
-
-#### via npm
-
-```bash
-$ npm install angular-locker
-```
-
-#### via jsDelivr CDN
-
-http://www.jsdelivr.com/#!angular.locker
-
-#### manual
-
-Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
-
-{"gitdown": "filesize", "file": "dist/angular-locker.min.js", "gzip": true} Minified & gzipped.
+{"gitdown": "include", "file": ".gitdown/_installation.md"}
 
 ## Usage
 
@@ -117,6 +91,20 @@ locker.put('someKey', function() {
     // some other logic
     return obj;
 });
+```
+
+The current value will be passed into the function so you can perform logic on the current value, before returning it. e.g.
+
+```js
+locker.put('someKey', ['foo', 'bar']);
+
+locker.put('someKey', function(current) {
+    current.push('baz');
+
+    return current
+});
+
+locker.get('someKey') // = ['foo', 'bar', 'baz']
 ```
 
 #### adding multiple items at once by passing a single object
