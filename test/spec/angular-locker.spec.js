@@ -200,20 +200,6 @@ describe('angular-locker', function () {
                     expect(value).toEqual(1);
                 }));
 
-                it('should pass the default to the funtion if the current item value does not exist', inject(function (locker) {
-                    var value = null;
-
-                    expect(locker.get('fnKey')).not.toBeDefined();
-
-                    locker.put('fnKey', function (param) {
-                        value = param;
-                        return 2;
-                    }, 1);
-
-                    expect(locker.get('fnKey')).toEqual(2);
-                    expect(value).toEqual(1);
-                }));
-
                 it('should pass undefined to the function if the current item value does not exist', inject(function (locker) {
                         var value = null;
 
@@ -416,13 +402,16 @@ describe('angular-locker', function () {
 
                 locker.put(function () {
                     return {
-                        'something': 'some value',
-                        'anotherThing': ['foo', 'bar'],
-                        'lorem': true
+                        something: 'some value',
+                        anotherThing: ['foo', 'bar'],
+                        lorem: true,
+                        foo: null
                     };
                 });
 
                 var result = locker.get(['something', 'anotherThing']);
+
+                console.log(result);
 
                 expect( angular.isObject(result) ).toBeTruthy();
                 expect( result.something ).toEqual('some value');
