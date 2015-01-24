@@ -193,8 +193,6 @@ describe('angular-locker', function () {
                         return param;
                     });
 
-                    console.log(locker.get('fnKey'));
-
                     expect( locker.get('fnKey') ).toEqual(['foo', 'bar', 'baz']);
                 }));
 
