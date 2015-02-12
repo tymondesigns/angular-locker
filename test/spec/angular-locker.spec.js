@@ -630,6 +630,7 @@ describe('angular-locker', function () {
 
             it('should unbind a variable from the scope', inject(function (locker, $rootScope) {
                 locker.bind($rootScope, 'foo');
+                locker.bind($rootScope, 'bar');
 
                 $rootScope.foo = ['bar', 'baz'];
                 $rootScope.$apply();
@@ -639,6 +640,7 @@ describe('angular-locker', function () {
                 locker.unbind($rootScope, 'foo');
 
                 expect($rootScope.foo).toBeUndefined();
+                expect(Object.keys(locker._watchers).length).toEqual(1);
             }));
 
         });
