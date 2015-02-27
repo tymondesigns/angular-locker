@@ -59,7 +59,7 @@
         };
 
         /**
-         * Set the default driver and namespace
+         * Set the defaults
          *
          * @type {Object}
          */
@@ -76,7 +76,8 @@
              * Allow setting of default storage driver via `lockerProvider`
              * e.g. lockerProvider.setDefaultDriver('session');
              *
-             * @param {String}  driver
+             * @param  {String|Function}  driver
+             * @return {self}
              */
             setDefaultDriver: function (driver) {
                 defaults.driver = _value(driver);
@@ -86,6 +87,8 @@
 
             /**
              * Get the default driver
+             *
+             * @return {String}
              */
             getDefaultDriver: function () {
                 return defaults.driver;
@@ -95,7 +98,8 @@
              * Allow setting of default namespace via `lockerProvider`
              * e.g. lockerProvider.setDefaultNamespace('myAppName');
              *
-             * @param {String}  namespace
+             * @param  {String|Function}  namespace
+             * @return {self}
              */
             setDefaultNamespace: function (namespace) {
                 defaults.namespace = _value(namespace);
@@ -105,6 +109,8 @@
 
             /**
              * Get the default namespace
+             *
+             * @return {String}
              */
             getDefaultNamespace: function () {
                 return defaults.namespace;
@@ -113,7 +119,8 @@
             /**
              * Set whether the events are enabled
              *
-             * @param {Boolean}  enabled
+             * @param  {Boolean|Function}  enabled
+             * @return {self}
              */
             setEventsEnabled: function (enabled) {
                 defaults.eventsEnabled = _value(enabled);
@@ -123,6 +130,8 @@
 
             /**
              * Get whether the events are enabled
+             *
+             * @return {Boolean}
              */
             getEventsEnabled: function () {
                 return defaults.eventsEnabled;
@@ -131,7 +140,8 @@
             /**
              * Set the separator to use with namespace in keys
              *
-             * @param {String} separator
+             * @param  {String|Function} separator
+             * @return {self}
              */
             setSeparator: function (separator) {
                 defaults.separator = _value(separator);
@@ -141,6 +151,8 @@
 
             /**
              * Get the separator
+             *
+             * @return {String}
              */
             getSeparator: function () {
                 return defaults.separator;
@@ -160,6 +172,8 @@
                 function Locker (driver, namespace) {
 
                     /**
+                     * Out of the box drivers
+                     * 
                      * @type {Object}
                      */
                     this._registeredDrivers = {
@@ -281,8 +295,8 @@
                     /**
                      * Trigger an event
                      *
-                     * @param  {String} name
-                     * @param  {Object} payload
+                     * @param  {String}  name
+                     * @param  {Object}  payload
                      * @return {void}
                      */
                     this._event = function (name, payload) {
@@ -473,7 +487,7 @@
                     },
 
                     /**
-                     * Return all items in storage within the current namespace
+                     * Return all items in storage within the current namespace/driver
                      *
                      * @return {Object}
                      */
@@ -492,7 +506,7 @@
                     },
 
                     /**
-                     * Remove all items set within the current namespace
+                     * Remove all items set within the current namespace/driver
                      *
                      * @return {self}
                      */
@@ -554,10 +568,13 @@
                     unbind: function ($scope, key) {
                         $parse(key).assign($scope, void 0);
                         this.forget(key);
-                        if (this._watchers[key + $scope.$id]) {
+
+                        var watchId = key + $scope.$id;
+                        
+                        if (this._watchers[watchId]) {
                             // execute the de-registration function
-                            this._watchers[key + $scope.$id]();
-                            delete this._watchers[key + $scope.$id];
+                            this._watchers[watchId]();
+                            delete this._watchers[watchId];
                         }
 
                         return this;

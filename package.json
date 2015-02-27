@@ -1,6 +1,6 @@
 {
   "name": "angular-locker",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A simple & configurable abstraction for local/session storage in angular projects",
   "author": "@tymondesigns",
   "license": "MIT",
