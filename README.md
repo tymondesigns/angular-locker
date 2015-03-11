@@ -1,7 +1,3 @@
-<!--
-This file has been generated using Gitdown (https://github.com/gajus/gitdown).
-Direct edits to this will be be overwritten. Look for Gitdown markup file under ./.gitdown/ path.
--->
 angular-locker
 ==============
 
@@ -53,7 +49,7 @@ http://www.jsdelivr.com/#!angular.locker
 
 Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
 
-1.73 kB Minified & gzipped.
+1.69 kB Minified & gzipped.
 
 <h2 id="usage">Usage</h2>
 

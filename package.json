@@ -26,6 +26,7 @@
     "angular-mocks": ">=1.2.0 <2.0.0",
     "gitdown": "^1.2.6",
     "gulp": "~3.8.6",
+    "fizzy": "^0.0.11",
     "gulp-bump": "^0.1.11",
     "gulp-clean": "^0.2.4",
     "gulp-filter": "~0.4.0",
