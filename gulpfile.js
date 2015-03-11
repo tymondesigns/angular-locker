@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var fizzy = require('fizzy');
 var pkg = require('./package.json');
-var config = require('./config.js');
+var config = require('./config');
 
 // Lint the JS
 gulp.task('lint', fizzy('lint', {

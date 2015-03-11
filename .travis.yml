@@ -2,10 +2,9 @@ sudo: false
 language: node_js
 node_js:
   - "0.10"
+  - "iojs"
 before_script:
-  - npm install -g gulp
-  - npm install -g bower
-  - npm install -g codeclimate-test-reporter
+  - npm install -g gulp bower codeclimate-test-reporter
   - bower install
 after_script:
   - cat test/coverage/lcov/lcov.info | codeclimate
