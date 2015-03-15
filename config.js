@@ -12,7 +12,7 @@ var banner = [
 
 module.exports = {
     paths: {
-        output : './dist/',
+        output : 'dist',
         vendor: [
             'vendor/angular/angular.js',
             'vendor/angular-mocks/angular-mocks.js'
@@ -31,7 +31,8 @@ module.exports = {
         karma: 'test/karma.conf.js',
         gitdown: {
             src: '.gitdown/README.md',
-            dest: 'README.md'
+            dest: 'README.md',
+            glob: '.gitdown/*.md'
         }
     },
     banner: banner

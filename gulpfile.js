@@ -1,35 +1,50 @@
-var gulp = require('gulp');
-var fizzy = require('fizzy');
-var pkg = require('./package.json');
-var config = require('./config');
+var gulp = require('gulp'),
+fizzy = require('fizzy'),
+pkg = require('./package.json'),
+config = require('./config'),
+paths = config.paths;
 
 // Lint the JS
-gulp.task('lint', fizzy('lint', {
-    src: config.paths.scripts
-}));
+gulp.task('lint', fizzy.task('lint', { src: paths.scripts }));
 
 // Remove the dist folder
-gulp.task('clean', fizzy('clean', {
-    src: config.paths.output
-}));
+gulp.task('clean', fizzy.task('clean', { src: paths.output }));
 
 // Build the dist folder
-gulp.task('scripts', ['clean'], fizzy('scripts', {
-    src: config.paths.scripts,
-    dest: config.paths.output,
+gulp.task('scripts', ['clean'], fizzy.task('scripts', {
+    src: paths.scripts,
+    dest: paths.output,
     header: [config.banner, { pkg: pkg }]
 }));
 
 // Run the tests
-gulp.task('test', fizzy('test', {
-    src: config.paths.vendor.concat(config.paths.scripts, config.paths.test),
-    karmaConfigFile: config.paths.karma
+gulp.task('test', fizzy.task('test', {
+    src: paths.vendor.concat(paths.scripts, paths.test),
+    karmaConfigFile: paths.karma
 }));
 
 // Build the readme
-gulp.task('gitdown', fizzy('gitdown', {
-    src: config.paths.gitdown.src,
-    dest: config.paths.gitdown.dest
+gulp.task('gitdown', fizzy.task('gitdown', {
+    src: paths.gitdown.src,
+    dest: paths.gitdown.dest
 }));
 
-gulp.task('default', ['lint', 'clean', 'scripts', 'test', 'gitdown']);
+// Define the build tasks
+gulp.task('build', ['lint', 'scripts', 'test', 'gitdown']);
+
+// Increment versions
+gulp.task('version', fizzy.task('version', {
+	src: paths.versions,
+	currentVersion: pkg.version
+}));
+
+// release a new version
+gulp.task('release', ['version', 'build']);
+
+// Watch for changes
+gulp.task('watch', function () {
+	gulp.watch(paths.scripts, ['lint']);
+	gulp.watch(paths.gitdown.glob, ['gitdown']);
+});
+
+gulp.task('default', ['build']);
