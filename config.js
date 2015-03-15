@@ -32,7 +32,7 @@ module.exports = {
         gitdown: {
             src: '.gitdown/README.md',
             dest: 'README.md',
-            glob: '.gitdown/*.md'
+            glob: '.gitdown/**/*.md'
         }
     },
     banner: banner

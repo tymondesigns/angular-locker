@@ -39,7 +39,9 @@ gulp.task('version', fizzy.task('version', {
 }));
 
 // release a new version
-gulp.task('release', ['version', 'build']);
+gulp.task('release', ['version'], function () {
+	gulp.run('build');
+});
 
 // Watch for changes
 gulp.task('watch', function () {
