@@ -34,19 +34,19 @@ gulp.task('build', ['lint', 'scripts', 'test', 'gitdown']);
 
 // Increment versions
 gulp.task('version', fizzy.task('version', {
-	src: paths.versions,
-	currentVersion: pkg.version
+    src: paths.versions,
+    currentVersion: pkg.version
 }));
 
 // release a new version
 gulp.task('release', ['version'], function () {
-	gulp.run('build');
+    gulp.run('build');
 });
 
 // Watch for changes
 gulp.task('watch', function () {
-	gulp.watch(paths.scripts, ['lint']);
-	gulp.watch(paths.gitdown.glob, ['gitdown']);
+    gulp.watch(paths.scripts, ['lint']);
+    gulp.watch(paths.gitdown.glob, ['gitdown']);
 });
 
 gulp.task('default', ['build']);
