@@ -173,7 +173,7 @@
 
                     /**
                      * Out of the box drivers
-                     * 
+                     *
                      * @type {Object}
                      */
                     this._registeredDrivers = {
@@ -388,19 +388,24 @@
                      *
                      * @param  {Mixed}  key
                      * @param  {Mixed}  value
+                     * @param  {Mixed}  def
                      * @return {self}
                      */
-                    put: function (key, value) {
+                    put: function (key, value, def) {
                         if (! key) return false;
                         key = _value(key);
 
                         if (angular.isObject(key)) {
                             angular.forEach(key, function (value, key) {
-                                this._setItem(key, value);
+                                this._setItem(key, angular.isDefined(value) && value !== null ? value : def);
                             }, this);
                         } else {
                             if (! angular.isDefined(value)) return false;
-                            this._setItem(key, _value(value, this._getItem(key)));
+                            this._setItem(key, _value(value,
+                              angular.isDefined(this._getItem(key)) && this._getItem(key) !== null ?
+                                this._getItem(key) :
+                                def
+                            ));
                         }
 
                         return this;
@@ -570,7 +575,7 @@
                         this.forget(key);
 
                         var watchId = key + $scope.$id;
-                        
+
                         if (this._watchers[watchId]) {
                             // execute the de-registration function
                             this._watchers[watchId]();
