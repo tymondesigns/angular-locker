@@ -49,6 +49,16 @@
         };
 
         /**
+         * Determine whether a value is defined and not null
+         *
+         * @param  {Mixed}  value
+         * @return {Boolean}
+         */
+        var _defined = function (value) {
+            return angular.isDefined(value) && value !== null;
+        };
+
+        /**
          * Trigger an error
          *
          * @param  {String}  msg
@@ -73,90 +83,11 @@
         return {
 
             /**
-             * Allow setting of default storage driver via `lockerProvider`
-             * e.g. lockerProvider.setDefaultDriver('session');
+             * Allow the defaults to be chosen
              *
-             * @param  {String|Function}  driver
-             * @return {self}
+             * @type {Object}
              */
-            setDefaultDriver: function (driver) {
-                defaults.driver = _value(driver);
-
-                return this;
-            },
-
-            /**
-             * Get the default driver
-             *
-             * @return {String}
-             */
-            getDefaultDriver: function () {
-                return defaults.driver;
-            },
-
-            /**
-             * Allow setting of default namespace via `lockerProvider`
-             * e.g. lockerProvider.setDefaultNamespace('myAppName');
-             *
-             * @param  {String|Function}  namespace
-             * @return {self}
-             */
-            setDefaultNamespace: function (namespace) {
-                defaults.namespace = _value(namespace);
-
-                return this;
-            },
-
-            /**
-             * Get the default namespace
-             *
-             * @return {String}
-             */
-            getDefaultNamespace: function () {
-                return defaults.namespace;
-            },
-
-            /**
-             * Set whether the events are enabled
-             *
-             * @param  {Boolean|Function}  enabled
-             * @return {self}
-             */
-            setEventsEnabled: function (enabled) {
-                defaults.eventsEnabled = _value(enabled);
-
-                return this;
-            },
-
-            /**
-             * Get whether the events are enabled
-             *
-             * @return {Boolean}
-             */
-            getEventsEnabled: function () {
-                return defaults.eventsEnabled;
-            },
-
-            /**
-             * Set the separator to use with namespace in keys
-             *
-             * @param  {String|Function} separator
-             * @return {self}
-             */
-            setSeparator: function (separator) {
-                defaults.separator = _value(separator);
-
-                return this;
-            },
-
-            /**
-             * Get the separator
-             *
-             * @return {String}
-             */
-            getSeparator: function () {
-                return defaults.separator;
-            },
+            config: defaults,
 
             /**
              * The locker service
@@ -173,7 +104,7 @@
 
                     /**
                      * Out of the box drivers
-                     * 
+                     *
                      * @type {Object}
                      */
                     this._registeredDrivers = {
@@ -399,7 +330,7 @@
                                 this._setItem(key, value);
                             }, this);
                         } else {
-                            if (! angular.isDefined(value)) return false;
+                            if (! _defined(value)) return false;
                             this._setItem(key, _value(value, this._getItem(key)));
                         }
 
@@ -545,14 +476,14 @@
                      * @return {self}
                      */
                     bind: function ($scope, key, def) {
-                        if (angular.isUndefined( $scope.$eval(key) )) {
+                        if (! _defined( $scope.$eval(key) )) {
                             $parse(key).assign($scope, this.get(key, def));
                             if (! this.has(key)) this.put(key, def);
                         }
 
                         var self = this;
                         this._watchers[key + $scope.$id] = $scope.$watch(key, function (newVal) {
-                            if (angular.isDefined(newVal)) self.put(key, newVal);
+                            if (_defined(newVal)) self.put(key, newVal);
                         }, angular.isObject($scope[key]));
 
                         return this;
@@ -570,7 +501,7 @@
                         this.forget(key);
 
                         var watchId = key + $scope.$id;
-                        
+
                         if (this._watchers[watchId]) {
                             // execute the de-registration function
                             this._watchers[watchId]();
