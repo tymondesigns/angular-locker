@@ -72,11 +72,17 @@
         return {
 
             /**
-             * Allow the defaults to be specified via `lockerProvider`
+             * Allow the defaults to be specified via the `lockerProvider`
              *
-             * @type {Object}
+             * @param {Object}  value
              */
-            defaults: defaults,
+            defaults: function (value) {
+                if (! _defined(value)) return defaults;
+
+                angular.forEach(value, function (val, key) {
+                    if (defaults.hasOwnProperty(key)) defaults[key] = val;
+                });
+            },
 
             /**
              * The locker service

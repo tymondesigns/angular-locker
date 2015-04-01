@@ -17,22 +17,22 @@ describe('angular-locker', function () {
 
         it('should set a default storage driver', function () {
             module(function(lockerProvider) {
-                expect(lockerProvider.defaults.driver).toEqual('local');
-                lockerProvider.defaults.driver = 'session';
-                expect(lockerProvider.defaults.driver).toEqual('session');
+                expect(lockerProvider.defaults().driver).toEqual('local');
+                lockerProvider.defaults({ driver: 'session'});
+                expect(lockerProvider.defaults().driver).toEqual('session');
             });
         });
 
         it('should set a default storage driver via function', function () {
             module(function(lockerProvider) {
-                expect( lockerProvider.defaults.driver ).toEqual('local');
+                expect( lockerProvider.defaults().driver ).toEqual('local');
 
-                lockerProvider.defaults.driver = function () {
+                lockerProvider.defaults({ driver: function () {
                     var shouldUseSession = true;
                     if (shouldUseSession) return 'session';
-                };
+                }});
 
-                expect(lockerProvider.defaults.driver).toEqual('session');
+                expect(lockerProvider.defaults().driver).toEqual('session');
             });
         });
 
@@ -310,7 +310,7 @@ describe('angular-locker', function () {
             it('should trigger added event when adding item to locker for the first time', function () {
 
                 module(function(lockerProvider) {
-                    lockerProvider.defaults.driver = 'session';
+                    lockerProvider.defaults({ driver: 'session' });
                 });
 
                 inject(function (locker, $rootScope) {
@@ -330,7 +330,7 @@ describe('angular-locker', function () {
 
             it('should not trigger events when events are disabled', function () {
                 module(function(lockerProvider) {
-                    lockerProvider.defaults.eventsEnabled = false;
+                    lockerProvider.defaults({ eventsEnabled: false });
                 });
 
                 inject(function (locker, $rootScope) {
