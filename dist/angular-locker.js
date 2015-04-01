@@ -38,17 +38,6 @@
         };
 
         /**
-         * Get the key of an object by the value
-         *
-         * @param  {Object}  object
-         * @param  {Mixed}   value
-         * @return {String}
-         */
-        var _keyByVal = function (object, value) {
-            return Object.keys(object).filter(function (key) { return object[key] === value; })[0];
-        };
-
-        /**
          * Determine whether a value is defined and not null
          *
          * @param  {Mixed}  value
@@ -83,11 +72,11 @@
         return {
 
             /**
-             * Allow the defaults to be chosen
+             * Allow the defaults to be specified via `lockerProvider`
              *
              * @type {Object}
              */
-            config: defaults,
+            defaults: defaults,
 
             /**
              * The locker service
@@ -97,10 +86,16 @@
                 /**
                  * Define the Locker class
                  *
-                 * @param {Storage}  driver
-                 * @param {String}   namespace
+                 * @param {Object}  options
                  */
-                function Locker (driver, namespace) {
+                function Locker (options) {
+
+                    /**
+                     * The config options
+                     *
+                     * @type {Object}
+                     */
+                    this._options = options;
 
                     /**
                      * Out of the box drivers
@@ -127,34 +122,19 @@
                     };
 
                     /**
-                     * Get the driver key (local/session) by the Storage instance
-                     *
-                     * @param  {Storage}  driver
-                     * @return {String}
-                     */
-                    this._deriveDriver = function (driver) {
-                        return _keyByVal(this._registeredDrivers, driver);
-                    };
-
-                    /**
                      * @type {Storage}
                      */
-                    this._driver = this._resolveDriver(driver);
+                    this._driver = this._resolveDriver(options.driver);
 
                     /**
                      * @type {String}
                      */
-                    this._namespace = namespace;
-
-                    /**
-                     * @type {Boolean}
-                     */
-                    this._eventsEnabled = defaults.eventsEnabled;
+                    this._namespace = options.namespace;
 
                     /**
                      * @type {String}
                      */
-                    this._separator = defaults.separator;
+                    this._separator = options.separator;
 
                     /**
                      * @type {Object}
@@ -231,10 +211,10 @@
                      * @return {void}
                      */
                     this._event = function (name, payload) {
-                        if (! this._eventsEnabled) return;
+                        if (! this._options.eventsEnabled) return;
 
                         $rootScope.$emit(name, angular.extend(payload, {
-                            driver: this._deriveDriver(this._driver),
+                            driver: this._options.driver,
                             namespace: this._namespace,
                         }));
                     };
@@ -518,7 +498,7 @@
                      * @return {self}
                      */
                     driver: function (driver) {
-                        return this.instance(driver, this._namespace);
+                        return this.instance(angular.extend(this._options, { driver: driver }));
                     },
 
                     /**
@@ -537,7 +517,7 @@
                      * @return {self}
                      */
                     namespace: function (namespace) {
-                        return this.instance(this._deriveDriver(this._driver), namespace);
+                        return this.instance(angular.extend(this._options, { namespace: namespace }));
                     },
 
                     /**
@@ -563,17 +543,16 @@
                     /**
                      * Get a new instance of Locker
                      *
-                     * @param  {String}  driver
-                     * @param  {String}  namespace
+                     * @param  {Object}  options
                      * @return {Locker}
                      */
-                    instance: function (driver, namespace) {
-                        return new Locker(driver, namespace);
+                    instance: function (options) {
+                        return new Locker(options);
                     }
                 };
 
                 // return the default instance
-                return new Locker(defaults.driver, defaults.namespace);
+                return new Locker(defaults);
             }]
         };
 

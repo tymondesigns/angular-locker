@@ -7,10 +7,10 @@ paths = config.paths;
 // Lint the JS
 gulp.task('lint', fizzy.task('lint', { src: paths.scripts }));
 
-// Remove the dist folder
+// Remove the output folder
 gulp.task('clean', fizzy.task('clean', { src: paths.output }));
 
-// Build the dist folder
+// Build the output folder
 gulp.task('scripts', ['clean'], fizzy.task('scripts', {
     src: paths.scripts,
     dest: paths.output,

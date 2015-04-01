@@ -17,22 +17,22 @@ describe('angular-locker', function () {
 
         it('should set a default storage driver', function () {
             module(function(lockerProvider) {
-                expect(lockerProvider.config.driver).toEqual('local');
-                lockerProvider.config.driver = 'session';
-                expect(lockerProvider.config.driver).toEqual('session');
+                expect(lockerProvider.defaults.driver).toEqual('local');
+                lockerProvider.defaults.driver = 'session';
+                expect(lockerProvider.defaults.driver).toEqual('session');
             });
         });
 
         it('should set a default storage driver via function', function () {
             module(function(lockerProvider) {
-                expect( lockerProvider.config.driver ).toEqual('local');
+                expect( lockerProvider.defaults.driver ).toEqual('local');
 
-                lockerProvider.config.driver = function () {
+                lockerProvider.defaults.driver = function () {
                     var shouldUseSession = true;
                     if (shouldUseSession) return 'session';
                 };
 
-                expect(lockerProvider.config.driver).toEqual('session');
+                expect(lockerProvider.defaults.driver).toEqual('session');
             });
         });
 
@@ -48,51 +48,51 @@ describe('angular-locker', function () {
 
         it('should set a default namespace', function () {
             module(function(lockerProvider) {
-                expect( lockerProvider.config.namespace ).toEqual('locker');
+                expect( lockerProvider.defaults.namespace ).toEqual('locker');
 
-                lockerProvider.config.namespace = 'myApp';
-                expect( lockerProvider.config.namespace ).toEqual('myApp');
+                lockerProvider.defaults.namespace = 'myApp';
+                expect( lockerProvider.defaults.namespace ).toEqual('myApp');
 
-                lockerProvider.config.namespace = '';
-                expect( lockerProvider.config.namespace ).toEqual('');
+                lockerProvider.defaults.namespace = '';
+                expect( lockerProvider.defaults.namespace ).toEqual('');
 
-                lockerProvider.config.namespace = false;
-                expect( lockerProvider.config.namespace ).toEqual(false);
+                lockerProvider.defaults.namespace = false;
+                expect( lockerProvider.defaults.namespace ).toEqual(false);
             });
         });
 
         it('should set a default namespace via function', function () {
             module(function(lockerProvider) {
-                expect( lockerProvider.config.namespace ).toEqual('locker');
-                lockerProvider.config.namespace = function () {
+                expect( lockerProvider.defaults.namespace ).toEqual('locker');
+                lockerProvider.defaults.namespace = function () {
                     var arr = ['myApp', 'coolApp', 'somethingElse'];
                     return arr[1];
                 };
-                expect( lockerProvider.config.namespace ).toEqual('coolApp');
+                expect( lockerProvider.defaults.namespace ).toEqual('coolApp');
             });
         });
 
         it('should set a default separator', function () {
             module(function(lockerProvider) {
-                expect( lockerProvider.config.separator ).toEqual('.');
-                lockerProvider.config.separator = '-';
-                expect( lockerProvider.config.separator ).toEqual('-');
-                lockerProvider.config.separator = '';
-                expect( lockerProvider.config.separator ).toEqual('');
+                expect( lockerProvider.defaults.separator ).toEqual('.');
+                lockerProvider.defaults.separator = '-';
+                expect( lockerProvider.defaults.separator ).toEqual('-');
+                lockerProvider.defaults.separator = '';
+                expect( lockerProvider.defaults.separator ).toEqual('');
 
-                lockerProvider.config.separator = false;
-                expect( lockerProvider.config.separator ).toEqual(false);
+                lockerProvider.defaults.separator = false;
+                expect( lockerProvider.defaults.separator ).toEqual(false);
             });
         });
 
         it('should set a default separator via function', function () {
             module(function(lockerProvider) {
-                expect( lockerProvider.config.separator ).toEqual('.');
-                lockerProvider.config.separator = function () {
+                expect( lockerProvider.defaults.separator ).toEqual('.');
+                lockerProvider.defaults.separator = function () {
                     var arr = ['.', '-', '!'];
                     return arr[1];
                 };
-                expect( lockerProvider.config.separator ).toEqual('-');
+                expect( lockerProvider.defaults.separator ).toEqual('-');
             });
         });
 
@@ -307,23 +307,30 @@ describe('angular-locker', function () {
                 }).toThrowError();
             }));
 
-            it('should trigger added event when adding item to locker for the first time', inject(function (locker, $rootScope) {
-                spyOn($rootScope, '$emit');
-                spyOn(locker, '_exists').and.returnValue(false);
+            it('should trigger added event when adding item to locker for the first time', function () {
 
-                locker.put('foo', 'bar');
-
-                expect($rootScope.$emit).toHaveBeenCalledWith('locker.item.added', {
-                    key: 'foo',
-                    value: 'bar',
-                    driver: 'local',
-                    namespace: 'locker'
+                module(function(lockerProvider) {
+                    lockerProvider.defaults.driver = 'session';
                 });
-            }));
+
+                inject(function (locker, $rootScope) {
+                    spyOn($rootScope, '$emit');
+                    spyOn(locker, '_exists').and.returnValue(false);
+
+                    locker.put('foo', 'bar');
+
+                    expect($rootScope.$emit).toHaveBeenCalledWith('locker.item.added', {
+                        key: 'foo',
+                        value: 'bar',
+                        driver: 'session',
+                        namespace: 'locker'
+                    });
+                })
+            });
 
             it('should not trigger events when events are disabled', function () {
                 module(function(lockerProvider) {
-                    lockerProvider.config.eventsEnabled = false;
+                    lockerProvider.defaults.eventsEnabled = false;
                 });
 
                 inject(function (locker, $rootScope) {
@@ -354,7 +361,7 @@ describe('angular-locker', function () {
 
             it('should switch drivers when chained', function () {
                 module(function(lockerProvider) {
-                    lockerProvider.config.driver = 'local';
+                    lockerProvider.defaults.driver = 'local';
                 });
 
                 inject(function (locker) {
