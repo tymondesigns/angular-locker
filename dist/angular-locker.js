@@ -305,19 +305,21 @@
                      *
                      * @param  {Mixed}  key
                      * @param  {Mixed}  value
+                     * @param  {Mixed}  def
                      * @return {self}
                      */
-                    put: function (key, value) {
-                        if (! key) return false;
+                    put: function (key, value, def) {
+                        if (! _defined(key)) return false;
                         key = _value(key);
 
                         if (angular.isObject(key)) {
                             angular.forEach(key, function (value, key) {
-                                this._setItem(key, value);
+                                this._setItem(key, _defined(value) ? value : def);
                             }, this);
                         } else {
                             if (! _defined(value)) return false;
-                            this._setItem(key, _value(value, this._getItem(key)));
+                            var val = this._getItem(key);
+                            this._setItem(key, _value(value, _defined(val) ? val : def));
                         }
 
                         return this;

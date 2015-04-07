@@ -215,6 +215,20 @@ describe('angular-locker', function () {
                     }));
                 });
 
+            it('should pass the default value to the function if the current item value does not exist and a default was specified', inject(function (locker) {
+                var value = null;
+
+                expect(locker.get('fnKey')).not.toBeDefined();
+
+                locker.put('fnKey', function (param) {
+                  value = param;
+                  return 2;
+                }, 1);
+
+                expect(locker.get('fnKey')).toEqual(2);
+                expect(value).toBe(1);
+            }));
+
             it('should put an item into the locker when passing a function as first param', inject(function (locker) {
 
                 locker.put(function () {
@@ -325,7 +339,7 @@ describe('angular-locker', function () {
                         driver: 'session',
                         namespace: 'locker'
                     });
-                })
+                });
             });
 
             it('should not trigger events when events are disabled', function () {
