@@ -413,10 +413,11 @@
                     all: function () {
                         var items = {};
                         angular.forEach(this._driver, function (value, key) {
-                            var split = key.split(this._separator);
-                            if (split.length > 1 && split[0] === this._namespace) {
-                                split.splice(0, 1);
-                                key = split.join(this._separator);
+                            if (this._namespace) {
+                                var prefixWithSeparator = this._namespace + this._separator;
+                                if (key.indexOf(prefixWithSeparator) === 0) {
+                                    key = key.substring(prefixWithSeparator.length);
+                                }
                             }
                             if (this.has(key)) items[key] = this.get(key);
                         }, this);
