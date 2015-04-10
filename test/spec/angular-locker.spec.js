@@ -17,22 +17,25 @@ describe('angular-locker', function () {
 
         it('should set a default storage driver', function () {
             module(function(lockerProvider) {
-                expect(lockerProvider.defaults().driver).toEqual('local');
+                expect(lockerProvider.defaults.driver).toEqual('local');
+
                 lockerProvider.defaults({ driver: 'session'});
-                expect(lockerProvider.defaults().driver).toEqual('session');
+
+                expect(lockerProvider.defaults.driver).toEqual('session');
+                expect(lockerProvider.defaults.namespace).toEqual('locker');
             });
         });
 
         it('should set a default storage driver via function', function () {
             module(function(lockerProvider) {
-                expect( lockerProvider.defaults().driver ).toEqual('local');
+                expect( lockerProvider.defaults.driver ).toEqual('local');
 
                 lockerProvider.defaults({ driver: function () {
                     var shouldUseSession = true;
                     if (shouldUseSession) return 'session';
                 }});
 
-                expect(lockerProvider.defaults().driver).toEqual('session');
+                expect(lockerProvider.defaults.driver).toEqual('session');
             });
         });
 
@@ -50,7 +53,7 @@ describe('angular-locker', function () {
             module(function(lockerProvider) {
                 expect( lockerProvider.defaults.namespace ).toEqual('locker');
 
-                lockerProvider.defaults.namespace = 'myApp';
+                lockerProvider.defaults.namespace = 'myApp.foo';
                 expect( lockerProvider.defaults.namespace ).toEqual('myApp');
 
                 lockerProvider.defaults.namespace = '';
@@ -451,13 +454,12 @@ describe('angular-locker', function () {
             it('should return all items within current namespace', inject(function (locker) {
 
                 for (var i=0; i<20; i++) {
-                    locker.put('aKey' + i, 'aVal' + i);
+                    locker.namespace('foo.bar').put('aKey' + i, 'aVal' + i);
                 }
 
-                locker.put('something.foo.bar', ['someValue']);
+                locker.namespace('foo.bar').put('something.foo.bar', ['someValue']);
 
-                // var all = store;
-                var all = locker.all();
+                var all = locker.namespace('foo.bar').all();
                 var none = locker.namespace('something').all();
 
                 expect( angular.isObject(all) && angular.isObject(none) ).toBeTruthy();
