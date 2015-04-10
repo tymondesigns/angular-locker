@@ -512,7 +512,7 @@
                      */
                     driver: function (driver) {
                         // no need to create a new instance if the driver is the same
-                        if (this._resolveDriver(driver) === this._driver) return this;
+                        if (driver === this._options.driver) return this;
 
                         return this.instance(angular.extend(this._options, { driver: driver }));
                     },
