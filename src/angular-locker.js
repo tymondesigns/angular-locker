@@ -30,7 +30,7 @@
          * If value is a function then execute, otherwise return
          *
          * @param  {Mixed}  value
-         * @param  {Mixed}  parameter
+         * @param  {Mixed}  param
          * @return {Mixed}
          */
         var _value = function (value, param) {
@@ -138,11 +138,15 @@
                     this._namespace = options.namespace;
 
                     /**
+                     * Separates the namespace from the keys
+                     *
                      * @type {String}
                      */
                     this._separator = options.separator;
 
                     /**
+                     * Store the watchers here so we can un-register them later
+                     *
                      * @type {Object}
                      */
                     this._watchers = {};
@@ -507,6 +511,9 @@
                      * @return {self}
                      */
                     driver: function (driver) {
+                        // no need to create a new instance if the driver is the same
+                        if (this._resolveDriver(driver) === this._driver) return this;
+
                         return this.instance(angular.extend(this._options, { driver: driver }));
                     },
 
@@ -526,6 +533,9 @@
                      * @return {self}
                      */
                     namespace: function (namespace) {
+                        // no need to create a new instance if the namespace is the same
+                        if (namespace === this._namespace) return this;
+
                         return this.instance(angular.extend(this._options, { namespace: namespace }));
                     },
 
