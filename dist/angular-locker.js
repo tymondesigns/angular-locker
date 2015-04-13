@@ -128,11 +128,15 @@
                     };
 
                     /**
+                     * The driver instance
+                     *
                      * @type {Storage}
                      */
                     this._driver = this._resolveDriver(options.driver);
 
                     /**
+                     * The namespace value
+                     *
                      * @type {String}
                      */
                     this._namespace = options.namespace;
@@ -289,8 +293,8 @@
                         if (! this._checkSupport()) _error('The browser does not support localStorage');
 
                         if (! this._exists(key)) return false;
-                        this._driver.removeItem(this._getPrefix(key));
 
+                        this._driver.removeItem(this._getPrefix(key));
                         this._event('locker.item.forgotten', { key: key });
 
                         return true;
@@ -334,11 +338,12 @@
                      *
                      * @param  {Mixed}  key
                      * @param  {Mixed}  value
+                     * @param  {Mixed}  def
                      * @return {Boolean}
                      */
-                    add: function (key, value) {
+                    add: function (key, value, def) {
                         if (! this.has(key)) {
-                            this.put(key, value);
+                            this.put(key, value, def);
                             return true;
                         }
 

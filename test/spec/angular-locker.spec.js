@@ -378,7 +378,7 @@ describe('angular-locker', function () {
 
             it('should switch drivers when chained', function () {
                 module(function(lockerProvider) {
-                    lockerProvider.defaults.driver = 'local';
+                    lockerProvider.defaults().driver = 'local';
                 });
 
                 inject(function (locker) {
@@ -700,6 +700,28 @@ describe('angular-locker', function () {
             it('should get the currently set driver', inject(function ($window, locker) {
                 expect( locker.getDriver() ).toEqual($window.localStorage);
                 expect( locker.driver('session').getDriver() ).toEqual($window.sessionStorage);
+            }));
+
+            it('should return the same instance if driver or namespace not changed', inject(function ($window, locker) {
+                expect( locker.getDriver() ).toEqual($window.localStorage);
+
+                var localInstance1 = locker;
+                var localInstance2 = locker.driver('local');
+                var sessionInstance = locker.driver('session');
+
+                expect( localInstance1 ).toEqual(localInstance2);
+                expect( localInstance1 ).not.toEqual(sessionInstance);
+            }));
+
+            it('should return the same instance if driver or namespace not changed', inject(function ($window, locker) {
+                expect( locker.getNamespace() ).toEqual('locker');
+
+                var defaultNamespace1 = locker;
+                var defaultNamespace2 = locker.namespace('locker');
+                var fooNamespace = locker.namespace('foo');
+
+                expect( defaultNamespace1 ).toEqual(defaultNamespace2);
+                expect( defaultNamespace2 ).not.toEqual(fooNamespace);
             }));
         });
 
