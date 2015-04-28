@@ -1,8 +1,8 @@
 var gulp = require('gulp'),
-fizzy = require('fizzy'),
-pkg = require('./package.json'),
-config = require('./config'),
-paths = config.paths;
+    fizzy = require('fizzy'),
+    pkg = require('./package.json'),
+    config = require('./config'),
+    paths = config.paths;
 
 // Lint the JS
 gulp.task('lint', fizzy.task('lint', { src: paths.scripts }));

@@ -163,7 +163,7 @@
                      * @return {Boolean}
                      */
                     this._checkSupport = function (driver) {
-                        if (angular.isUndefined(this._supported)) {
+                        if (! _defined(this._supported)) {
                             var l = 'l';
                             try {
                                 this._resolveDriver(driver || 'local').setItem(l, l);
@@ -423,10 +423,8 @@
                         var items = {};
                         angular.forEach(this._driver, function (value, key) {
                             if (this._namespace) {
-                                var prefixWithSeparator = this._namespace + this._separator;
-                                if (key.indexOf(prefixWithSeparator) === 0) {
-                                    key = key.substring(prefixWithSeparator.length);
-                                }
+                                var prefix = this._namespace + this._separator;
+                                if (key.indexOf(prefix) === 0) key = key.substring(prefix.length);
                             }
                             if (this.has(key)) items[key] = this.get(key);
                         }, this);
@@ -435,14 +433,21 @@
                     },
 
                     /**
+                     * Get the storage keys as an array
+                     *
+                     * @return {Array}
+                     */
+                    keys: function () {
+                        return Object.keys(this.all());
+                    },
+
+                    /**
                      * Remove all items set within the current namespace/driver
                      *
                      * @return {self}
                      */
                     clean: function () {
-                        this.forget(Object.keys(this.all()));
-
-                        return this;
+                        return this.forget(this.keys());
                     },
 
                     /**
@@ -462,7 +467,7 @@
                      * @return {Integer}
                      */
                     count: function () {
-                        return Object.keys(this.all()).length;
+                        return this.keys().length;
                     },
 
                     /**
