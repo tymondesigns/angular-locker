@@ -66,7 +66,8 @@
             driver: 'local',
             namespace: 'locker',
             eventsEnabled: true,
-            separator: '.'
+            separator: '.',
+            extend: {}
         };
 
         return {
@@ -108,10 +109,10 @@
                      *
                      * @type {Object}
                      */
-                    this._registeredDrivers = {
+                    this._registeredDrivers = angular.extend({
                         local: $window.localStorage,
                         session: $window.sessionStorage
-                    };
+                    }, options.extend);
 
                     /**
                      * Get the Storage instance from the key
