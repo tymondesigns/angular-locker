@@ -226,12 +226,12 @@
                      * @return {void}
                      */
                     this._event = function (name, payload) {
-                        if (! this._options.eventsEnabled) return;
-
-                        $rootScope.$emit(name, angular.extend(payload, {
-                            driver: this._options.driver,
-                            namespace: this._namespace,
-                        }));
+                        if (this._options.eventsEnabled) {
+                            $rootScope.$emit(name, angular.extend(payload, {
+                                driver: this._options.driver,
+                                namespace: this._namespace,
+                            }));
+                        }
                     };
 
                     /**
@@ -487,7 +487,7 @@
 
                         var self = this;
                         this._watchers[key + $scope.$id] = $scope.$watch(key, function (newVal) {
-                            if (_defined(newVal)) self.put(key, newVal);
+                            self.put(key, newVal);
                         }, angular.isObject($scope[key]));
 
                         return this;
