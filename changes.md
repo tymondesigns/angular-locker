@@ -1,4 +1,4 @@
-### 1.3.0
+### 2.0.0
 
 ##### Breaking Changes
 
@@ -8,7 +8,8 @@ lockerProvider.defaults({
     driver: 'session',
     namespace: 'myApp',
     separator: '.',
-    eventsEnabled: true
+    eventsEnabled: true,
+    extend: {}
 });
 ```
 
