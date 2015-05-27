@@ -482,7 +482,7 @@
                     bind: function ($scope, key, def) {
                         if (! _defined( $scope.$eval(key) )) {
                             $parse(key).assign($scope, this.get(key, def));
-                            if (! this.has(key)) this.put(key, def);
+                            this.add(key, def);
                         }
 
                         var self = this;
