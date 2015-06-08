@@ -1,4 +1,19 @@
 {
+    "plugins": [
+        "jscs-jsdoc"
+    ],
+    "jsDoc": {
+        "checkAnnotations": true,
+        "checkParamNames": true,
+        "checkRedundantParams": true,
+        "checkReturnTypes": true,
+        "checkRedundantReturns": true,
+        "requireReturnTypes": true,
+        "requireNewlineAfterDescription": true,
+        "checkTypes": "capitalizedNativeCase",
+        "enforceExistence": "exceptExports"
+    },
+
     "requireCurlyBraces": [
         "else",
         "for",

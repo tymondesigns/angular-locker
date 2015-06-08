@@ -163,7 +163,7 @@
                     /**
                      * Check browser support
                      *
-                     * @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
+                     * @see github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
                      * @param  {String}  driver
                      *
                      * @return {Boolean}
@@ -588,11 +588,11 @@
                     /**
                      * Check browser support
                      *
-                     * @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
+                     * @see github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
                      * @param  {String}  driver
                      * @return {Boolean}
                      */
-                    supported: function (driver) {
+                    supported: function(driver) {
                         return this._checkSupport(driver);
                     },
 
