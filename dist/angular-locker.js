@@ -212,7 +212,8 @@
                     };
 
                     /**
-                     * Try to parse value as json, if it fails then it probably isn't json so just return it
+                     * Try to parse value as json, if it fails then it probably isn't json
+                     * so just return it
                      *
                      * @param  {String}  value
                      *
@@ -262,7 +263,9 @@
                                 this._event('locker.item.added', { key: key, value: value });
                             }
                         } catch (e) {
-                            if (['QUOTA_EXCEEDED_ERR', 'NS_ERROR_DOM_QUOTA_REACHED', 'QuotaExceededError'].indexOf(e.name) !== -1) {
+                            if (['QUOTA_EXCEEDED_ERR',
+                                'NS_ERROR_DOM_QUOTA_REACHED',
+                                'QuotaExceededError'].indexOf(e.name) !== -1) {
                                 _error('The browser storage quota has been exceeded');
                             } else {
                                 _error('Could not add item with key "' + key + '"');

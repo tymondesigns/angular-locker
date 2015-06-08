@@ -7,6 +7,9 @@ var gulp = require('gulp'),
 // Lint the JS
 gulp.task('lint', fizzy.task('lint', { src: paths.scripts }));
 
+// Check the coding style
+gulp.task('jscs', fizzy.task('jscs', { src: paths.scripts[0] }));
+
 // Remove the output folder
 gulp.task('clean', fizzy.task('clean', { src: paths.output }));
 
@@ -30,7 +33,7 @@ gulp.task('gitdown', fizzy.task('gitdown', {
 }));
 
 // Define the build tasks
-gulp.task('build', ['lint', 'scripts', 'test', 'gitdown']);
+gulp.task('build', ['lint', 'jscs', 'scripts', 'test', 'gitdown']);
 
 // Increment versions
 gulp.task('version', fizzy.task('version', {
