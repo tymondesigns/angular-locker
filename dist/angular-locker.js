@@ -31,6 +31,7 @@
          *
          * @param  {Mixed}  value
          * @param  {Mixed}  param
+         *
          * @return {Mixed}
          */
         var _value = function (value, param) {
@@ -41,6 +42,7 @@
          * Determine whether a value is defined and not null
          *
          * @param  {Mixed}  value
+         *
          * @return {Boolean}
          */
         var _defined = function (value) {
@@ -51,6 +53,7 @@
          * Trigger an error
          *
          * @param  {String}  msg
+         *
          * @return {void}
          */
         var _error = function (msg) {
@@ -118,6 +121,7 @@
                      * Get the Storage instance from the key
                      *
                      * @param  {String}  driver
+                     *
                      * @return {Storage}
                      */
                     this._resolveDriver = function (driver) {
@@ -161,6 +165,7 @@
                      *
                      * @see https://github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
                      * @param  {String}  driver
+                     *
                      * @return {Boolean}
                      */
                     this._checkSupport = function (driver) {
@@ -182,6 +187,7 @@
                      * Build the storage key from the namspace
                      *
                      * @param  {String}  key
+                     *
                      * @return {String}
                      */
                     this._getPrefix = function (key) {
@@ -194,6 +200,7 @@
                      * Try to encode value as json, or just return the value upon failure
                      *
                      * @param  {Mixed}  value
+                     *
                      * @return {Mixed}
                      */
                     this._serialize = function (value) {
@@ -208,7 +215,8 @@
                      * Try to parse value as json, if it fails then it probably isn't json so just return it
                      *
                      * @param  {String}  value
-                     * @return {Object|String}
+                     *
+                     * @return {Mixed}
                      */
                     this._unserialize = function (value) {
                         try {
@@ -223,6 +231,7 @@
                      *
                      * @param  {String}  name
                      * @param  {Object}  payload
+                     *
                      * @return {void}
                      */
                     this._event = function (name, payload) {
@@ -238,7 +247,8 @@
                      * Add to storage
                      *
                      * @param {String}  key
-                     * @param {Mixed}  value
+                     *
+                     * @param {Mixed}   value
                      */
                     this._setItem = function (key, value) {
                         if (! this._checkSupport()) _error('The browser does not support localStorage');
@@ -264,6 +274,7 @@
                      * Get from storage
                      *
                      * @param  {String}  key
+                     *
                      * @return {Mixed}
                      */
                     this._getItem = function (key) {
@@ -276,6 +287,7 @@
                      * Exists in storage
                      *
                      * @param  {String}  key
+                     *
                      * @return {Boolean}
                      */
                     this._exists = function (key) {
@@ -288,6 +300,7 @@
                      * Remove from storage
                      *
                      * @param  {String}  key
+                     *
                      * @return {Boolean}
                      */
                     this._removeItem = function (key) {
@@ -315,7 +328,8 @@
                      * @param  {Mixed}  key
                      * @param  {Mixed}  value
                      * @param  {Mixed}  def
-                     * @return {self}
+                     *
+                     * @return {Locker}
                      */
                     put: function (key, value, def) {
                         if (! _defined(key)) return false;
@@ -340,6 +354,7 @@
                      * @param  {Mixed}  key
                      * @param  {Mixed}  value
                      * @param  {Mixed}  def
+                     *
                      * @return {Boolean}
                      */
                     add: function (key, value, def) {
@@ -356,6 +371,7 @@
                      *
                      * @param  {String|Array}  key
                      * @param  {Mixed}  def
+                     *
                      * @return {Mixed}
                      */
                     get: function (key, def) {
@@ -377,6 +393,7 @@
                      * Determine whether the item exists in storage
                      *
                      * @param  {String|Function}  key
+                     *
                      * @return {Boolean}
                      */
                     has: function (key) {
@@ -387,6 +404,7 @@
                      * Remove specified item(s) from storage
                      *
                      * @param  {Mixed}  key
+                     *
                      * @return {Object}
                      */
                     forget: function (key) {
@@ -406,6 +424,7 @@
                      *
                      * @param  {String|Array}  key
                      * @param  {Mixed}  def
+                     *
                      * @return {Mixed}
                      */
                     pull: function (key, def) {
@@ -454,7 +473,7 @@
                     /**
                      * Empty the current storage driver completely. careful now.
                      *
-                     * @return {self}
+                     * @return {Locker}
                      */
                     empty: function () {
                         this._driver.clear();
@@ -477,7 +496,8 @@
                      * @param  {Object}  $scope
                      * @param  {String}  key
                      * @param  {Mixed}   def
-                     * @return {self}
+                     *
+                     * @return {Locker}
                      */
                     bind: function ($scope, key, def) {
                         if (! _defined( $scope.$eval(key) )) {
@@ -498,7 +518,8 @@
                      *
                      * @param  {Object}  $scope
                      * @param  {String}  key
-                     * @return {self}
+                     *
+                     * @return {Locker}
                      */
                     unbind: function ($scope, key) {
                         $parse(key).assign($scope, void 0);
@@ -519,7 +540,8 @@
                      * Set the storage driver on a new instance to enable overriding defaults
                      *
                      * @param  {String}  driver
-                     * @return {self}
+                     *
+                     * @return {Locker}
                      */
                     driver: function (driver) {
                         // no need to create a new instance if the driver is the same
@@ -541,7 +563,8 @@
                      * Set the namespace on a new instance to enable overriding defaults
                      *
                      * @param  {String}  namespace
-                     * @return {self}
+                     *
+                     * @return {Locker}
                      */
                     namespace: function (namespace) {
                         // no need to create a new instance if the namespace is the same
@@ -574,6 +597,7 @@
                      * Get a new instance of Locker
                      *
                      * @param  {Object}  options
+                     *
                      * @return {Locker}
                      */
                     instance: function (options) {
