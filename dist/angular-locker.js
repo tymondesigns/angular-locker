@@ -53,8 +53,6 @@
          * Trigger an error
          *
          * @param  {String}  msg
-         *
-         * @return {void}
          */
         var _error = function (msg) {
             throw new Error('[angular-locker] ' + msg);
@@ -232,8 +230,6 @@
                      *
                      * @param  {String}  name
                      * @param  {Object}  payload
-                     *
-                     * @return {void}
                      */
                     this._event = function (name, payload) {
                         if (this._options.eventsEnabled) {
@@ -332,7 +328,7 @@
                      * @param  {Mixed}  value
                      * @param  {Mixed}  def
                      *
-                     * @return {Locker}
+                     * @return {Locker|Boolean}
                      */
                     put: function (key, value, def) {
                         if (! _defined(key)) return false;
@@ -592,7 +588,7 @@
                      * @param  {String}  driver
                      * @return {Boolean}
                      */
-                    supported: function(driver) {
+                    supported: function (driver) {
                         return this._checkSupport(driver);
                     },
 

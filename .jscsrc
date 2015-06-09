@@ -57,11 +57,14 @@
     "requireSpaceBeforeBlockStatements": true,
     "requireSpacesInForStatement": true,
     "requireLineFeedAtFileEnd": true,
+    "requireSpaceAfterLineComment": true,
     "requireCamelCaseOrUpperCaseIdentifiers": true,
     "requireSpacesInFunctionExpression": {
         "beforeOpeningRoundBrace": true,
         "beforeOpeningCurlyBrace": true
     },
+
+    "requireSpaceAfterPrefixUnaryOperators": ["!"],
 
     "disallowSpacesInCallExpression": true,
     "disallowSpaceAfterObjectKeys": true,
