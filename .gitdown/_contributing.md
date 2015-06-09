@@ -1,3 +1,3 @@
 ## Contributing
 
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using Gulp.
+Take care to maintain the existing coding style using the provided `.jscsrc` file. Add unit tests for any new or changed functionality. Lint and test your code using Gulp.
