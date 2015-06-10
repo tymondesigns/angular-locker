@@ -111,9 +111,12 @@
                      * @type {Object}
                      */
                     this._registeredDrivers = angular.extend({
-                        local: $window.localStorage,
                         session: $window.sessionStorage
                     }, options.extend);
+                    // IE may throw an exception when accessing localStorage
+                    try {
+                        this._registeredDrivers.local = $window.localStorage;
+                    } catch (e) {}
 
                     /**
                      * Get the Storage instance from the key
