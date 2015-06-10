@@ -65,14 +65,17 @@ Configure via `lockerProvider` (*optional*)
 
 ```js
 .config(['lockerProvider', function config(lockerProvider) {
-    lockerProvider.setDefaultDriver('session')
-                  .setDefaultNamespace('myAppName')
-                  .setSeparator('.')
-                  .setEventsEnabled(false);
+    lockerProvider.defaults({
+        driver: 'session',
+        namespace: 'myApp',
+        separator: '.',
+        eventsEnabled: true,
+        extend: {}
+    });
 }]);
 ```
 
-*Note*: You can also pass `false` into `setDefaultNamespace()` if you prefer to not have a namespace in your keys.
+*Note*: You can also pass `false` to `namespace` if you prefer to not have a namespace in your keys.
 
 inject `locker` into your controller/service/directive etc
 
@@ -81,6 +84,28 @@ inject `locker` into your controller/service/directive etc
     locker.put('someKey', 'someVal');
 }]);
 ```
+
+<h4 id="usage-adding-to-your-project-extending-locker">Extending Locker</h4>
+
+You can pass in an implementation of the [Storage Interface](https://developer.mozilla.org/en-US/docs/Web/API/Storage) to the `lockerProvider` as described above. e.g.
+
+```js
+lockerProvider.defaults({
+    extend: {
+        myCustomStore: function () {
+            // getItem
+            // setItem
+            // removeItem
+            // etc
+        }
+    }
+});
+
+// then use as normal
+locker.driver('myCustomStore').put('foo', 'bar');
+```
+
+See my [storageMock](https://github.com/tymondesigns/angular-locker/blob/master/test/mock/storageMock.js) for an example on how to define a custom implementation.
 
 ----------------------------
 
@@ -147,6 +172,15 @@ locker.put('someKey', function(current) {
 });
 
 locker.get('someKey') // = ['foo', 'bar', 'baz']
+```
+
+If the current value is not already set then you can pass a third parameter as a default that will be returned instead. e.g.
+
+```js
+// given locker.get('foo') is not defined
+locker.put('foo', function (current) {
+    // current will equal 'bar'
+}, 'bar');
 ```
 
 <h4 id="usage-adding-items-to-locker-adding-multiple-items-at-once-by-passing-a-single-object">adding multiple items at once by passing a single object</h4>
