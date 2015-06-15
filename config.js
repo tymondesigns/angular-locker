@@ -10,7 +10,7 @@ var banner = [
     '\n'
 ].join('');
 
-module.exports = {
+export default {
     paths: {
         output : 'dist',
         vendor: [
