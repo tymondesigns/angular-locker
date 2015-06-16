@@ -4,7 +4,7 @@ node_js:
   - "0.10"
   - "iojs"
 before_script:
-  - npm install -g gulp bower codeclimate-test-reporter
+  - npm install -g gulp codeclimate-test-reporter
 after_script:
   - cat test/coverage/lcov/lcov.info | codeclimate
 env:
