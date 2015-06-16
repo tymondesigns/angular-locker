@@ -170,8 +170,8 @@
                         if (! _defined(this._supported)) {
                             var l = 'l';
                             try {
-                                this._resolveDriver(driver || 'local').setItem(l, l);
-                                this._resolveDriver(driver || 'local').removeItem(l);
+                                this._resolveDriver(driver || options.driver).setItem(l, l);
+                                this._resolveDriver(driver || options.driver).removeItem(l);
                                 this._supported = true;
                             } catch (e) {
                                 this._supported = false;
@@ -248,7 +248,7 @@
                      * @param {Mixed}   value
                      */
                     this._setItem = function (key, value) {
-                        if (! this._checkSupport()) _error('The browser does not support localStorage');
+                        if (! this._checkSupport()) _error('The browser does not support the "' + options.driver + '" driver');
 
                         try {
                             var oldVal = this._getItem(key);
@@ -277,7 +277,7 @@
                      * @return {Mixed}
                      */
                     this._getItem = function (key) {
-                        if (! this._checkSupport()) _error('The browser does not support localStorage');
+                        if (! this._checkSupport()) _error('The browser does not support the "' + options.driver + '" driver');
 
                         return this._unserialize(this._driver.getItem(this._getPrefix(key)));
                     };
@@ -290,7 +290,7 @@
                      * @return {Boolean}
                      */
                     this._exists = function (key) {
-                        if (! this._checkSupport()) _error('The browser does not support localStorage');
+                        if (! this._checkSupport()) _error('The browser does not support the "' + options.driver + '" driver');
 
                         return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
                     };
@@ -303,7 +303,7 @@
                      * @return {Boolean}
                      */
                     this._removeItem = function (key) {
-                        if (! this._checkSupport()) _error('The browser does not support localStorage');
+                        if (! this._checkSupport()) _error('The browser does not support the "' + options.driver + '" driver');
 
                         if (! this._exists(key)) return false;
 
