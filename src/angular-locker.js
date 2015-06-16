@@ -248,7 +248,9 @@
                      * @param {Mixed}   value
                      */
                     this._setItem = function (key, value) {
-                        if (! this._checkSupport()) _error('The browser does not support the "' + options.driver + '" driver');
+                        if (! this._checkSupport()) {
+                            _error('The browser does not support the "' + options.driver + '" driver');
+                        }
 
                         try {
                             var oldVal = this._getItem(key);
@@ -277,7 +279,9 @@
                      * @return {Mixed}
                      */
                     this._getItem = function (key) {
-                        if (! this._checkSupport()) _error('The browser does not support the "' + options.driver + '" driver');
+                        if (! this._checkSupport()) {
+                            _error('The browser does not support the "' + options.driver + '" driver');
+                        }
 
                         return this._unserialize(this._driver.getItem(this._getPrefix(key)));
                     };
@@ -290,7 +294,9 @@
                      * @return {Boolean}
                      */
                     this._exists = function (key) {
-                        if (! this._checkSupport()) _error('The browser does not support the "' + options.driver + '" driver');
+                        if (! this._checkSupport()) {
+                            _error('The browser does not support the "' + options.driver + '" driver');
+                        }
 
                         return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
                     };
@@ -303,7 +309,9 @@
                      * @return {Boolean}
                      */
                     this._removeItem = function (key) {
-                        if (! this._checkSupport()) _error('The browser does not support the "' + options.driver + '" driver');
+                        if (! this._checkSupport()) {
+                            _error('The browser does not support the "' + options.driver + '" driver');
+                        }
 
                         if (! this._exists(key)) return false;
 
