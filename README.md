@@ -467,7 +467,6 @@ Take care to maintain the existing coding style using the provided `.jscsrc` fil
 
 ```bash
 $ npm install
-$ bower install
 $ gulp
 ```
 
