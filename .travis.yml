@@ -5,10 +5,8 @@ node_js:
   - "iojs"
 before_script:
   - npm install -g gulp bower codeclimate-test-reporter
-  - bower install
 after_script:
   - cat test/coverage/lcov/lcov.info | codeclimate
-script: gulp test
 env:
   global:
     - secure: jGnioqs1TSYzv+IfKLf6weOn7b7+xkEkGPhnVJ/YngvGBiyu5G3aFdJRV5xZos4H2lhhsIHUej1ZocLM61bFLdgLp8p5khEXP8TSZPsO3OGyAj4ZhFRtNwK6vcY1y1Lez8CA/3Clikz8iSm5Twg83hwofLr7C57kQJ22gruISm4=
