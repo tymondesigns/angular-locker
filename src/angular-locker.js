@@ -29,8 +29,10 @@
         /**
          * If value is a function then execute, otherwise return
          *
-         * @param  {Mixed}  value
-         * @param  {Mixed}  param
+         * @private
+         *
+         * @param  {Mixed}  value  -  The value to execute or return
+         * @param  {Mixed}  param  -  The parameter to pass to function if applicable
          *
          * @return {Mixed}
          */
@@ -41,7 +43,7 @@
         /**
          * Determine whether a value is defined and not null
          *
-         * @param  {Mixed}  value
+         * @param  {Mixed}  value  -  The value to check
          *
          * @return {Boolean}
          */
@@ -52,7 +54,9 @@
         /**
          * Trigger an error
          *
-         * @param  {String}  msg
+         * @throws {Error}
+         *
+         * @param  {String}  msg  -  The error message
          */
         var _error = function (msg) {
             throw new Error('[angular-locker] ' + msg);
@@ -60,6 +64,8 @@
 
         /**
          * Set the defaults
+         *
+         * @private
          *
          * @type {Object}
          */
@@ -76,7 +82,7 @@
             /**
              * Allow the defaults to be specified via the `lockerProvider`
              *
-             * @param {Object}  value
+             * @param {Object}  value  -  The defaults to override
              */
             defaults: function (value) {
                 if (! _defined(value)) return defaults;
@@ -94,12 +100,17 @@
                 /**
                  * Define the Locker class
                  *
-                 * @param {Object}  options
+                 * @public
+                 * @constructor
+                 *
+                 * @param {Object}  options  -  The config options to initialize with
                  */
                 function Locker (options) {
 
                     /**
                      * The config options
+                     *
+                     * @private
                      *
                      * @type {Object}
                      */
@@ -107,6 +118,8 @@
 
                     /**
                      * Out of the box drivers
+                     *
+                     * @private
                      *
                      * @type {Object}
                      */
@@ -118,7 +131,9 @@
                     /**
                      * Get the Storage instance from the key
                      *
-                     * @param  {String}  driver
+                     * @private
+                     *
+                     * @param  {String}  driver  -  The storage driver identifier
                      *
                      * @return {Storage}
                      */
@@ -133,12 +148,16 @@
                     /**
                      * The driver instance
                      *
+                     * @private
+                     *
                      * @type {Storage}
                      */
                     this._driver = this._resolveDriver(options.driver);
 
                     /**
                      * The namespace value
+                     *
+                     * @private
                      *
                      * @type {String}
                      */
@@ -147,12 +166,16 @@
                     /**
                      * Separates the namespace from the keys
                      *
+                     * @private
+                     *
                      * @type {String}
                      */
                     this._separator = options.separator;
 
                     /**
                      * Store the watchers here so we can un-register them later
+                     *
+                     * @private
                      *
                      * @type {Object}
                      */
@@ -161,7 +184,9 @@
                     /**
                      * Check browser support
                      *
+                     * @private
                      * @see github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
+                     *
                      * @param  {String}  driver
                      *
                      * @return {Boolean}
@@ -184,6 +209,8 @@
                     /**
                      * Build the storage key from the namspace
                      *
+                     * @private
+                     *
                      * @param  {String}  key
                      *
                      * @return {String}
@@ -196,6 +223,8 @@
 
                     /**
                      * Try to encode value as json, or just return the value upon failure
+                     *
+                     * @private
                      *
                      * @param  {Mixed}  value
                      *
@@ -213,6 +242,8 @@
                      * Try to parse value as json, if it fails then it probably isn't json
                      * so just return it
                      *
+                     * @private
+                     *
                      * @param  {String}  value
                      *
                      * @return {Mixed}
@@ -227,6 +258,8 @@
 
                     /**
                      * Trigger an event
+                     *
+                     * @private
                      *
                      * @param  {String}  name
                      * @param  {Object}  payload
@@ -243,9 +276,11 @@
                     /**
                      * Add to storage
                      *
-                     * @param {String}  key
+                     * @private
+                     * @throws {Error}   if browser support fails
                      *
-                     * @param {Mixed}   value
+                     * @param  {String}  key
+                     * @param  {Mixed}   value
                      */
                     this._setItem = function (key, value) {
                         if (! this._checkSupport()) {
@@ -274,6 +309,9 @@
                     /**
                      * Get from storage
                      *
+                     * @private
+                     * @throws {Error}   if browser support fails
+                     *
                      * @param  {String}  key
                      *
                      * @return {Mixed}
@@ -289,6 +327,9 @@
                     /**
                      * Exists in storage
                      *
+                     * @private
+                     * @throws {Error}   if browser support fails
+                     *
                      * @param  {String}  key
                      *
                      * @return {Boolean}
@@ -303,6 +344,9 @@
 
                     /**
                      * Remove from storage
+                     *
+                     * @private
+                     * @throws {Error}   if browser support fails
                      *
                      * @param  {String}  key
                      *
@@ -325,6 +369,8 @@
                 /**
                  * Define the public api
                  *
+                 * @public
+                 *
                  * @type {Object}
                  */
                 Locker.prototype = {
@@ -332,9 +378,11 @@
                     /**
                      * Add a new item to storage (even if it already exists)
                      *
-                     * @param  {Mixed}  key
-                     * @param  {Mixed}  value
-                     * @param  {Mixed}  def
+                     * @public
+                     *
+                     * @param  {Mixed}  key    -  The key
+                     * @param  {Mixed}  value  -  The value
+                     * @param  {Mixed}  def    -  The default
                      *
                      * @return {Locker|Boolean}
                      */
@@ -358,9 +406,11 @@
                     /**
                      * Add an item to storage if it doesn't already exist
                      *
-                     * @param  {Mixed}  key
-                     * @param  {Mixed}  value
-                     * @param  {Mixed}  def
+                     * @public
+                     *
+                     * @param  {Mixed}  key    -  The key to add
+                     * @param  {Mixed}  value  -  The value to add
+                     * @param  {Mixed}  def    -  The default
                      *
                      * @return {Boolean}
                      */
@@ -376,8 +426,10 @@
                     /**
                      * Retrieve the specified item from storage
                      *
-                     * @param  {String|Array}  key
-                     * @param  {Mixed}  def
+                     * @public
+                     *
+                     * @param  {String|Array}  key  -  The key to get
+                     * @param  {Mixed}         def  -  The default value if it does not exist
                      *
                      * @return {Mixed}
                      */
@@ -399,7 +451,9 @@
                     /**
                      * Determine whether the item exists in storage
                      *
-                     * @param  {String|Function}  key
+                     * @public
+                     *
+                     * @param  {String|Function}  key  -  The key to remove
                      *
                      * @return {Boolean}
                      */
@@ -410,7 +464,9 @@
                     /**
                      * Remove specified item(s) from storage
                      *
-                     * @param  {Mixed}  key
+                     * @public
+                     *
+                     * @param  {String|Array}  key  -  The key or array of keys to remove
                      *
                      * @return {Object}
                      */
@@ -429,8 +485,10 @@
                     /**
                      * Retrieve the specified item from storage and then remove it
                      *
-                     * @param  {String|Array}  key
-                     * @param  {Mixed}  def
+                     * @public
+                     *
+                     * @param  {String|Array}  key  -  The key to pull from storage
+                     * @param  {Mixed}         def  -  The default value if it does not exist
                      *
                      * @return {Mixed}
                      */
@@ -443,6 +501,8 @@
 
                     /**
                      * Return all items in storage within the current namespace/driver
+                     *
+                     * @public
                      *
                      * @return {Object}
                      */
@@ -462,6 +522,8 @@
                     /**
                      * Get the storage keys as an array
                      *
+                     * @public
+                     *
                      * @return {Array}
                      */
                     keys: function () {
@@ -471,7 +533,9 @@
                     /**
                      * Remove all items set within the current namespace/driver
                      *
-                     * @return {self}
+                     * @public
+                     *
+                     * @return {Locker}
                      */
                     clean: function () {
                         return this.forget(this.keys());
@@ -479,6 +543,8 @@
 
                     /**
                      * Empty the current storage driver completely. careful now.
+                     *
+                     * @public
                      *
                      * @return {Locker}
                      */
@@ -491,6 +557,8 @@
                     /**
                      * Get the total number of items within the current namespace
                      *
+                     * @public
+                     *
                      * @return {Integer}
                      */
                     count: function () {
@@ -499,6 +567,8 @@
 
                     /**
                      * Bind a storage key to a $scope property
+                     *
+                     * @public
                      *
                      * @param  {Object}  $scope
                      * @param  {String}  key
@@ -523,6 +593,8 @@
                     /**
                      * Unbind a storage key from a $scope property
                      *
+                     * @public
+                     *
                      * @param  {Object}  $scope
                      * @param  {String}  key
                      *
@@ -546,7 +618,9 @@
                     /**
                      * Set the storage driver on a new instance to enable overriding defaults
                      *
-                     * @param  {String}  driver
+                     * @public
+                     *
+                     * @param  {String}  driver  -  The driver to switch to
                      *
                      * @return {Locker}
                      */
@@ -554,11 +628,13 @@
                         // no need to create a new instance if the driver is the same
                         if (driver === this._options.driver) return this;
 
-                        return this.instance(angular.extend(this._options, { driver: driver }));
+                        return this.instance(angular.extend(this._options, { driver: _value(driver) }));
                     },
 
                     /**
                      * Get the currently set driver
+                     *
+                     * @public
                      *
                      * @return {Storage}
                      */
@@ -569,7 +645,9 @@
                     /**
                      * Set the namespace on a new instance to enable overriding defaults
                      *
-                     * @param  {String}  namespace
+                     * @public
+                     *
+                     * @param  {String}  namespace  -  The namespace to switch to
                      *
                      * @return {Locker}
                      */
@@ -577,11 +655,13 @@
                         // no need to create a new instance if the namespace is the same
                         if (namespace === this._namespace) return this;
 
-                        return this.instance(angular.extend(this._options, { namespace: namespace }));
+                        return this.instance(angular.extend(this._options, { namespace: _value(namespace) }));
                     },
 
                     /**
                      * Get the currently set namespace
+                     *
+                     * @public
                      *
                      * @return {String}
                      */
@@ -592,8 +672,11 @@
                     /**
                      * Check browser support
                      *
+                     * @public
                      * @see github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
-                     * @param  {String}  driver
+                     *
+                     * @param  {String}  driver  -  The driver to check support with
+                     *
                      * @return {Boolean}
                      */
                     supported: function (driver) {
@@ -603,7 +686,9 @@
                     /**
                      * Get a new instance of Locker
                      *
-                     * @param  {Object}  options
+                     * @public
+                     *
+                     * @param  {Object}  options  -  The config options to instantiate with
                      *
                      * @return {Locker}
                      */
