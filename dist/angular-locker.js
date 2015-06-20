@@ -628,7 +628,7 @@
                         // no need to create a new instance if the driver is the same
                         if (driver === this._options.driver) return this;
 
-                        return this.instance(angular.extend(this._options, { driver: _value(driver) }));
+                        return this.instance(angular.extend(this._options, { driver: driver }));
                     },
 
                     /**
@@ -655,7 +655,7 @@
                         // no need to create a new instance if the namespace is the same
                         if (namespace === this._namespace) return this;
 
-                        return this.instance(angular.extend(this._options, { namespace: _value(namespace) }));
+                        return this.instance(angular.extend(this._options, { namespace: namespace }));
                     },
 
                     /**
