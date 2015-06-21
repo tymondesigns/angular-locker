@@ -31,8 +31,8 @@
          *
          * @private
          *
-         * @param  {Mixed}  value  -  The value to execute or return
-         * @param  {Mixed}  param  -  The parameter to pass to function if applicable
+         * @param  {Mixed}  value  The value to execute or return
+         * @param  {Mixed}  param  The parameter to pass to function if applicable
          *
          * @return {Mixed}
          */
@@ -43,7 +43,9 @@
         /**
          * Determine whether a value is defined and not null
          *
-         * @param  {Mixed}  value  -  The value to check
+         * @private
+         *
+         * @param  {Mixed}  value  The value to check
          *
          * @return {Boolean}
          */
@@ -54,9 +56,10 @@
         /**
          * Trigger an error
          *
+         * @private
          * @throws {Error}
          *
-         * @param  {String}  msg  -  The error message
+         * @param  {String}  msg  The error message
          */
         var _error = function (msg) {
             throw new Error('[angular-locker] ' + msg);
@@ -82,7 +85,7 @@
             /**
              * Allow the defaults to be specified via the `lockerProvider`
              *
-             * @param {Object}  value  -  The defaults to override
+             * @param {Object}  value  The defaults to override
              */
             defaults: function (value) {
                 if (! _defined(value)) return defaults;
@@ -103,7 +106,7 @@
                  * @public
                  * @constructor
                  *
-                 * @param {Object}  options  -  The config options to initialize with
+                 * @param {Object}  options  The config options to initialize with
                  */
                 function Locker (options) {
 
@@ -133,7 +136,7 @@
                      *
                      * @private
                      *
-                     * @param  {String}  driver  -  The storage driver identifier
+                     * @param  {String}  driver  The storage driver identifier
                      *
                      * @return {Storage}
                      */
@@ -187,7 +190,7 @@
                      * @private
                      * @see github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
                      *
-                     * @param  {String}  driver
+                     * @param  {String}  driver  The driver to check support with
                      *
                      * @return {Boolean}
                      */
@@ -211,7 +214,7 @@
                      *
                      * @private
                      *
-                     * @param  {String}  key
+                     * @param  {String}  key  The key to build the prefix with
                      *
                      * @return {String}
                      */
@@ -226,7 +229,7 @@
                      *
                      * @private
                      *
-                     * @param  {Mixed}  value
+                     * @param  {Mixed}  value  The value to serialize
                      *
                      * @return {Mixed}
                      */
@@ -244,7 +247,7 @@
                      *
                      * @private
                      *
-                     * @param  {String}  value
+                     * @param  {String}  value  The value to unserialize
                      *
                      * @return {Mixed}
                      */
@@ -261,8 +264,8 @@
                      *
                      * @private
                      *
-                     * @param  {String}  name
-                     * @param  {Object}  payload
+                     * @param  {String}  name     The name of the event to trigger
+                     * @param  {Object}  payload  The data to pass along with event
                      */
                     this._event = function (name, payload) {
                         if (this._options.eventsEnabled) {
@@ -279,8 +282,8 @@
                      * @private
                      * @throws {Error}   if browser support fails
                      *
-                     * @param  {String}  key
-                     * @param  {Mixed}   value
+                     * @param  {String}  key    The key to add
+                     * @param  {Mixed}   value  The value to add
                      */
                     this._setItem = function (key, value) {
                         if (! this._checkSupport()) {
@@ -312,7 +315,7 @@
                      * @private
                      * @throws {Error}   if browser support fails
                      *
-                     * @param  {String}  key
+                     * @param  {String}  key  The key to get
                      *
                      * @return {Mixed}
                      */
@@ -330,7 +333,7 @@
                      * @private
                      * @throws {Error}   if browser support fails
                      *
-                     * @param  {String}  key
+                     * @param  {String}  key  The key to check for existence
                      *
                      * @return {Boolean}
                      */
@@ -348,7 +351,7 @@
                      * @private
                      * @throws {Error}   if browser support fails
                      *
-                     * @param  {String}  key
+                     * @param  {String}  key  The key to remove
                      *
                      * @return {Boolean}
                      */
@@ -380,9 +383,9 @@
                      *
                      * @public
                      *
-                     * @param  {Mixed}  key    -  The key
-                     * @param  {Mixed}  value  -  The value
-                     * @param  {Mixed}  def    -  The default
+                     * @param  {Mixed}  key    The key to add
+                     * @param  {Mixed}  value  The value to add
+                     * @param  {Mixed}  def    The default to pass to function if doesn't already exist
                      *
                      * @return {Locker|Boolean}
                      */
@@ -408,9 +411,9 @@
                      *
                      * @public
                      *
-                     * @param  {Mixed}  key    -  The key to add
-                     * @param  {Mixed}  value  -  The value to add
-                     * @param  {Mixed}  def    -  The default
+                     * @param  {Mixed}  key    The key to add
+                     * @param  {Mixed}  value  The value to add
+                     * @param  {Mixed}  def    The default to pass to function if doesn't already exist
                      *
                      * @return {Boolean}
                      */
@@ -428,8 +431,8 @@
                      *
                      * @public
                      *
-                     * @param  {String|Array}  key  -  The key to get
-                     * @param  {Mixed}         def  -  The default value if it does not exist
+                     * @param  {String|Array}  key  The key to get
+                     * @param  {Mixed}         def  The default value if it does not exist
                      *
                      * @return {Mixed}
                      */
@@ -466,7 +469,7 @@
                      *
                      * @public
                      *
-                     * @param  {String|Array}  key  -  The key or array of keys to remove
+                     * @param  {String|Array}  key  The key or array of keys to remove
                      *
                      * @return {Object}
                      */
@@ -487,8 +490,8 @@
                      *
                      * @public
                      *
-                     * @param  {String|Array}  key  -  The key to pull from storage
-                     * @param  {Mixed}         def  -  The default value if it does not exist
+                     * @param  {String|Array}  key  The key to pull from storage
+                     * @param  {Mixed}         def  The default value if it does not exist
                      *
                      * @return {Mixed}
                      */
@@ -570,9 +573,9 @@
                      *
                      * @public
                      *
-                     * @param  {Object}  $scope
-                     * @param  {String}  key
-                     * @param  {Mixed}   def
+                     * @param  {Object}  $scope  The angular $scope object
+                     * @param  {String}  key     The key in storage to bind to
+                     * @param  {Mixed}   def     The default value to initially bind
                      *
                      * @return {Locker}
                      */
@@ -595,8 +598,8 @@
                      *
                      * @public
                      *
-                     * @param  {Object}  $scope
-                     * @param  {String}  key
+                     * @param  {Object}  $scope  The angular $scope object
+                     * @param  {String}  key     The key to remove from bindings
                      *
                      * @return {Locker}
                      */
@@ -620,7 +623,7 @@
                      *
                      * @public
                      *
-                     * @param  {String}  driver  -  The driver to switch to
+                     * @param  {String}  driver  The driver to switch to
                      *
                      * @return {Locker}
                      */
@@ -647,7 +650,7 @@
                      *
                      * @public
                      *
-                     * @param  {String}  namespace  -  The namespace to switch to
+                     * @param  {String}  namespace  The namespace to switch to
                      *
                      * @return {Locker}
                      */
@@ -675,7 +678,7 @@
                      * @public
                      * @see github.com/Modernizr/Modernizr/blob/master/feature-detects/storage/localstorage.js#L38-L47
                      *
-                     * @param  {String}  driver  -  The driver to check support with
+                     * @param  {String}  driver  The driver to check support with
                      *
                      * @return {Boolean}
                      */
@@ -688,7 +691,7 @@
                      *
                      * @public
                      *
-                     * @param  {Object}  options  -  The config options to instantiate with
+                     * @param  {Object}  options  The config options to instantiate with
                      *
                      * @return {Locker}
                      */
