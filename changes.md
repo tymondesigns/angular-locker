@@ -1,3 +1,14 @@
+### 2.0.1
+
+##### Fixes
+
+- Improving driver support checking - see #18
+
+##### General / Improvements
+
+- Gulpfile now uses ES6 goodness via babel :)
+- Removing needless bower dev dependencies from project
+
 ### 2.0.0
 
 ##### Breaking Changes
