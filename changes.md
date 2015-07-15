@@ -1,3 +1,9 @@
+### 2.0.2
+
+##### Fixes
+
+- Fixed issue with multiple sequential calls to same driver - see #22
+
 ### 2.0.1
 
 ##### Fixes
