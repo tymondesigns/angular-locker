@@ -4,6 +4,10 @@
 
 - Fixed issue with multiple sequential calls to same driver - see #22
 
+##### General / Improvements
+
+- improving docblocks, to work with jsdoc
+
 ### 2.0.1
 
 ##### Fixes
