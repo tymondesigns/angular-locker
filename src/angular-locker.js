@@ -656,6 +656,17 @@
                     },
 
                     /**
+                     * Set the namespace gloably
+                     *
+                     * @public
+                     *
+                     * @return {String}
+                     */
+                    changeNamespace : function(namespace){
+                        this._namespace = namespace
+                        return this._namespace;
+                    },
+                    /**
                      * Get the currently set namespace
                      *
                      * @public
