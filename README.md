@@ -168,10 +168,10 @@ locker.put('someKey', ['foo', 'bar']);
 locker.put('someKey', function(current) {
     current.push('baz');
 
-    return current
+    return current;
 });
 
-locker.get('someKey') // = ['foo', 'bar', 'baz']
+locker.get('someKey'); // = ['foo', 'bar', 'baz']
 ```
 
 If the current value is not already set then you can pass a third parameter as a default that will be returned instead. e.g.
@@ -300,7 +300,7 @@ locker.namespace('somethingElse').count();
 You can determine whether an item exists in the current namespace via
 
 ```js
-locker.has('someKey') // true or false
+locker.has('someKey'); // true or false
 // or
 locker.namespace('foo').has('bar');
 
@@ -406,7 +406,7 @@ app.controller('AppCtrl', ['$scope', function ($scope) {
 
     $scope.foo = ['bar', 'baz'];
 
-    locker.get('foo') // = ['bar', 'baz']
+    locker.get('foo'); // = ['bar', 'baz']
 
 }]);
 ```
@@ -420,7 +420,7 @@ app.controller('AppCtrl', ['$scope', function ($scope) {
 
     $scope.foo // = 'someDefault'
 
-    locker.get('foo') // = 'someDefault'
+    locker.get('foo'); // = 'someDefault'
 
 }]);
 ```
@@ -435,7 +435,7 @@ app.controller('AppCtrl', ['$scope', function ($scope) {
 
     $scope.foo // = undefined
 
-    locker.get('foo') // = undefined
+    locker.get('foo'); // = undefined
 
 }]);
 ```
