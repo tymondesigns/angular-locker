@@ -194,9 +194,7 @@ describe('angular-locker', () => {
 
                 it('should put an item into the locker', inject((locker) => {
 
-                    locker.put('fnKey', () => {
-                        return 12 * 12;
-                    });
+                    locker.put('fnKey', () => 12 * 12);
 
                     expect( locker.get('fnKey') ).toEqual(144);
                 }));
@@ -518,9 +516,7 @@ describe('angular-locker', () => {
             it('should remove an item from locker when passing a function', inject((locker) => {
                 locker.put('someKey', 'someVal');
 
-                locker.forget(() => {
-                    return 'someKey';
-                });
+                locker.forget(() => 'someKey');
 
                 expect( locker.get('someKey') ).not.toBeDefined();
             }));
@@ -534,9 +530,7 @@ describe('angular-locker', () => {
                     };
                 });
 
-                locker.forget(() => {
-                    return ['something', 'anotherThing'];
-                });
+                locker.forget(() => ['something', 'anotherThing']);
 
                 expect( locker.get('something') ).not.toBeDefined();
                 expect( locker.get('anotherThing') ).not.toBeDefined();
@@ -615,9 +609,7 @@ describe('angular-locker', () => {
             it('should determine whether an item exists in locker when passing a function', inject((locker) => {
                 locker.put('randKey', Math.random());
 
-                var result = locker.has(() => {
-                    return 'randKey';
-                });
+                var result = locker.has(() => 'randKey');
 
                 expect(result).toBeTruthy();
                 expect( locker.has('loremipsumdolorsitamet') ).toBeFalsy();
