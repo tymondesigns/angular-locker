@@ -2,6 +2,7 @@ import gulp from 'gulp';
 import {task as fizzy} from 'fizzy';
 import pkg from './package.json';
 import {paths, banner} from './config';
+import runSequence from 'run-sequence';
 
 // Lint the JS
 gulp.task('lint', fizzy('lint', { src: paths.scripts }));
@@ -32,7 +33,9 @@ gulp.task('gitdown', fizzy('gitdown', {
 }));
 
 // Define the build tasks
-gulp.task('build', ['lint', 'jscs', 'scripts', 'test', 'gitdown']);
+gulp.task('build', (cb) => {
+    runSequence(['lint', 'jscs', 'scripts', 'test'], 'gitdown', cb);
+});
 
 // Increment versions
 gulp.task('version', fizzy('version', {
@@ -41,8 +44,8 @@ gulp.task('version', fizzy('version', {
 }));
 
 // release a new version
-gulp.task('release', ['version'], () => {
-    gulp.run('build');
+gulp.task('release', (cb) => {
+    runSequence('version', 'build', cb);
 });
 
 // Watch for changes

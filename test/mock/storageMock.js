@@ -2,38 +2,34 @@
 'use strict';
 
 function storageMock() {
-    var store = {};
+    let store = {};
 
     Object.defineProperties(store, {
         setItem: {
-            value: function (key, value) {
+            value: (key, value) => {
                 store[key] = value || '';
             },
             enumerable: false,
             writable: true
         },
         getItem: {
-            value: function (key) {
-                return store[key];
-            },
+            value: (key) => store[key],
             enumerable: false,
             writable: true
         },
         removeItem: {
-            value: function (key) {
+            value: (key) => {
                 delete store[key];
             },
             enumerable: false,
             writable: true
         },
         length: {
-            get: function () {
-                return Object.keys(store).length;
-            },
+            get: () => Object.keys(store).length,
             enumerable: false
         },
         clear: {
-            value: function () {
+            value: () => {
                 store = {};
             },
             enumerable: false,

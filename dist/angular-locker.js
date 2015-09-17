@@ -269,7 +269,7 @@
                      */
                     this._event = function (name, payload) {
                         if (this._options.eventsEnabled) {
-                            $rootScope.$emit(name, angular.extend(payload, {
+                            $rootScope.$emit('locker.' + name, angular.extend(payload, {
                                 driver: this._options.driver,
                                 namespace: this._namespace,
                             }));
@@ -294,9 +294,9 @@
                             var oldVal = this._getItem(key);
                             this._driver.setItem(this._getPrefix(key), this._serialize(value));
                             if (this._exists(key) && ! angular.equals(oldVal, value)) {
-                                this._event('locker.item.updated', { key: key, oldValue: oldVal, newValue: value });
+                                this._event('item.updated', { key: key, oldValue: oldVal, newValue: value });
                             } else {
-                                this._event('locker.item.added', { key: key, value: value });
+                                this._event('item.added', { key: key, value: value });
                             }
                         } catch (e) {
                             if (['QUOTA_EXCEEDED_ERR',
@@ -363,7 +363,7 @@
                         if (! this._exists(key)) return false;
 
                         this._driver.removeItem(this._getPrefix(key));
-                        this._event('locker.item.forgotten', { key: key });
+                        this._event('item.forgotten', { key: key });
 
                         return true;
                     };
