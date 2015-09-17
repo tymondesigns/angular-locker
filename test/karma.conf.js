@@ -54,15 +54,6 @@ module.exports = function (config) {
         basePath: '',
         autoWatch: true,
         frameworks: ['jasmine'],
-        plugins: [
-            'karma-spec-reporter',
-            'karma-phantomjs-launcher',
-            'karma-sauce-launcher',
-            'karma-jasmine',
-            'karma-coverage',
-            'karma-notify-reporter',
-            'karma-babel-preprocessor'
-        ],
         preprocessors: {
             '../src/*.js': ['coverage'],
             '../test/**/*.js': ['babel']
