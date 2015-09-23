@@ -17,7 +17,8 @@ gulp.task('clean', fizzy('clean', { src: paths.output }));
 gulp.task('scripts', ['clean'], fizzy('scripts', {
     src: paths.scripts,
     dest: paths.output,
-    header: [banner, { pkg }]
+    header: [banner, { pkg }],
+    size: false
 }));
 
 // Run the tests

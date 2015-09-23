@@ -1,15 +1,5 @@
 'use strict';
 
-var banner = [
-    '/*! ',
-    '<%= pkg.name %> ',
-    'v<%= pkg.version %> | ',
-    '(c) ' + new Date().getFullYear() + ' <%= pkg.author %> |',
-    ' <%= pkg.homepage %>',
-    ' */',
-    '\n'
-].join('');
-
 export default {
     paths: {
         output : 'dist',
@@ -35,5 +25,5 @@ export default {
             glob: '.gitdown/**/*.md'
         }
     },
-    banner: banner
+    banner: '/*! <%= pkg.name %> v<%= pkg.version %> | (c) ${new Date().getFullYear()} <%= pkg.author %> | <%= pkg.homepage %> */\n'
 };

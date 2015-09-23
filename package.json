@@ -37,7 +37,7 @@
     "karma-spec-reporter": "0.0.13",
     "run-sequence": "^1.1.3"
   },
-  "main": "dist/angular-locker.min.js",
+  "main": "src/angular-locker.js",
   "scripts": {
     "test": "gulp test"
   }
