@@ -22,7 +22,7 @@
 
     'use strict';
 
-    angular.module('angular-locker', [])
+    return angular.module('angular-locker', [])
 
     .provider('locker', function () {
 
@@ -699,6 +699,6 @@
             }]
         };
 
-    });
+    }).name; // export module name for the likes of Browserify and Webpack
 
 });
