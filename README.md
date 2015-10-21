@@ -327,7 +327,7 @@ locker.driver('session').forget('sessionKey');
 
 <h4 id="usage-removing-items-from-locker-removing-multiple-items-at-once">removing multiple items at once</h4>
 
-You can also pass an array.
+You can also pass an array of String values.
 
 ```js
 locker.forget(['keyToRemove', 'anotherKeyToRemove', 'something', 'else']);
@@ -474,7 +474,7 @@ $ gulp
 
 The MIT License (MIT)
 
-Copyright (c) 2014 Sean Tymon
+Copyright (c) 2015 Sean Tymon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
