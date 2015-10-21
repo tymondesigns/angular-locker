@@ -455,7 +455,7 @@ if (! locker.supported()) {
 }
 ```
 
-I would recommend using [Remy's Storage polyfill](https://gist.github.com/remy/350433) if you want to support older browsers.
+I would recommend using [Remy's Storage polyfill](https://gist.github.com/remy/350433) if you want to support older browsers and need persistence (cookie storage) or [Tmcgee's Storage polyfill](https://gist.github.com/tmcgee123/c25325d70277b2ee3f3a) if you do not need persistence (cache storage).
 
 For the latest browser compatibility chart see [HERE](http://caniuse.com/namevalue-storage)
 
