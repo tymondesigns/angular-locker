@@ -11,7 +11,7 @@
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         define(function () {
-            return factory(root.angular);
+            return factory(root.angular || (window && window.angular));
         });
     } else if (typeof exports === 'object') {
         module.exports = factory(root.angular || (window && window.angular));
