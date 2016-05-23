@@ -1,3 +1,4 @@
+[![Beerpay](https://beerpay.io/tymondesigns/angular-locker/badge.svg?style=flat-square)](https://beerpay.io/tymondesigns/angular-locker)
 angular-locker
 ==============
 
