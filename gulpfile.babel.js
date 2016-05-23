@@ -23,7 +23,9 @@ gulp.task('scripts', ['clean'], fizzy('scripts', {
 
 // Run the tests
 gulp.task('test', fizzy('test', {
-    src: paths.vendor.concat(paths.scripts, paths.test),
+    src: paths.vendor
+        .concat(['./node_modules/phantomjs-polyfill/bind-polyfill.js'])
+        .concat(paths.scripts, paths.test),
     karmaConfigFile: paths.karma
 }));
 

@@ -2,12 +2,12 @@
 
 export default {
     paths: {
-        output : 'dist',
+        output: 'dist',
         vendor: [
             'node_modules/angular/angular.js',
             'node_modules/angular-mocks/angular-mocks.js'
         ],
-        scripts : [
+        scripts: [
             'src/angular-locker.js'
         ],
         test: [
