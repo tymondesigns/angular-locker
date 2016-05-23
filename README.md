@@ -1,4 +1,3 @@
-[![Beerpay](https://beerpay.io/tymondesigns/angular-locker/badge.svg?style=flat-square)](https://beerpay.io/tymondesigns/angular-locker)
 angular-locker
 ==============
 
@@ -10,6 +9,8 @@ A simple & configurable abstraction for local/session storage in angular project
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://www.opensource.org/licenses/MIT)
 [![NPM Release](https://img.shields.io/npm/v/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
 [![NPM Monthly Downloads](https://img.shields.io/npm/dm/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
+
+[![Beerpay](https://beerpay.io/tymondesigns/angular-locker/badge.svg?style=flat-square)](https://beerpay.io/tymondesigns/angular-locker)
 
 * [Installation](#installation)
 * [Usage](#usage)
