@@ -7,7 +7,8 @@ node_js:
 before_script:
   - npm install -g gulp codeclimate-test-reporter
 after_script:
-  - cat test/coverage/lcov/lcov.info | codeclimate
+  - codeclimate-test-reporter < test/coverage/lcov/lcov.info
+
 env:
   global:
     - secure: jGnioqs1TSYzv+IfKLf6weOn7b7+xkEkGPhnVJ/YngvGBiyu5G3aFdJRV5xZos4H2lhhsIHUej1ZocLM61bFLdgLp8p5khEXP8TSZPsO3OGyAj4ZhFRtNwK6vcY1y1Lez8CA/3Clikz8iSm5Twg83hwofLr7C57kQJ22gruISm4=
