@@ -1,3 +1,15 @@
+### 2.0.4
+
+##### Fixes
+
+- Fix Webpack support #30
+
+### 2.0.3
+
+##### General / Improvements
+
+- adding better Browserify & Webpack support
+
 ### 2.0.2
 
 ##### Fixes
