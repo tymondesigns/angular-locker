@@ -1,4 +1,4 @@
-/**
+﻿/**
  * angular-locker
  *
  * A simple & configurable abstraction for local/session storage in angular projects.
@@ -341,8 +341,8 @@
                         if (! this._checkSupport()) {
                             _error('The browser does not support the "' + options.driver + '" driver');
                         }
-
-                        return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
+                        /*D2NOVA Stephen Chen: hasOwnProperty() method doesn't work on MacOS latest Chrome Version v60.0.3080.5 */
+                        return this._driver.hasOwnProperty(this._getPrefix(_value(key))) || this._getItem(key);
                     };
 
                     /**
