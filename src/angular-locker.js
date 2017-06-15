@@ -341,8 +341,8 @@
                         if (! this._checkSupport()) {
                             _error('The browser does not support the "' + options.driver + '" driver');
                         }
-                        /*D2NOVA Stephen Chen: hasOwnProperty() method doesn't work on MacOS latest Chrome Version v60.0.3080.5 */
-                        return this._driver.hasOwnProperty(this._getPrefix(_value(key))) || this._getItem(key);
+
+                        return this._driver.hasOwnProperty(this._getPrefix(_value(key))) || !! this._getItem(key);
                     };
 
                     /**

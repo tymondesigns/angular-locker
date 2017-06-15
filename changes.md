@@ -1,3 +1,9 @@
+### 2.0.5
+
+##### Fixes
+
+- Fix compatibility with latest Chrome #38
+
 ### 2.0.4
 
 ##### Fixes

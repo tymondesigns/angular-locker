@@ -631,6 +631,14 @@ describe('angular-locker', () => {
                 }).toThrowError();
             }));
 
+            it('should check an item exists when hasOwnProperty does not work', inject((locker) => {
+                locker.namespace('differentNs').put('randKeyNs', Math.random());
+                spyOn(locker._driver, 'hasOwnProperty').and.returnValue(void 0);
+
+                expect( locker.namespace('differentNs').has('randKeyNs') ).toBeTruthy();
+                expect( locker.namespace('loremipsumdolorsitamet').has('randKeyNs') ).toBeFalsy();
+            }));
+
         });
 
         describe('checking browser support', () => {
