@@ -342,7 +342,7 @@
                             _error('The browser does not support the "' + options.driver + '" driver');
                         }
 
-                        return this._driver.hasOwnProperty(this._getPrefix(_value(key)));
+                        return this._driver.hasOwnProperty(this._getPrefix(_value(key))) || !! this._getItem(key);
                     };
 
                     /**

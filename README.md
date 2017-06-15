@@ -10,8 +10,6 @@ A simple & configurable abstraction for local/session storage in angular project
 [![NPM Release](https://img.shields.io/npm/v/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
 [![NPM Monthly Downloads](https://img.shields.io/npm/dm/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
 
-[![Beerpay](https://beerpay.io/tymondesigns/angular-locker/badge.svg?style=flat-square)](https://beerpay.io/tymondesigns/angular-locker)
-
 * [Installation](#installation)
 * [Usage](#usage)
     * [Adding to your project](#usage-adding-to-your-project)
@@ -51,7 +49,7 @@ http://www.jsdelivr.com/#!angular.locker
 
 Simply download the zip file [HERE](https://github.com/tymondesigns/angular-locker/archive/master.zip) and include `dist/angular-locker.min.js` in your project.
 
-1.65 kB Minified & gzipped.
+1.66 KB Minified & gzipped.
 
 <h2 id="usage">Usage</h2>
 
