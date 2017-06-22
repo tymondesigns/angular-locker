@@ -6,7 +6,7 @@
     "Sean Tymon <tymon148@gmail.com>"
   ],
   "description": "A simple & configurable abstraction for local/session storage in angular projects.",
-  "main": "dist/angular-locker.min.js",
+  "main": "dist/angular-locker.js",
   "keywords": [
     "angular-locker",
     "angular",
