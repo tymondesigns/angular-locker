@@ -8,6 +8,7 @@ A simple & configurable abstraction for local/session storage in angular project
 [![License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://www.opensource.org/licenses/MIT)
 [![NPM Release](https://img.shields.io/npm/v/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
 [![NPM Monthly Downloads](https://img.shields.io/npm/dm/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
+[![NPM Total Downloads](https://img.shields.io/npm/dt/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
 
 * [Installation](#installation)
 * [Usage](#usage)
