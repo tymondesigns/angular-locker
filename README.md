@@ -10,10 +10,6 @@ A simple & configurable abstraction for local/session storage in angular project
 [![NPM Monthly Downloads](https://img.shields.io/npm/dm/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
 [![NPM Total Downloads](https://img.shields.io/npm/dt/angular-locker.svg?style=flat-square)](https://www.npmjs.org/package/angular-locker)
 
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/5S8eNjgwCUjgucKT89buNKez/tymondesigns/angular-locker'>
-  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/5S8eNjgwCUjgucKT89buNKez/tymondesigns/angular-locker.svg' />
-</a>
-
 * [Installation](#installation)
 * [Usage](#usage)
     * [Adding to your project](#usage-adding-to-your-project)
