@@ -1,9 +1,9 @@
 sudo: false
 language: node_js
 node_js:
-  - "0.10"
   - 4
-  - "iojs"
+  - 6
+  - 8
 before_script:
   - npm install -g gulp codeclimate-test-reporter
 after_script:
